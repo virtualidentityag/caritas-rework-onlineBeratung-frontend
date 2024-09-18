@@ -4,7 +4,6 @@ import {
 	useCallback,
 	useContext,
 	useEffect,
-	useMemo,
 	useRef,
 	useState
 } from 'react';
@@ -12,22 +11,17 @@ import { Link, useHistory, useParams } from 'react-router-dom';
 import {
 	getSessionType,
 	SESSION_LIST_TAB,
-	SESSION_LIST_TAB_ANONYMOUS,
 	SESSION_LIST_TAB_ARCHIVE,
 	SESSION_LIST_TYPES,
 	SESSION_TYPE_ARCHIVED,
 	SESSION_TYPES
 } from '../session/sessionHelpers';
 import {
-	AnonymousConversationFinishedContext,
-	AnonymousConversationStartedContext,
 	AUTHORITIES,
 	buildExtendedSession,
-	ConsultingTypesContext,
 	ExtendedSessionInterface,
 	getExtendedSession,
 	hasUserAuthority,
-	isAnonymousSession,
 	REMOVE_SESSIONS,
 	RocketChatContext,
 	SessionsDataContext,
@@ -38,16 +32,12 @@ import {
 	ActiveSessionProvider
 } from '../../globalState';
 import { ListItemInterface, STATUS_EMPTY } from '../../globalState/interfaces';
-import { apiPatchUserData } from '../../api/apiPatchUserData';
-import { SelectDropdown, SelectDropdownItem } from '../select/SelectDropdown';
 import { SessionListItemComponent } from '../sessionsListItem/SessionListItemComponent';
 import { SessionsListSkeleton } from '../sessionsListItem/SessionsListItemSkeleton';
 import {
 	apiGetAskerSessionList,
 	apiGetConsultantSessionList,
 	FETCH_ERRORS,
-	FILTER_FEEDBACK,
-	INITIAL_FILTER,
 	SESSION_COUNT
 } from '../../api';
 import { Button } from '../button/Button';
@@ -65,7 +55,6 @@ import useDebounceCallback from '../../hooks/useDebounceCallback';
 import {
 	EVENT_ROOMS_CHANGED,
 	EVENT_SUBSCRIPTIONS_CHANGED,
-	STATUS_ONLINE,
 	SUB_STREAM_NOTIFY_USER
 } from '../app/RocketChat';
 import { getValueFromCookie } from '../sessionCookie/accessSessionCookie';
@@ -74,9 +63,6 @@ import { useWatcher } from '../../hooks/useWatcher';
 import { useSearchParam } from '../../hooks/useSearchParams';
 import { apiGetChatRoomById } from '../../api/apiGetChatRoomById';
 import { useTranslation } from 'react-i18next';
-import { ReactComponent as LiveChatAvailableIllustration } from '../../resources/img/illustrations/live-chat-available.svg';
-import { ListInfo } from '../listInfo/ListInfo';
-import { RocketChatUserStatusContext } from '../../globalState/provider/RocketChatUserStatusProvider';
 import { RocketChatUsersOfRoomProvider } from '../../globalState/provider/RocketChatUsersOfRoomProvider';
 import { EmptyListItem } from './EmptyListItem';
 
@@ -90,10 +76,6 @@ export const SessionsList = ({
 	sessionTypes
 }: SessionsListProps) => {
 	const { t: translate } = useTranslation();
-	const { consultingTypes } = useContext(ConsultingTypesContext);
-	const { anonymousConversationFinished } = useContext(
-		AnonymousConversationFinishedContext
-	);
 
 	const { rcGroupId: groupIdFromParam, sessionId: sessionIdFromParam } =
 		useParams<{ rcGroupId: string; sessionId: string }>();
@@ -105,41 +87,26 @@ export const SessionsList = ({
 	const listRef = createRef<HTMLDivElement>();
 
 	const { sessions, dispatch } = useContext(SessionsDataContext);
-	const { type, path: listPath } = useContext(SessionTypeContext);
+	const { type } = useContext(SessionTypeContext);
 
 	const {
 		subscribe,
 		unsubscribe,
 		ready: socketReady
 	} = useContext(RocketChatContext);
-	const [filter, setFilter] = useState<
-		typeof INITIAL_FILTER | typeof FILTER_FEEDBACK
-	>(INITIAL_FILTER);
 
 	const sessionListTab = useSearchParam<SESSION_LIST_TAB>('sessionListTab');
 
-	const { userData, reloadUserData } = useContext(UserDataContext);
-	const { status } = useContext(RocketChatUserStatusContext);
+	const { userData } = useContext(UserDataContext);
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [currentOffset, setCurrentOffset] = useState(0);
 	const [totalItems, setTotalItems] = useState(0);
 	const [isReloadButtonVisible, setIsReloadButtonVisible] = useState(false);
 	const [isRequestInProgress, setIsRequestInProgress] = useState(false);
-	const { anonymousConversationStarted, setAnonymousConversationStarted } =
-		useContext(AnonymousConversationStartedContext);
-
 	const abortController = useRef<AbortController>(null);
 
 	useGroupWatcher(isLoading);
-
-	const toggleAvailability = () => {
-		apiPatchUserData({
-			available: status !== STATUS_ONLINE
-		})
-			.then(reloadUserData)
-			.catch(console.log);
-	};
 
 	// If create new group chat
 	const isCreateChatActive = groupIdFromParam === 'createGroupChat';
@@ -160,7 +127,6 @@ export const SessionsList = ({
 
 			return apiGetConsultantSessionList({
 				type,
-				filter,
 				offset,
 				sessionListTab: sessionListTab,
 				count: count ?? SESSION_COUNT,
@@ -199,15 +165,7 @@ export const SessionsList = ({
 					return { sessions, total };
 				});
 		},
-		[filter, sessionListTab, type]
-	);
-
-	useLiveChatWatcher(
-		!isLoading &&
-			type === SESSION_LIST_TYPES.ENQUIRY &&
-			sessionListTab === SESSION_LIST_TAB_ANONYMOUS,
-		getConsultantSessionList,
-		currentOffset
+		[sessionListTab, type]
 	);
 
 	const scrollIntoView = useCallback(() => {
@@ -243,11 +201,7 @@ export const SessionsList = ({
 		setIsLoading(true);
 		setIsReloadButtonVisible(false);
 		setCurrentOffset(0);
-		setAnonymousConversationStarted(false);
-		if (
-			hasUserAuthority(AUTHORITIES.ASKER_DEFAULT, userData) ||
-			hasUserAuthority(AUTHORITIES.ANONYMOUS_DEFAULT, userData)
-		) {
+		if (hasUserAuthority(AUTHORITIES.ASKER_DEFAULT, userData)) {
 			// Fetch asker data
 			apiGetAskerSessionList()
 				.then(({ sessions }) => {
@@ -261,20 +215,6 @@ export const SessionsList = ({
 						sessions[0]?.session?.status === STATUS_EMPTY
 					) {
 						history.push(`/sessions/user/view/write/`);
-					} else if (
-						sessions.length === 1 &&
-						isAnonymousSession(sessions[0]?.session) &&
-						hasUserAuthority(
-							AUTHORITIES.ANONYMOUS_DEFAULT,
-							userData
-						)
-					) {
-						const extendedSession = buildExtendedSession(
-							sessions[0]
-						);
-						history.push(
-							`/sessions/user/view/${extendedSession?.rid}/${extendedSession?.item?.id}`
-						);
 					}
 				})
 				.then(() => setIsLoading(false));
@@ -330,9 +270,7 @@ export const SessionsList = ({
 		getConsultantSessionList,
 		initialId,
 		scrollIntoView,
-		userData,
-		anonymousConversationStarted,
-		setAnonymousConversationStarted
+		userData
 	]);
 	/* eslint-enable */
 	// Refresh myself
@@ -365,7 +303,6 @@ export const SessionsList = ({
 
 							const sessionType = getSessionType(
 								session,
-								rid,
 								userData.userId
 							);
 
@@ -510,9 +447,6 @@ export const SessionsList = ({
 	// Subscribe to all my messages
 	useEffect(() => {
 		const userId = rcUid.current;
-		if (anonymousConversationFinished) {
-			return;
-		}
 
 		if (socketReady && !subscribed.current) {
 			subscribed.current = true;
@@ -559,7 +493,6 @@ export const SessionsList = ({
 			}
 		};
 	}, [
-		anonymousConversationFinished,
 		onDebounceRoomsChanged,
 		onDebounceSubscriptionsChanged,
 		socketReady,
@@ -567,27 +500,6 @@ export const SessionsList = ({
 		subscribed,
 		unsubscribe
 	]);
-
-	const [showFilter, setShowFilter] = useState(false);
-
-	useEffect(() => {
-		const showFilter =
-			type !== SESSION_LIST_TYPES.ENQUIRY &&
-			sessionListTab !== SESSION_LIST_TAB_ARCHIVE &&
-			((hasUserAuthority(AUTHORITIES.VIEW_ALL_PEER_SESSIONS, userData) &&
-				type === SESSION_LIST_TYPES.TEAMSESSION) ||
-				(hasUserAuthority(AUTHORITIES.USE_FEEDBACK, userData) &&
-					!hasUserAuthority(
-						AUTHORITIES.VIEW_ALL_PEER_SESSIONS,
-						userData
-					)));
-
-		setShowFilter(showFilter);
-
-		if (!showFilter) {
-			setFilter(INITIAL_FILTER);
-		}
-	}, [sessionListTab, type, userData]);
 
 	const loadMoreSessions = useCallback(() => {
 		setIsLoading(true);
@@ -633,67 +545,13 @@ export const SessionsList = ({
 		totalItems
 	]);
 
-	const handleSelect = (selectedOption) => {
-		setCurrentOffset(0);
-		setFilter(selectedOption.value);
-		history.push(listPath);
-	};
-
 	const handleReloadButton = useCallback(() => {
 		setIsReloadButtonVisible(false);
 		loadMoreSessions();
 	}, [loadMoreSessions]);
 
-	const selectedOptionsSet = [
-		{
-			value: FILTER_FEEDBACK,
-			label: hasUserAuthority(
-				AUTHORITIES.VIEW_ALL_PEER_SESSIONS,
-				userData
-			)
-				? translate('sessionList.filter.option.feedbackMain')
-				: translate('sessionList.filter.option.feedbackPeer')
-		},
-		{
-			value: INITIAL_FILTER,
-			label: translate('sessionList.filter.option.all')
-		}
-	];
-
-	const preSelectedOption =
-		selectedOptionsSet.find((option) => option.value === filter) ??
-		selectedOptionsSet[1];
-
-	const selectDropdown: SelectDropdownItem = {
-		id: 'listFilterSelect',
-		selectedOptions: selectedOptionsSet,
-		handleDropdownSelect: handleSelect,
-		selectInputLabel: translate('sessionList.filter.placeholder'),
-		useIconOption: false,
-		isSearchable: false,
-		menuPlacement: 'bottom',
-		defaultValue: preSelectedOption
-	};
-
-	const showEnquiryTabs = useMemo(() => {
-		return (
-			hasUserAuthority(AUTHORITIES.CONSULTANT_DEFAULT, userData) &&
-			userData.hasAnonymousConversations &&
-			type === SESSION_LIST_TYPES.ENQUIRY &&
-			userData.agencies.some(
-				(agency) =>
-					(consultingTypes ?? []).find(
-						(consultingType) =>
-							consultingType.id === agency.consultingType
-					)?.isAnonymousConversationAllowed
-			)
-		);
-	}, [consultingTypes, type, userData]);
-
 	const showSessionListTabs =
-		userData.hasArchive &&
-		(type === SESSION_LIST_TYPES.MY_SESSION ||
-			type === SESSION_LIST_TYPES.TEAMSESSION);
+		userData.hasArchive && type === SESSION_LIST_TYPES.MY_SESSION;
 
 	const sortSessions = useCallback(
 		(
@@ -713,13 +571,6 @@ export const SessionsList = ({
 						? -1
 						: 1;
 				case SESSION_LIST_TYPES.MY_SESSION:
-				case SESSION_LIST_TYPES.TEAMSESSION:
-					const latestMessageA = new Date(sessionA.latestMessage);
-					const latestMessageB = new Date(sessionB.latestMessage);
-					if (latestMessageA === latestMessageB) {
-						return 0;
-					}
-					return latestMessageA > latestMessageB ? -1 : 1;
 			}
 			return 0;
 		},
@@ -740,9 +591,6 @@ export const SessionsList = ({
 				// filter my sessions only with my user id as consultant
 				case SESSION_LIST_TYPES.MY_SESSION:
 					return session?.consultant?.id === userData.userId;
-				// filter teamsessions only without my user id as consultant
-				case SESSION_LIST_TYPES.TEAMSESSION:
-					return session?.consultant?.id !== userData.userId;
 				// only show sessions without an assigned consultant in sessionPreview
 				case SESSION_LIST_TYPES.ENQUIRY:
 					return !session?.consultant;
@@ -829,50 +677,8 @@ export const SessionsList = ({
 
 	return (
 		<div className="sessionsList__innerWrapper">
-			{(showFilter || showEnquiryTabs || showSessionListTabs) && (
+			{showSessionListTabs && (
 				<div className="sessionsList__functionalityWrapper">
-					{showEnquiryTabs && (
-						<div role="tablist" className="sessionsList__tabs">
-							<Link
-								className={clsx({
-									'sessionsList__tabs--active':
-										!sessionListTab
-								})}
-								to={'/sessions/consultant/sessionPreview'}
-								onKeyDown={(e) => handleKeyDownTabs(e)}
-								ref={(el) => (ref_tab_first.current = el)}
-								tabIndex={0}
-								role="tab"
-							>
-								<Text
-									text={translate(
-										'sessionList.preview.registered.tab'
-									)}
-									type="standard"
-								/>
-							</Link>
-							<Link
-								className={clsx({
-									'sessionsList__tabs--active':
-										sessionListTab ===
-										SESSION_LIST_TAB_ANONYMOUS
-								})}
-								to={`/sessions/consultant/sessionPreview?sessionListTab=${SESSION_LIST_TAB_ANONYMOUS}`}
-								onKeyDown={(e) => handleKeyDownTabs(e)}
-								ref={(el) => (ref_tab_second.current = el)}
-								tabIndex={-1}
-								role="tab"
-							>
-								<Text
-									className={clsx('walkthrough_step_2')}
-									text={translate(
-										'sessionList.preview.anonymous.tab'
-									)}
-									type="standard"
-								/>
-							</Link>
-						</div>
-					)}
 					{showSessionListTabs && (
 						<div className="sessionsList__tabs" role="tablist">
 							<Link
@@ -880,11 +686,7 @@ export const SessionsList = ({
 									'sessionsList__tabs--active':
 										!sessionListTab
 								})}
-								to={`/sessions/consultant/${
-									type === SESSION_LIST_TYPES.TEAMSESSION
-										? 'teamSessionView'
-										: 'sessionView'
-								}`}
+								to={`/sessions/consultant/sessionView`}
 								onKeyDown={(e) => handleKeyDownTabs(e)}
 								ref={(el) => (ref_tab_first.current = el)}
 								tabIndex={0}
@@ -903,11 +705,7 @@ export const SessionsList = ({
 										sessionListTab ===
 										SESSION_LIST_TAB_ARCHIVE
 								})}
-								to={`/sessions/consultant/${
-									type === SESSION_LIST_TYPES.TEAMSESSION
-										? 'teamSessionView'
-										: 'sessionView'
-								}?sessionListTab=${SESSION_LIST_TAB_ARCHIVE}`}
+								to={`/sessions/consultant/sessionView?sessionListTab=${SESSION_LIST_TAB_ARCHIVE}`}
 								onKeyDown={(e) => handleKeyDownTabs(e)}
 								ref={(el) => (ref_tab_second.current = el)}
 								tabIndex={-1}
@@ -923,18 +721,12 @@ export const SessionsList = ({
 							</Link>
 						</div>
 					)}
-					{showFilter && (
-						<div className="sessionsList__selectWrapper">
-							<SelectDropdown {...selectDropdown} />
-						</div>
-					)}
 				</div>
 			)}
 			<div
 				className={clsx('sessionsList__scrollContainer', {
-					'sessionsList__scrollContainer--hasFilter': showFilter,
 					'sessionsList__scrollContainer--hasTabs':
-						showEnquiryTabs || showSessionListTabs
+						showSessionListTabs
 				})}
 				ref={listRef}
 				onScroll={handleListScroll}
@@ -966,8 +758,6 @@ export const SessionsList = ({
 						) && <SessionListCreateChat />}
 
 					{(!isLoading || finalSessionsList.length > 0) &&
-						(status === STATUS_ONLINE ||
-							sessionListTab !== SESSION_LIST_TAB_ANONYMOUS) &&
 						finalSessionsList
 							.map((session) =>
 								buildExtendedSession(session, groupIdFromParam)
@@ -1029,110 +819,17 @@ export const SessionsList = ({
 				{!isLoading &&
 					!isCreateChatActive &&
 					!isReloadButtonVisible &&
-					finalSessionsList.length === 0 &&
-					(sessionListTab !== SESSION_LIST_TAB_ANONYMOUS ||
-						status === STATUS_ONLINE) && (
+					finalSessionsList.length === 0 && (
 						<EmptyListItem
 							sessionListTab={sessionListTab}
 							type={type}
 						/>
-					)}
-
-				{!isLoading &&
-					status !== STATUS_ONLINE &&
-					type === SESSION_LIST_TYPES.ENQUIRY &&
-					sessionListTab === SESSION_LIST_TAB_ANONYMOUS && (
-						<ListInfo
-							headline={translate(
-								'sessionList.unavailable.description'
-							)}
-							Illustration={LiveChatAvailableIllustration}
-							buttonLabel={translate(
-								'sessionList.unavailable.buttonLabel'
-							)}
-							onButtonClick={toggleAvailability}
-						></ListInfo>
 					)}
 			</div>
 		</div>
 	);
 };
 
-/*
-Watch for inactive groups because there is no api endpoint
- */
-const useLiveChatWatcher = (
-	shouldStart: boolean,
-	loader: (
-		offset: number,
-		initialID?: string,
-		count?: number
-	) => Promise<any>,
-	offset: number
-) => {
-	const { sessions, dispatch } = useContext(SessionsDataContext);
-
-	const refreshLoader = useCallback((): Promise<any> => {
-		return loader(0, null, offset + SESSION_COUNT)
-			.then(({ sessions: newSessions }) => {
-				const addedSessions = newSessions.filter(
-					(newSession) =>
-						!sessions.find(
-							(session) =>
-								newSession.session.groupId ===
-								session.session.groupId
-						)
-				);
-				dispatch({
-					type: UPDATE_SESSIONS,
-					sessions: addedSessions
-				});
-
-				const removedSessions = sessions.filter(
-					(session) =>
-						!newSessions.find(
-							(newSession) =>
-								newSession.session.groupId ===
-								session.session.groupId
-						)
-				);
-
-				if (removedSessions.length > 0) {
-					dispatch({
-						type: REMOVE_SESSIONS,
-						ids: removedSessions.map(
-							(session) => session.session.groupId
-						)
-					});
-				}
-			})
-			.catch((e) => {
-				if (e.message === FETCH_ERRORS.EMPTY) {
-					dispatch({
-						type: SET_SESSIONS,
-						sessions: []
-					});
-				}
-			});
-	}, [dispatch, loader, offset, sessions]);
-
-	const [startWatcher, stopWatcher, isWatcherRunning] = useWatcher(
-		refreshLoader,
-		3000
-	);
-
-	useEffect(() => {
-		if (!isWatcherRunning && shouldStart) {
-			startWatcher();
-		}
-
-		return () => {
-			if (isWatcherRunning) {
-				stopWatcher();
-			}
-		};
-	}, [shouldStart, isWatcherRunning, startWatcher, stopWatcher]);
-};
 /*
 Watch for inactive groups because there is no api endpoint
  */

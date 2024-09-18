@@ -19,12 +19,10 @@
 		}
 	},
 	"isSubsequentRegistrationAllowed": true,
-	"isAnonymousConversationAllowed": true,
 	"isSetEmailAllowed": true,
 	"slug": "suchtberatung",
 	"languageFormal": true,
 	"lockedAgencies": false,
-	"excludeNonMainConsultantsFromTeamSessions": false,
 	"whiteSpot": {
 		"whiteSpotAgencyAssigned": true,
 		"whiteSpotAgencyId": 100
@@ -46,18 +44,10 @@
 		"relation": true,
 		"state": false
 	},
-	"initializeFeedbackChat": false,
 	"roles": {
 		"consultant": {
 			"main": ["consultant"],
 			"peer": ["consultant"]
-		}
-	},
-	"notifications": {
-		"teamSessions": {
-			"newMessage": {
-				"allTeamConsultants": false
-			}
 		}
 	},
 	"showAskerProfile": true,

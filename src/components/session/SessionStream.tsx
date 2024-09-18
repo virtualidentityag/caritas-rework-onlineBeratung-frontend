@@ -11,7 +11,6 @@ import { useParams, useHistory } from 'react-router-dom';
 import { Loading } from '../app/Loading';
 import { SessionItemComponent } from './SessionItemComponent';
 import {
-	AnonymousConversationFinishedContext,
 	AUTHORITIES,
 	ConsultantListContext,
 	E2EEContext,
@@ -22,7 +21,6 @@ import {
 	UserDataContext,
 	ActiveSessionContext
 } from '../../globalState';
-import { STATUS_FINISHED } from '../../globalState/interfaces';
 import {
 	apiGetAgencyConsultantList,
 	apiGetSessionData,
@@ -42,7 +40,6 @@ import useTyping from '../../utils/useTyping';
 import './session.styles';
 import { useE2EE } from '../../hooks/useE2EE';
 import {
-	EVENT_ROOMS_CHANGED,
 	EVENT_SUBSCRIPTIONS_CHANGED,
 	SUB_STREAM_NOTIFY_USER,
 	SUB_STREAM_ROOM_MESSAGES
@@ -75,9 +72,6 @@ export const SessionStream = ({
 	const { userData } = useContext(UserDataContext);
 	const { subscribe, unsubscribe } = useContext(RocketChatContext);
 	const { getSetting } = useContext(RocketChatGlobalSettingsContext);
-	const { anonymousConversationFinished } = useContext(
-		AnonymousConversationFinishedContext
-	);
 	const { rcGroupId } = useParams<{ rcGroupId: string }>();
 
 	const subscribed = useRef(false);
@@ -86,7 +80,7 @@ export const SessionStream = ({
 	const [loading, setLoading] = useState(true);
 	const [overlayItem, setOverlayItem] = useState(null);
 
-	const { activeSession, readActiveSession, reloadActiveSession } =
+	const { activeSession, readActiveSession } =
 		useContext(ActiveSessionContext);
 
 	const { addNewUsersToEncryptedRoom } = useE2EE(activeSession?.rid);
@@ -138,19 +132,8 @@ export const SessionStream = ({
 			return;
 		}
 
-		const isLiveChatFinished =
-			activeSession.isLive &&
-			activeSession.item.status === STATUS_FINISHED;
-
-		if (
-			!hasUserAuthority(AUTHORITIES.CONSULTANT_DEFAULT, userData) &&
-			isLiveChatFinished
-		) {
-			return;
-		}
-
 		readActiveSession();
-	}, [activeSession, readActiveSession, readonly, userData]);
+	}, [readActiveSession, readonly]);
 
 	/**
 	 * ToDo: roomMessageBounce is just a temporary fix because currently
@@ -159,7 +142,7 @@ export const SessionStream = ({
 	 */
 	const handleRoomMessage = useCallback(
 		(args) => {
-			if (args.length === 0 || anonymousConversationFinished) return;
+			if (args.length === 0) return;
 
 			args
 				// Map collected from debounce callback
@@ -191,7 +174,6 @@ export const SessionStream = ({
 		},
 
 		[
-			anonymousConversationFinished,
 			checkMutedUserForThisSession,
 			isE2eeEnabled,
 			activeSession.isGroup,
@@ -244,18 +226,6 @@ export const SessionStream = ({
 		)
 	);
 
-	const handleLiveChatStopped = useUpdatingRef(
-		useCallback(
-			([, room]) => {
-				if (!room.ro) {
-					return;
-				}
-				reloadActiveSession();
-			},
-			[reloadActiveSession]
-		)
-	);
-
 	const handleSubscriptionChanged = useUpdatingRef(
 		useCallback(
 			([event]) => {
@@ -279,11 +249,6 @@ export const SessionStream = ({
 		} else {
 			subscribed.current = true;
 
-			if (anonymousConversationFinished) {
-				setLoading(false);
-				return;
-			}
-
 			// check if any user needs to be added when opening session view
 			addNewUsersToEncryptedRoom().then();
 
@@ -305,24 +270,13 @@ export const SessionStream = ({
 							event: EVENT_SUBSCRIPTIONS_CHANGED,
 							userId: getValueFromCookie('rc_uid')
 						},
-						activeSession.isGroup || activeSession.isLive
+						activeSession.isGroup
 							? handleChatStopped
 							: handleSubscriptionChanged
 					);
 
-					if (activeSession.isGroup || activeSession.isLive) {
+					if (activeSession.isGroup) {
 						subscribeTyping();
-					}
-
-					if (activeSession.isLive) {
-						subscribe(
-							{
-								name: SUB_STREAM_NOTIFY_USER,
-								event: EVENT_ROOMS_CHANGED,
-								userId: getValueFromCookie('rc_uid')
-							},
-							handleLiveChatStopped
-						);
 					}
 
 					setLoading(false);
@@ -359,34 +313,21 @@ export const SessionStream = ({
 						event: EVENT_SUBSCRIPTIONS_CHANGED,
 						userId: getValueFromCookie('rc_uid')
 					},
-					activeSession.isGroup || activeSession.isLive
+					activeSession.isGroup
 						? handleChatStopped
 						: handleSubscriptionChanged
 				);
 
-				if (activeSession.isGroup || activeSession.isLive) {
+				if (activeSession.isGroup) {
 					unsubscribeTyping();
-				}
-
-				if (activeSession.isLive) {
-					unsubscribe(
-						{
-							name: SUB_STREAM_NOTIFY_USER,
-							event: EVENT_ROOMS_CHANGED,
-							userId: getValueFromCookie('rc_uid')
-						},
-						handleLiveChatStopped
-					);
 				}
 			}
 		};
 	}, [
 		activeSession,
 		addNewUsersToEncryptedRoom,
-		anonymousConversationFinished,
 		fetchSessionMessages,
 		handleChatStopped,
-		handleLiveChatStopped,
 		handleSubscriptionChanged,
 		onDebounceMessage,
 		setSessionRead,
@@ -400,7 +341,6 @@ export const SessionStream = ({
 
 	useEffect(() => {
 		if (
-			activeSession.isLive ||
 			activeSession.isGroup ||
 			hasUserAuthority(AUTHORITIES.ASKER_DEFAULT, userData)
 		) {
@@ -417,7 +357,6 @@ export const SessionStream = ({
 			});
 	}, [
 		activeSession.isGroup,
-		activeSession.isLive,
 		activeSession.item.agencyId,
 		setConsultantList,
 		userData

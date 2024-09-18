@@ -82,7 +82,6 @@ export const GroupChatHeader = ({
 		!hasUserAuthority(AUTHORITIES.ASKER_DEFAULT, userData) &&
 		consultingType?.showAskerProfile &&
 		activeSession.isSession &&
-		!activeSession.isLive &&
 		((type === SESSION_LIST_TYPES.ENQUIRY &&
 			Object.entries(userSessionData).length !== 0) ||
 			SESSION_LIST_TYPES.ENQUIRY !== type);

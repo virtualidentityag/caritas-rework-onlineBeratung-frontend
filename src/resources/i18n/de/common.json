@@ -34,88 +34,6 @@
 			"reassign_consultant_reset_last_message": "neu zugewiesen"
 		}
 	},
-	"anonymous": {
-		"listItem": {
-			"activeLabel": "Aktiv"
-		},
-		"overlay": {
-			"chatWasFinished": {
-				"button": "Zu Diakonie.de",
-				"copy": "Sie haben nun keinen Zugriff mehr auf Ihren Chat-Verlauf.",
-				"headline": "Ihre Beraterin oder Ihr Berater hat den Chat beendet."
-			},
-			"finishChat": {
-				"asker": {
-					"copy": "Wenn Sie diesen Chat beenden, haben Sie keinen Zugriff mehr auf Ihren Chat-Verlauf."
-				},
-				"button1": "Chat beenden",
-				"button2": "Abbrechen",
-				"consultant": {
-					"copy": "Der Ratsuchende wird darüber informiert und kann danach nicht mehr auf den Chat-Verlauf zugreifen."
-				},
-				"headline": "Möchten Sie diesen Chat beenden?",
-				"success": {
-					"button": "Zu Diakonie.de",
-					"headline": "Der Chat wurde erfolgreich beendet."
-				}
-			}
-		},
-		"session": {
-			"finishChat": "Chat beenden",
-			"infoMessage": {
-				"chatFinished": "Die Nachrichten werden 48h nach dem Beenden des Chats gelöscht."
-			},
-			"systemMessage": {
-				"chatFinished": "Der Chat wurde beendet."
-			}
-		},
-		"waitingroom": {
-			"closed": {
-				"description": "Auf unserer <a target=\"_blank\" href=\"{{websiteUrl}}\">Website</a> finden Sie im jeweiligen Themenbereich die Öffnungszeiten des Chats.",
-				"headline": "Momentan ist unser Live-Chat nicht besetzt.",
-				"illustrationTitle": "Chat geschlossen"
-			},
-			"dataProtection": {
-				"button": "Ich bin einverstanden",
-				"description": "Danach dürfen unsere Beraterinnen oder Berater einen Chat mit Ihnen starten.",
-				"headline": "Herzlich Willkommen",
-				"subline": "Bitte bestätigen Sie unsere Datenschutzbestimmungen. Danach dürfen unsere Berater_innen einen Chat mit Ihnen starten."
-			},
-			"errorPage": {
-				"button": "Neu laden",
-				"description": "Es tut uns leid, da ist wohl etwas schiefgelaufen.<br>Versuchen Sie es erneut.",
-				"headline": "Ups!"
-			},
-			"headline": "Bitte haben Sie etwas Geduld",
-			"info": {
-				"accountDeletion": "Um Ihre Anonymität zu schützen, löschen wir Ihre Nachrichten spätestens 48 Stunden nachdem der Chat beendet wurde."
-			},
-			"overlay": {
-				"acceptance": {
-					"button": "Jetzt chatten",
-					"copy": "Sie werden von Ihrer Beraterin oder Ihrem Berater im Chat erwartet. Sind Sie bereit?",
-					"headline": "Herzlich Willkommen!"
-				},
-				"rejection": {
-					"button": "Zur Registrierung",
-					"copy": "Leider konnten wir innerhalb der Chat-Zeit nicht auf Ihr Anliegen eingehen. Registrieren Sie sich und hinterlassen Sie uns Ihre Nachricht. Wir melden uns innerhalb von 2 Arbeitstagen bei Ihnen.",
-					"headline": "Chat-Zeit beendet."
-				}
-			},
-			"redirect": {
-				"subline": "Registrieren Sie sich und hinterlassen Sie uns Ihre Nachricht. Wir melden uns innerhalb von 2 Arbeitstagen bei Ihnen.",
-				"title": "Sie benötigen nicht sofort eine Antwort? Und wollen nicht auf einen freien Chat warten?"
-			},
-			"subline": "Derzeit sind alle Beraterinnen oder Berater im Gespräch. Wir sind schnellstmöglich für Sie da.",
-			"title": {
-				"start": "Warteraum"
-			},
-			"username": {
-				"loading": "Wird geladen...",
-				"text": "Ihr Benutzername lautet:"
-			}
-		}
-	},
 	"app": {
 		"back": "Zurück",
 		"claim": "Online. Anonym. Sicher.",
@@ -210,12 +128,6 @@
 				"success": {
 					"button": "Schließen",
 					"copy": "Sie haben den Ratsuchenden erfolgreich archiviert."
-				}
-			},
-			"teamsession": {
-				"success": {
-					"button": "Schließen",
-					"copy": "Sie haben den Ratsuchenden für sich und Ihr Team erfolgreich archiviert."
 				}
 			}
 		},
@@ -374,7 +286,6 @@
 		"dataProtection": "Datenschutz",
 		"dearchive": "Dearchivieren",
 		"editGroupChat": "Chat-Einstellungen",
-		"feedback": "Feedback",
 		"groupChatInfo": "Chat-Info",
 		"imprint": "Impressum",
 		"leaveGroupChat": "Chat verlassen",
@@ -595,10 +506,6 @@
 				"placeholder": {
 					"asker": "Schreiben Sie uns, was Sie bewegt.",
 					"consultant": "Nachricht an Klient:in schreiben",
-					"feedback": {
-						"main": "Nachricht an Peer schreiben",
-						"peer": "Nachricht an Teamleiter:in schreiben"
-					},
 					"groupChat": "Nachricht schreiben"
 				}
 			},
@@ -1264,15 +1171,10 @@
 				"headline": "Nachricht löschen"
 			}
 		},
-		"forward": {
-			"label": "Weitergeleitete Nachricht von {{username}}, {{date}} um {{time}}",
-			"title": "Textnachricht an\nFeedback weiterleiten"
-		},
 		"groupChat": "Gruppenchat",
 		"isMyMessage": {
 			"name": "Ich"
 		},
-		"liveChat": "Live Chat",
 		"newEnquiry": "Neue Anfrage",
 		"note": {
 			"title": "Notiz"
@@ -1295,13 +1197,6 @@
 			"moderatorEndedTitle": "Videokonferenz wurde beendet: {{time}}",
 			"moderatorStartedTitle": "Moderator:in {{name}} hat eine Videokonferenz gestartet"
 		},
-		"write": {
-			"peer": {
-				"checkbox": {
-					"label": "Feedback anfordern"
-				}
-			}
-		},
 		"yesterday": "Gestern"
 	},
 	"navigation": {
@@ -1317,17 +1212,9 @@
 		},
 		"consultant": {
 			"enquiries": "Erstanfragen",
-			"peersessions": {
-				"large": "Peer Beratungen",
-				"small": "Peer Ber."
-			},
 			"sessions": {
 				"large": "Meine Beratungen",
 				"small": "Nachrichten"
-			},
-			"teamsessions": {
-				"large": "Team Beratungen",
-				"small": "Team Ber."
 			}
 		},
 		"language": "Sprache",
@@ -1336,9 +1223,6 @@
 		"tools": "Meine Tools"
 	},
 	"notifications": {
-		"enquiry": {
-			"new": "Sie haben eine neue Livechat Anfrage!"
-		},
 		"error": "Fehlgeschlagen",
 		"info": "Information",
 		"initialRequest": {
@@ -1563,11 +1447,6 @@
 		"header": {
 			"title": "Profil"
 		},
-		"liveChat": {
-			"subtitle": "Aktivieren Sie Ihre Verfügbarkeit und sehen Sie in den Erstanfragen unter „Live-Chat Anfragen“ die wartenden anoymen Ratsuchenden.",
-			"title": "Meine Live-Chat Verfügbarkeit",
-			"toggleLabel": "Bin verfügbar"
-		},
 		"noContent": "Keine Angabe",
 		"notifications": {
 			"appointmentNotificationEnabled": {
@@ -1639,7 +1518,6 @@
 		"routes": {
 			"activities": {
 				"absence": "Meine Abwesenheit",
-				"availability": "Meine Verfügbarkeit",
 				"statistics": "Meine Statistik",
 				"title": "Meine Aktivitäten"
 			},
@@ -1766,7 +1644,6 @@
 		"agency": {
 			"headline": "Ihre Beratungsstelle wählen",
 			"preselected": {
-				"isTeam": "Sie werden von einem Team beraten.",
 				"prefix": "Ihre vorausgewählte Beratungsstelle: "
 			},
 			"consultantheadline": "Ihre Beratungsstelle",
@@ -2084,11 +1961,7 @@
 					"2": "Sie haben die Beratung erfolgreich zugewiesen."
 				},
 				"subtitle": {
-					"noTeam": "{{newConsultant}} ist somit für die Ratsuchende oder den Ratsuchenden verantwortlich und kann den kompletten Nachrichtenverlauf lesen. Sie haben keinen Zugiff mehr auf die Nachrichten.",
-					"team": {
-						"other": "{{newConsultant}} ist somit für die Ratsuchende oder den Ratsuchenden verantwortlich. Stimmt {{toAskerName}} der Zuweisung zu, finden Sie den Chatverlauf unter Teamberatung und nicht mehr in Ihren Nachrichten.",
-						"self": "{{newConsultant}} ist somit für die Ratsuchende oder den Ratsuchenden verantwortlich. Stimmt {{toAskerName}} der Zuweisung zu, finden Sie den Chatverlauf in Ihren Nachrichten und nicht mehr unter Teamberatung."
-					}
+					"noTeam": "{{newConsultant}} ist somit für die Ratsuchende oder den Ratsuchenden verantwortlich und kann den kompletten Nachrichtenverlauf lesen. Sie haben keinen Zugiff mehr auf die Nachrichten."
 				}
 			}
 		},
@@ -2124,9 +1997,6 @@
 			"restrictions": ".jpg, .png, .pdf, .docx, .xlsx bis maximal {{attachment_filesize}} MB"
 		},
 		"empty": "Bitte wählen Sie eine Nachricht aus",
-		"feedback": {
-			"label": "Feedback"
-		},
 		"groupChat": {
 			"consultant": {
 				"prefix": "Moderatorin oder Moderator - "
@@ -2174,17 +2044,12 @@
 							"title": "{{client}} hat die Zuweisung abgelehnt."
 						},
 						"description": {
-							"noTeam": "{{newConsultant}} kann somit den kompletten Nachrichtenverlauf lesen und ist für Sie verantwortlich. {{oldConsultant}} hat keinen Zugriff mehr auf die Nachrichten.",
-							"team": "{{newConsultant}} kann somit den kompletten Nachrichtenverlauf lesen und ist für Sie verantwortlich."
+							"noTeam": "{{newConsultant}} kann somit den kompletten Nachrichtenverlauf lesen und ist für Sie verantwortlich. {{oldConsultant}} hat keinen Zugriff mehr auf die Nachrichten."
 						},
 						"question": "Stimmen Sie der Übergabe zu?",
 						"sent": {
 							"description": {
-								"noTeam": "Sobald {{client1}} der Zuweisung zustimmt, wird {{client2}} an {{newConsultant}} mit dem kompletten Nachrichtenverlauf übergeben.",
-								"team": {
-									"other": "Sobald {{client1}} der Zuweisung zustimmt, ist {{newConsultant}} für {{client2}} verantwortlich. Sie finden den Chatverlauf dann in Ihren Nachrichten und nicht mehr hier unter Teamberatung.",
-									"self": "Sobald {{client1}} der Zuweisung zustimmt, ist {{newConsultant}} für {{client2}} verantwortlich. Sie finden den Chatverlauf dann unter Teamberatung und nicht mehr hier in Ihren Nachrichten."
-								}
+								"noTeam": "Sobald {{client1}} der Zuweisung zustimmt, wird {{client2}} an {{newConsultant}} mit dem kompletten Nachrichtenverlauf übergeben."
 							},
 							"title": "Anfrage zur Zuweisung versendet"
 						},
@@ -2210,46 +2075,20 @@
 			"buttonTitle": "Chat anlegen"
 		},
 		"empty": {
-			"anonymous": "Aktuell warten keine anonymen Ratsuchenden auf einen Live-Chat",
 			"archived": "Es sind noch keine Beratungen archiviert",
 			"known": "Aktuell liegen keine Erstanfragen vor",
-			"mySessions": "Sie haben zurzeit keine aktiven Beratungen",
-			"peerSessions": "Sie haben zurzeit keine aktiven Peer-Beratungen",
-			"teamSessions": "Ihr Team hat keine aktiven Beratungen",
-			"peersessions": "Sie haben zur Zeit keine aktiven Peer-Beratungen"
-		},
-		"filter": {
-			"option": {
-				"all": "Alle Beratungen",
-				"feedbackMain": "Feedback benötigt",
-				"feedbackPeer": "Feedback vorhanden"
-			},
-			"placeholder": "Filter"
-		},
-		"peersessions": {
-			"headline": "Peer-Beratungen"
+			"mySessions": "Sie haben zurzeit keine aktiven Beratungen"
 		},
 		"preview": {
-			"anonymous": {
-				"tab": "Live-Chat Anfragen"
-			},
-			"headline": "Erstanfragen",
-			"registered": {
-				"tab": "Erstanfragen"
-			}
+			"headline": "Erstanfragen"
 		},
 		"reloadButton": {
 			"label": "Erneut laden"
 		},
-		"teamsession": "Team Beratung",
 		"time": {
 			"label": {
 				"postfix": "Uhr"
 			}
-		},
-		"unavailable": {
-			"buttonLabel": "Verfügbarkeit aktivieren",
-			"description": "Aktivieren Sie Ihre Verfügbarkeit und erhalten Sie hier die Live-Chat Anfragen von anonymen Ratsuchenden"
 		},
 		"user": {
 			"consultantUnknown": "Beraterinnen- oder Berater-Suche läuft",
@@ -2673,10 +2512,7 @@
 			"ignored": "hat versucht Sie zu erreichen.",
 			"rejected": {
 				"prefix": "Sie haben versucht",
-				"suffix": "zu erreichen.",
-				"teamconsultant": {
-					"prefix": "hat versucht"
-				}
+				"suffix": "zu erreichen."
 			},
 			"unsupported": {
 				"button": "Hilfe öffnen",
@@ -2759,10 +2595,6 @@
 				"intro": "Hier finden Sie eine Übersicht über alle offenen Anfragen, die noch keinem Berater zugeordnet sind. Ihr gesamtes Team hat Zugriff auf diese Übersicht.\n<br /><br /> Die ältesten Anfragen stehen oben, die neuesten ganz unten, damit Sie die zuerst eingegangenen leichter finden können.\n<br /><br /> In dem Moment, in dem Sie auf 'Anfrage annehmen' klicken, wird die Anfrage sofort in Ihren Bereich 'Meine Beratungen' verschoben und die anderen Berater_innen sehen sie nicht mehr.",
 				"title": "Erstanfragen"
 			},
-			"2": {
-				"intro": "Von hier aus können Sie einen Chat mit einem/einer Ratsuchenden beginnen, der/die sich gerade im Warteraum befindet. <br /><br /> Die Ratsuchenden werden mit einem anonymen Namen gekennzeichnet, wie zum Beispiel \"Ratsuchende_r 11\". <br /><br /> Wenn Sie den Chat starten möchten, klicken Sie auf \"Chat starten\" und Sie können das Gespräch unter der Rubrik \"Meine Beratungen\" fortsetzen.",
-				"title": "Live-Chat Anfragen"
-			},
 			"3": {
 				"intro": "In diesem Bereich finden Sie alle Anfragen, die Sie angenommen haben. \n<br /><br /> Der Nachrichtenverlauf, der zuletzt bearbeitet wurde, steht ganz oben.\nFalls der/die Ratsuchende gerade im Warteraum online ist, sehen Sie das Label \"Aktiv\" direkt neben dem Namen.",
 				"title": "Meine Beratungen"
@@ -2770,10 +2602,6 @@
 			"4": {
 				"intro": "Damit Sie nicht durch nicht aktive Unterhaltungen abgelenkt werden, können Sie einige der Unterhaltungen archivieren. <br /><br /> Sie werden dann nicht gelöscht, sondern nur in die Registerkarte \"Archiv\" verschoben. <br /><br /> Jedes Mal, wenn Sie oder der/die Ratsuchende etwas in eine archivierte Unterhaltung schreiben, wird dieser Nachrichtenverlauf wieder in die Liste der Ratsuchenden eingeordnet.",
 				"title": "Archiv"
-			},
-			"5": {
-				"intro": "In diesem Bereich können Sie alle aktiven Beratungen, die jemand in Ihrem Team gerade bearbeitet, einsehen und zu ihnen beitragen.",
-				"title": "Team-Beratungen"
 			},
 			"6": {
 				"intro": "Im Profilbereich können Sie persönliche und öffentliche Informationen verwalten, die Abwesenheitsnachricht während Ihres Urlaubs aktivieren, Ihr Passwort ändern und viele andere Funktionen (wie die Einrichtung der 2-Faktor-Authentifizierung) nutzen.",
@@ -2844,7 +2672,7 @@
 		"title9": "Dauer der Speicherung, Widerspruchs- und Beseitigungsmöglichkeit",
 		"text9": "Cookies werden auf dem Rechner des Nutzers gespeichert und von diesem an unserer Seite übermittelt. \nDaher haben Sie als Nutzer auch die volle Kontrolle über die Verwendung von Cookies. \nDurch eine Änderung der Einstellungen in Ihrem Internetbrowser können Sie die Übertragung von Cookies deaktivieren oder einschränken. \nBereits gespeicherte Cookies können jederzeit gelöscht werden. \nDies kann auch automatisiert erfolgen. Werden Cookies für unsere Website deaktiviert, können möglicherweise nicht mehr alle Funktionen der Website vollumfänglich genutzt werden.",
 		"title10": "Verwendete Cookies",
-		"text10": "\n<table>\n<tr>\n<th>Name</th>\n<th>Speicherdauer</th>\n<th>Zugriff Dritter</th>\n</tr>\n<tr>\n<td>CSRF-TOKEN</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>keycloak</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>KEYCLOAK_LOCALE</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>rc_token</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>rc_uid</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>refreshToken</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>useInformal</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>userRoles</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>registeredUsername</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>hideInfoBanner</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>public_key</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>private_key</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>visited</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>anonymousSessionId</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>auth.access_token_valid_until</td>\n<td>Dauerhaft</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>auth.refresh_token_valid_until</td>\n<td>Dauerhaft</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>mk_*</td>\n<td>Dauerhaft</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>locale</td>\n<td>Dauerhaft</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>releaseNote</td>\n<td>Dauerhaft</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>pseudoPassword_*</td>\n<td>Dauerhaft</td>\n<td>nein</td>\n</tr>\n</table>\n",
+		"text10": "\n<table>\n<tr>\n<th>Name</th>\n<th>Speicherdauer</th>\n<th>Zugriff Dritter</th>\n</tr>\n<tr>\n<td>CSRF-TOKEN</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>keycloak</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>KEYCLOAK_LOCALE</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>rc_token</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>rc_uid</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>refreshToken</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>useInformal</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>userRoles</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>hideInfoBanner</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>public_key</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>private_key</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>visited</td>\n<td>Session</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>auth.access_token_valid_until</td>\n<td>Dauerhaft</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>auth.refresh_token_valid_until</td>\n<td>Dauerhaft</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>mk_*</td>\n<td>Dauerhaft</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>locale</td>\n<td>Dauerhaft</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>releaseNote</td>\n<td>Dauerhaft</td>\n<td>nein</td>\n</tr>\n<tr>\n<td>pseudoPassword_*</td>\n<td>Dauerhaft</td>\n<td>nein</td>\n</tr>\n</table>\n",
 		"title11": "Registrierung und Kommunikation über die Beratungsplattform",
 		"text11": "Das Beratungsportal ist ein geschlossenes und verschlüsseltes System, über das Ratsuchende anonymen Kontakt zu einer Beratungsstelle der Diakonie herstellen können. \nDie Diakonie Deutschland stellt dieses System zur Verfügung und gewährleistet die technische Sicherheit, hat aber keinen Einblick in die Beratungsvorgänge. \nDiese liegen in der Verantwortung der einzelnen Beratungsstellen. \nBei Fragen zu einem Beratungsvorgang wenden Sie sich daher bitte direkt an die jeweilige Beratungsstelle.",
 		"title12": "Umfang und Zweck der Datenverarbeitung, Rechtsgrundlage",

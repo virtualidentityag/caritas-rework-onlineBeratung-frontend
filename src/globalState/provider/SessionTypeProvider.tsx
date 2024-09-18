@@ -33,8 +33,6 @@ export function SessionTypeProvider({
 				switch (type) {
 					case SESSION_LIST_TYPES.ENQUIRY:
 						return '/sessions/consultant/sessionPreview';
-					case SESSION_LIST_TYPES.TEAMSESSION:
-						return '/sessions/consultant/teamSessionView';
 					case SESSION_LIST_TYPES.MY_SESSION:
 						return '/sessions/consultant/sessionView';
 				}

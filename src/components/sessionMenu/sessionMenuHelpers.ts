@@ -2,7 +2,6 @@ import { OverlayItem, OVERLAY_FUNCTIONS } from '../overlay/Overlay';
 import { BUTTON_TYPES } from '../button/Button';
 import { ReactComponent as CheckIllustration } from '../../resources/img/illustrations/check.svg';
 import { ReactComponent as XIllustration } from '../../resources/img/illustrations/x.svg';
-import { ReactComponent as WavingIllustration } from '../../resources/img/illustrations/waving.svg';
 import { ReactComponent as ErrorBubbleIllustration } from '../../resources/img/illustrations/error-bubble.svg';
 
 export const stopGroupChatSecurityOverlayItem: OverlayItem = {
@@ -85,53 +84,6 @@ export const leaveGroupChatSuccessOverlayItem: OverlayItem = {
 			label: 'groupChat.leaveChat.successOverlay.button2Label',
 			function: OVERLAY_FUNCTIONS.LOGOUT,
 			type: BUTTON_TYPES.SECONDARY
-		}
-	]
-};
-
-export const finishAnonymousChatSecurityOverlayItem: OverlayItem = {
-	svg: WavingIllustration,
-	illustrationBackground: 'neutral',
-	headline: 'anonymous.overlay.finishChat.headline',
-	copy: 'anonymous.overlay.finishChat.consultant.copy',
-	buttonSet: [
-		{
-			label: 'anonymous.overlay.finishChat.button1',
-			function: OVERLAY_FUNCTIONS.FINISH_ANONYMOUS_CONVERSATION,
-			type: BUTTON_TYPES.PRIMARY
-		},
-		{
-			label: 'anonymous.overlay.finishChat.button2',
-			function: OVERLAY_FUNCTIONS.CLOSE,
-			type: BUTTON_TYPES.SECONDARY
-		}
-	]
-};
-
-export const selfFinishedAnonymousChatSuccessOverlayItem: OverlayItem = {
-	svg: WavingIllustration,
-	illustrationBackground: 'neutral',
-	headline: 'anonymous.overlay.chatWasFinished.headline',
-	headlineStyleLevel: '1',
-	copy: 'anonymous.overlay.chatWasFinished.copy',
-	buttonSet: [
-		{
-			label: 'anonymous.overlay.chatWasFinished.button',
-			function: OVERLAY_FUNCTIONS.REDIRECT_TO_URL,
-			type: BUTTON_TYPES.PRIMARY
-		}
-	]
-};
-
-export const finishAnonymousChatSuccessOverlayItem: OverlayItem = {
-	svg: CheckIllustration,
-	illustrationBackground: 'info',
-	headline: 'anonymous.overlay.finishChat.success.headline',
-	buttonSet: [
-		{
-			label: 'anonymous.overlay.finishChat.success.button',
-			function: OVERLAY_FUNCTIONS.REDIRECT_TO_URL,
-			type: BUTTON_TYPES.PRIMARY
 		}
 	]
 };

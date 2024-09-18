@@ -32,10 +32,7 @@ export const SessionsListWrapper = ({
 	const { type } = useContext(SessionTypeContext);
 	const sessionListTab = useSearchParam<SESSION_LIST_TAB>('sessionListTab');
 
-	if (
-		hasUserAuthority(AUTHORITIES.ASKER_DEFAULT, userData) ||
-		hasUserAuthority(AUTHORITIES.ANONYMOUS_DEFAULT, userData)
-	) {
+	if (hasUserAuthority(AUTHORITIES.ASKER_DEFAULT, userData)) {
 		return (
 			<div className="sessionsList__wrapper">
 				<div
@@ -66,20 +63,6 @@ export const SessionsListWrapper = ({
 				>
 					{type === SESSION_LIST_TYPES.MY_SESSION
 						? translate('sessionList.view.headline')
-						: null}
-					{type === SESSION_LIST_TYPES.TEAMSESSION &&
-					!hasUserAuthority(
-						AUTHORITIES.VIEW_ALL_PEER_SESSIONS,
-						userData
-					)
-						? translate('navigation.consultant.teamsessions.large')
-						: null}
-					{type === SESSION_LIST_TYPES.TEAMSESSION &&
-					hasUserAuthority(
-						AUTHORITIES.VIEW_ALL_PEER_SESSIONS,
-						userData
-					)
-						? translate('sessionList.peersessions.headline')
 						: null}
 					{type === SESSION_LIST_TYPES.ENQUIRY
 						? translate('sessionList.preview.headline')

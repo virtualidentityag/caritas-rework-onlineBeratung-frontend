@@ -19,13 +19,11 @@ export interface DisplayInfoProps {
 		ns: string;
 	};
 	isProfileView?: boolean;
-	showTeamAgencyInfo?: boolean;
 }
 
 export const InfoTooltip = ({
 	translation,
 	isProfileView,
-	showTeamAgencyInfo,
 	info
 }: DisplayInfoProps) => {
 	const { t: translate } = useTranslation(['common', translation.ns]);
@@ -88,17 +86,6 @@ export const InfoTooltip = ({
 					}`}
 					ref={agencyInfoRef}
 				>
-					{showTeamAgencyInfo && (
-						<div className="agencyInfo__teamAgency">
-							<InfoIcon aria-hidden="true" focusable="false" />
-							<Text
-								text={translate(
-									`registration.${translation.prefix}.preselected.isTeam`
-								)}
-								type="standard"
-							/>
-						</div>
-					)}
 					{displayInfo.name && (
 						<Text
 							className="agencyInfo__name"

@@ -1,7 +1,5 @@
 import * as React from 'react';
 import {
-	AnonymousConversationFinishedProvider,
-	AnonymousEnquiryAcceptedProvider,
 	ConsultantListProvider,
 	ConsultingTypesProvider,
 	NotificationsProvider,
@@ -9,7 +7,6 @@ import {
 	UserDataProvider,
 	WebsocketConnectionDeactivatedProvider,
 	RocketChatGlobalSettingsProvider,
-	AnonymousConversationStartedProvider,
 	SessionsDataProvider,
 	ModalProvider,
 	AgencySpecificProvider,
@@ -30,8 +27,6 @@ function ContextProvider({ children }) {
 	return (
 		<ProviderComposer
 			contexts={[
-				<AnonymousEnquiryAcceptedProvider />,
-				<AnonymousConversationStartedProvider />,
 				<ConsultantListProvider />,
 				<ConsultingTypesProvider />,
 				<TopicsProvider />,
@@ -39,7 +34,6 @@ function ContextProvider({ children }) {
 				<UpdateSessionListProvider />,
 				<UserDataProvider />,
 				<AgencySpecificProvider />,
-				<AnonymousConversationFinishedProvider />,
 				<WebsocketConnectionDeactivatedProvider />,
 				<SessionsDataProvider />,
 				<RocketChatGlobalSettingsProvider />,

@@ -30,11 +30,6 @@ declare namespace AgencyService {
 			 * example:
 			 * false
 			 */
-			teamAgency?: boolean;
-			/**
-			 * example:
-			 * false
-			 */
 			offline?: boolean;
 			/**
 			 * example:

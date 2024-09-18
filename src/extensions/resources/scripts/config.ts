@@ -32,7 +32,6 @@ export const config: AppConfigInterface = {
 	..._.merge(baseConfig, {
 		urls: {
 			chatScheduleUrl: uiUrl + '/registration',
-			finishedAnonymousChatRedirect: 'https://www.diakonie.de',
 			home: uiUrl + '/registration',
 			landingpage: '/registration',
 			toEntry: uiUrl + '/registration',

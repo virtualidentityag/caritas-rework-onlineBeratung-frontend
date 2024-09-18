@@ -19,6 +19,7 @@ $message-attachment-color: $secondary !default;
 			opacity: 0;
 			transform: translate(0, 0) scale(0.98);
 		}
+
 		100% {
 			opacity: 1;
 			transform: translate(0, 0) scale(1);
@@ -50,6 +51,7 @@ $message-attachment-color: $secondary !default;
 		line-height: 13px;
 		text-align: center;
 	}
+
 	&__username {
 		text-align: left;
 		display: flex;
@@ -69,21 +71,6 @@ $message-attachment-color: $secondary !default;
 
 		&--consultant {
 			color: $message-name-consultant;
-		}
-
-		&--forwarded {
-			font-size: $font-size-secondary;
-			line-height: $line-height-secondary;
-			color: $message-name-forwarded;
-
-			svg {
-				display: inline-block;
-				margin-right: 8px;
-				padding-bottom: 4px;
-				path {
-					fill: $text-low-emphasis;
-				}
-			}
 		}
 
 		.flyoutMenu {
@@ -316,10 +303,6 @@ $message-attachment-color: $secondary !default;
 				color: var(--text-color-contrast-switch, $white);
 			}
 		}
-
-		&--forwarded {
-			background-color: $yellow-4;
-		}
 	}
 
 	&__action {
@@ -334,12 +317,6 @@ $message-attachment-color: $secondary !default;
 
 			path {
 				fill: var(--skin-color-secondary, $secondary);
-			}
-
-			&.forward {
-				&--active {
-					animation: successReverse 2.5s ease forwards;
-				}
 			}
 
 			&.copy {
@@ -525,23 +502,11 @@ $message-attachment-color: $secondary !default;
 		transform: translate(-50%, 0) scale(0);
 		opacity: 0;
 	}
+
 	33%,
 	66% {
 		transform: translate(-50%, 0) scale(1);
 		opacity: 1;
-	}
-}
-
-@keyframes successReverse {
-	100%,
-	0% {
-		transform: scale(1);
-		opacity: 1;
-	}
-	15%,
-	80% {
-		transform: scale(0) rotate(45deg);
-		opacity: 0;
 	}
 }
 
@@ -551,6 +516,7 @@ $message-attachment-color: $secondary !default;
 		transform: scale(1);
 		opacity: 1;
 	}
+
 	15%,
 	80% {
 		transform: scale(0);

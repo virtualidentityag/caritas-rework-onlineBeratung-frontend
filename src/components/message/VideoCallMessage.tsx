@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { ICON_CALL_OFF, SystemMessage } from './SystemMessage';
 import { VideoCallMessageDTO } from './MessageItemComponent';
-import {
-	currentUserIsTeamConsultant,
-	currentUserWasVideoCallInitiator
-} from '../../utils/videoCallHelpers';
+import { currentUserWasVideoCallInitiator } from '../../utils/videoCallHelpers';
 import { useTranslation } from 'react-i18next';
 interface VideoCallMessageProps {
 	videoCallMessage: VideoCallMessageDTO;
@@ -30,22 +27,7 @@ export const VideoCallMessage = (props: VideoCallMessageProps) => {
 				) : (
 					<>
 						<b>{props.videoCallMessage.initiatorUserName}</b>{' '}
-						{currentUserIsTeamConsultant(
-							props.videoCallMessage.initiatorRcUserId,
-							props.activeSessionAskerRcId
-						) ? (
-							<>
-								{translate(
-									'videoCall.incomingCall.rejected.teamconsultant.prefix'
-								)}{' '}
-								<b>{props.activeSessionUsername}</b>{' '}
-								{translate(
-									'videoCall.incomingCall.rejected.suffix'
-								)}
-							</>
-						) : (
-							translate('videoCall.incomingCall.ignored')
-						)}
+						{translate('videoCall.incomingCall.ignored')}
 					</>
 				)
 			}

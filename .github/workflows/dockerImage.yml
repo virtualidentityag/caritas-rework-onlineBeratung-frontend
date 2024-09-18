@@ -10,7 +10,6 @@ on:
             - 'dockerImage.v.*'
             - 'v*'
 
-
 jobs:
     build:
         name: Build

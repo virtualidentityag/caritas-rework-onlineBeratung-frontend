@@ -34,88 +34,6 @@
 			"reassign_consultant_reset_last_message": "reassigned"
 		}
 	},
-	"anonymous": {
-		"listItem": {
-			"activeLabel": "Active"
-		},
-		"overlay": {
-			"chatWasFinished": {
-				"button": "Go to Caritas.de",
-				"copy": "You will no longer have access to your chat history.",
-				"headline": "Your consultant has ended the chat."
-			},
-			"finishChat": {
-				"asker": {
-					"copy": "When you exit this chat, you will no longer have access to your chat history."
-				},
-				"button1": "End chat",
-				"button2": "Cancel",
-				"consultant": {
-					"copy": "The advice seeker will be informed about this and will not be able to access the chat history afterwards."
-				},
-				"headline": "Do you want to end this chat?",
-				"success": {
-					"button": "Go to Caritas.de",
-					"headline": "The chat has ended successfully."
-				}
-			}
-		},
-		"session": {
-			"finishChat": "End chat",
-			"infoMessage": {
-				"chatFinished": "The messages are deleted 48h after the chat ends."
-			},
-			"systemMessage": {
-				"chatFinished": "The chat has been closed."
-			}
-		},
-		"waitingroom": {
-			"closed": {
-				"description": "On our <a target=\"_blank\" href=\"{{websiteUrl}}\">Website</a> you can find the opening hours of the chat in the respective subject area.",
-				"headline": "Our live chat is currently unavailable",
-				"illustrationTitle": "chat closed"
-			},
-			"dataProtection": {
-				"button": "I agree",
-				"description": "After that, our consultants may start a chat with you.",
-				"headline": "Welcome",
-				"subline": "Please confirm our privacy policy. After that, our consultants may start a chat with you."
-			},
-			"errorPage": {
-				"button": "Reload",
-				"description": "We are sorry something must have gone wrong.<br>Try again.",
-				"headline": "Oops!"
-			},
-			"headline": "Please be patient",
-			"info": {
-				"accountDeletion": "To protect your anonymity, we delete your messages no later than 48 hours after the chat has ended."
-			},
-			"overlay": {
-				"acceptance": {
-					"button": "Chat now",
-					"copy": "Your consultant is waiting for you in the chat. Are you ready?",
-					"headline": "Welcome!"
-				},
-				"rejection": {
-					"button": "To registration",
-					"copy": "Sorry, we could not respond to your request within the chat time. Please register and leave us your message. We will get back to you within 2 business days.",
-					"headline": "Chat time ended."
-				}
-			},
-			"redirect": {
-				"subline": "Register and leave us a message. We will get back to you within 2 business days. <br><br>Go to <a href=\"registration\">registration</a>",
-				"title": "You do not need an answer immediately? And do not want to wait for a free chat?"
-			},
-			"subline": "Currently, all consultants are in discussion. We will be there for you as soon as possible.",
-			"title": {
-				"start": "Waiting room"
-			},
-			"username": {
-				"loading": "Will be loaded...",
-				"text": "Your username is:"
-			}
-		}
-	},
 	"app": {
 		"back": "back",
 		"claim": "Online. Anonymous. Secure.",
@@ -207,12 +125,6 @@
 				"success": {
 					"button": "Close",
 					"copy": "You have successfully archived the advice seeker."
-				}
-			},
-			"teamsession": {
-				"success": {
-					"button": "Close",
-					"copy": "You have successfully archived the advice seeker for you and your team."
 				}
 			}
 		},
@@ -362,7 +274,6 @@
 		"dataProtection": "Data protection",
 		"dearchive": "Dearchive",
 		"editGroupChat": "Chat settings",
-		"feedback": "Feedback",
 		"groupChatInfo": "Chat info",
 		"imprint": "Imprint",
 		"leaveGroupChat": "Leave chat",
@@ -583,10 +494,6 @@
 				"placeholder": {
 					"asker": "Write us what moves you.",
 					"consultant": "Write a message to client",
-					"feedback": {
-						"main": "Send a message to Peer",
-						"peer": "Send a message to Teamleader"
-					},
 					"groupChat": "Write message"
 				}
 			},
@@ -1249,15 +1156,10 @@
 				"headline": "Delete message"
 			}
 		},
-		"forward": {
-			"label": "Forwarded message from {{username}}, {{date}} at {{time}}",
-			"title": "Forward text message to\nFeedback"
-		},
 		"groupChat": "Group chat",
 		"isMyMessage": {
 			"name": "Me"
 		},
-		"liveChat": "Live chat",
 		"newEnquiry": "New enquiry",
 		"note": {
 			"title": "Note"
@@ -1273,13 +1175,6 @@
 		"today": "Today",
 		"tomorrow": "Tomorrow",
 		"unread": "unread",
-		"write": {
-			"peer": {
-				"checkbox": {
-					"label": "Request feedback"
-				}
-			}
-		},
 		"yesterday": "Yesterday"
 	},
 	"navigation": {
@@ -1295,17 +1190,9 @@
 		},
 		"consultant": {
 			"enquiries": "Initial inquiries",
-			"peersessions": {
-				"large": "Peer consultations",
-				"small": "Peer Con."
-			},
 			"sessions": {
 				"large": "My consultations",
 				"small": "Messages"
-			},
-			"teamsessions": {
-				"large": "Team consultations",
-				"small": "Team Con."
 			}
 		},
 		"language": "Language",
@@ -1314,9 +1201,6 @@
 		"tools": "My tools"
 	},
 	"notifications": {
-		"enquiry": {
-			"new": "You have a new live chat request!"
-		},
 		"error": "failed",
 		"info": "info",
 		"initialRequest": {
@@ -1540,11 +1424,6 @@
 		"header": {
 			"title": "Profile"
 		},
-		"liveChat": {
-			"subtitle": "Activate your availability and see the waiting anoymous advice seekers in the initial requests under \"Live Chat Requests\".",
-			"title": "My live chat availability",
-			"toggleLabel": "available"
-		},
 		"noContent": "Not specified",
 		"notifications": {
 			"appointmentNotificationEnabled": {
@@ -1608,7 +1487,6 @@
 		"routes": {
 			"activities": {
 				"absence": "My absence",
-				"availability": "My availability",
 				"statistics": "My statistics",
 				"title": "My activities"
 			},
@@ -1735,7 +1613,6 @@
 		"agency": {
 			"headline": "Choose consulting center",
 			"preselected": {
-				"isTeam": "You will be advised by a team.",
 				"prefix": "Your pre-selected counseling center: "
 			}
 		},
@@ -1965,11 +1842,7 @@
 					"2": "You have successfully assigned the consultation."
 				},
 				"subtitle": {
-					"noTeam": "{{newConsultant}} is thus responsible for the advice seeker and can read the complete message history. They no longer have access to the messages.",
-					"team": {
-						"other": "{{newConsultant}} is thus responsible for the advice seeker. If {{toAskerName}} agrees to the assignment, you will find the chat history under Team Consulting and no longer in your messages.",
-						"self": "{{newConsultant}} is thus responsible for the advice seeker. If {{toAskerName}} agrees to the assignment, you will find the chat history in your messages and no longer under team consulting."
-					}
+					"noTeam": "{{newConsultant}} is thus responsible for the advice seeker and can read the complete message history. They no longer have access to the messages."
 				}
 			}
 		},
@@ -2005,9 +1878,6 @@
 			"restrictions": ".jpg, .png, .pdf, .docx, .xlsx up to a maximum of {{attachment_filesize}}MB"
 		},
 		"empty": "Please select a message",
-		"feedback": {
-			"label": "Feedback"
-		},
 		"groupChat": {
 			"consultant": {
 				"prefix": "Moderator - "
@@ -2055,17 +1925,12 @@
 							"title": "{{client}} has rejected the assignment."
 						},
 						"description": {
-							"noTeam": "{{newConsultant}} can thus read the complete message history and is responsible for you. {{oldConsultant}} no longer has access to the messages.",
-							"team": "{{newConsultant}} can thus read the complete message history and is responsible for you."
+							"noTeam": "{{newConsultant}} can thus read the complete message history and is responsible for you. {{oldConsultant}} no longer has access to the messages."
 						},
 						"question": "Do you agree to the transfer?",
 						"sent": {
 							"description": {
-								"noTeam": "Once {{client1}} agrees to the assignment, {{client2}} is passed to {{newConsultant}} with the complete message history.",
-								"team": {
-									"other": "Once {{client1}} agrees to the assignment, {{newConsultant}} will be responsible for {{client2}}. You will then find the chat history in your messages and no longer here under Team Consulting.",
-									"self": "Once {{client1}} agrees to the assignment, {{newConsultant}} will be responsible for {{client2}}. You will then find the chat history under Team Consulting and no longer here in your messages."
-								}
+								"noTeam": "Once {{client1}} agrees to the assignment, {{client2}} is passed to {{newConsultant}} with the complete message history."
 							},
 							"title": "Request for assignment sent"
 						},
@@ -2091,28 +1956,11 @@
 			"buttonTitle": "Create chat"
 		},
 		"empty": {
-			"anonymous": "Currently, no anonymous advice seekers are waiting for a live chat",
 			"archived": "There are no consultations in the archive yet",
 			"known": "There are no requests at the moment",
-			"mySessions": "You currently have no active consultations",
-			"peersessions": "You currently have no active peer counselling",
-			"teamSessions": "Your team has no active consultations"
-		},
-		"filter": {
-			"option": {
-				"all": "All consultations",
-				"feedbackMain": "Feedback needed",
-				"feedbackPeer": "Feedback available"
-			},
-			"placeholder": "Filter"
-		},
-		"peersessions": {
-			"headline": "Peer consultations"
+			"mySessions": "You currently have no active consultations"
 		},
 		"preview": {
-			"anonymous": {
-				"tab": "Live chat requests"
-			},
 			"headline": "Initial inquiries",
 			"registered": {
 				"tab": "Initial inquiries"
@@ -2121,15 +1969,10 @@
 		"reloadButton": {
 			"label": "Reload"
 		},
-		"teamsession": "Team consulting",
 		"time": {
 			"label": {
 				"postfix": "Clock"
 			}
-		},
-		"unavailable": {
-			"buttonLabel": "Activate availability",
-			"description": "Activate your availability to receive initial inquiries from advice seekers"
 		},
 		"user": {
 			"consultantUnknown": "Search for consultants underway",
@@ -2552,10 +2395,7 @@
 			"ignored": "has been trying to reach you.",
 			"rejected": {
 				"prefix": "You have tried",
-				"suffix": "to reach.",
-				"teamconsultant": {
-					"prefix": "Has tried"
-				}
+				"suffix": "to reach."
 			},
 			"unsupported": {
 				"button": "Open help",
@@ -2638,10 +2478,6 @@
 				"intro": "Here you will find an overview of all open requests that are not yet assigned to a consultant. Your entire team has access to this overview.\n<br /><br /> The oldest requests are at the top, the newest at the bottom, to make it easier for you to find the ones you received first.\n<br /><br /> The moment you click on \"Accept request\", the request will be immediately moved to your \"My consultations\" section and the other consultants will not see it anymore.",
 				"title": "Initial inquiries"
 			},
-			"2": {
-				"intro": "From here you can start a chat with a person seeking advice who is currently in the waiting room. <br /><br /> Those seeking advice are identified by an anonymous name, such as \"Advice Seeker 11\". <br /><br /> If you want to start the chat, click on \"Start chat\" and you will be able to continue the conversation under the \"My consultations\" section.",
-				"title": "Live chat requests"
-			},
 			"3": {
 				"intro": "In this section you will find all the requests that you have accepted. \n<br /><br /> The message history that was last edited is at the top.\nIf the person seeking advice is currently online in the waiting room, you will see the label \"Active\" right next to the name.",
 				"title": "My consultations"
@@ -2649,10 +2485,6 @@
 			"4": {
 				"intro": "To avoid being distracted by conversations that are not active, you can archive some of the conversations. <br /><br /> They will then not be deleted, but only moved to the \"Archive\" tab. <br /><br /> Every time you or the advice seeker write something in an archived conversation, that message history is put back into the advice seeker list.",
 				"title": "Archive"
-			},
-			"5": {
-				"intro": "In this section you can view and contribute to all active consultations that someone in your team is currently working on.",
-				"title": "Team consultations"
 			},
 			"6": {
 				"intro": "In the profile area you can manage personal and public information, enable out-of-office messaging during your vacation, change your password and use many other features (like setting up 2-factor authentication).",

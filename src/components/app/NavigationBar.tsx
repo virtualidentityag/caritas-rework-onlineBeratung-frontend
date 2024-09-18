@@ -23,10 +23,7 @@ import { ReactComponent as LogoutIconOutline } from '../../resources/img/icons/l
 import { ReactComponent as LogoutIconFilled } from '../../resources/img/icons/logout_filled.svg';
 import clsx from 'clsx';
 import { RocketChatUnreadContext } from '../../globalState/provider/RocketChatUnreadProvider';
-import {
-	apiFinishAnonymousConversation,
-	apiGetAskerSessionList
-} from '../../api';
+import { apiGetAskerSessionList } from '../../api';
 import { useTranslation } from 'react-i18next';
 import { LocaleSwitch } from '../localeSwitch/LocaleSwitch';
 import { userHasBudibaseTools } from '../../api/apiGetTools';
@@ -51,18 +48,15 @@ export const NavigationBar = ({
 	const { consultingTypes } = useContext(ConsultingTypesContext);
 	const { sessions, dispatch } = useContext(SessionsDataContext);
 	const { selectableLocales } = useContext(LocaleContext);
-	const [sessionId, setSessionId] = useState(null);
 	const [hasTools, setHasTools] = useState<boolean>(false);
 
 	const isConsultant = hasUserAuthority(
 		AUTHORITIES.CONSULTANT_DEFAULT,
 		userData
 	);
-	const {
-		sessions: unreadSessions,
-		group: unreadGroup,
-		teamsessions: unreadTeamSessions
-	} = useContext(RocketChatUnreadContext);
+	const { sessions: unreadSessions, group: unreadGroup } = useContext(
+		RocketChatUnreadContext
+	);
 	const { tenant } = useContext(TenantContext);
 
 	const ref_menu = useRef<any>([]);
@@ -71,13 +65,8 @@ export const NavigationBar = ({
 	const ref_select = useRef<any>();
 
 	const handleLogout = useCallback(() => {
-		if (hasUserAuthority(AUTHORITIES.ANONYMOUS_DEFAULT, userData)) {
-			apiFinishAnonymousConversation(sessionId).catch((error) => {
-				console.error(error);
-			});
-		}
 		onLogout();
-	}, [onLogout, sessionId, userData]);
+	}, [onLogout]);
 
 	const location = useLocation();
 	const [animateNavIcon, setAnimateNavIcon] = useState(false);
@@ -94,7 +83,6 @@ export const NavigationBar = ({
 					ready: true,
 					sessions: sessionsData.sessions
 				});
-				setSessionId(sessionsData?.sessions?.[0]?.session?.id);
 			});
 		}
 	}, [dispatch, isConsultant]);
@@ -113,12 +101,7 @@ export const NavigationBar = ({
 			return;
 		}
 
-		if (
-			unreadSessions.length +
-				unreadGroup.length +
-				unreadTeamSessions.length >
-			0
-		) {
+		if (unreadSessions.length + unreadGroup.length > 0) {
 			setAnimateNavIcon(true);
 		}
 
@@ -126,16 +109,12 @@ export const NavigationBar = ({
 			setAnimateNavIcon(false);
 			animateNavIconTimeoutRef.current = null;
 		}, 1000);
-	}, [unreadSessions, unreadGroup, unreadTeamSessions]);
-
-	const notificationConsultant = isConsultant ? 0 : unreadTeamSessions.length;
+	}, [unreadSessions, unreadGroup]);
 
 	const pathsToShowUnreadMessageNotification = {
 		'/sessions/consultant/sessionView':
 			unreadSessions.length + unreadGroup.length,
-		'/sessions/user/view':
-			unreadSessions.length + unreadGroup.length + notificationConsultant,
-		'/sessions/consultant/teamSessionView': unreadTeamSessions.length,
+		'/sessions/user/view': unreadSessions.length + unreadGroup.length,
 		'/profile': isFirstVisit && !browserNotificationsSettings().visited
 	};
 

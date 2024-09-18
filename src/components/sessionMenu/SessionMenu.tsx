@@ -8,7 +8,6 @@ import {
 } from 'react';
 import { generatePath, Link, Redirect, useHistory } from 'react-router-dom';
 import {
-	AnonymousConversationFinishedContext,
 	AUTHORITIES,
 	hasUserAuthority,
 	SessionTypeContext,
@@ -16,10 +15,7 @@ import {
 	UserDataContext,
 	ActiveSessionContext
 } from '../../globalState';
-import {
-	SessionItemInterface,
-	STATUS_FINISHED
-} from '../../globalState/interfaces';
+import { SessionItemInterface } from '../../globalState/interfaces';
 import {
 	SESSION_LIST_TAB,
 	SESSION_LIST_TAB_ARCHIVE,
@@ -28,7 +24,6 @@ import {
 import { Overlay, OVERLAY_FUNCTIONS } from '../overlay/Overlay';
 import {
 	archiveSessionSuccessOverlayItem,
-	finishAnonymousChatSecurityOverlayItem,
 	groupChatErrorOverlayItem,
 	leaveGroupChatSecurityOverlayItem,
 	leaveGroupChatSuccessOverlayItem,
@@ -37,7 +32,6 @@ import {
 	videoCallErrorOverlayItem
 } from './sessionMenuHelpers';
 import {
-	apiFinishAnonymousConversation,
 	apiPutArchive,
 	apiPutDearchive,
 	apiPutGroupChat,
@@ -47,7 +41,6 @@ import {
 import { logout } from '../logout/logout';
 import { mobileListView } from '../app/navigationHandler';
 import { isGroupChatOwner } from '../groupChat/groupChatHelpers';
-import { ReactComponent as FeedbackIcon } from '../../resources/img/icons/pen-paper.svg';
 import { ReactComponent as LeaveChatIcon } from '../../resources/img/icons/out.svg';
 import { ReactComponent as GroupChatInfoIcon } from '../../resources/img/icons/i.svg';
 import { ReactComponent as StopGroupChatIcon } from '../../resources/img/icons/x.svg';
@@ -91,9 +84,6 @@ export const SessionMenu = (props: SessionMenuProps) => {
 
 	const { userData } = useContext(UserDataContext);
 	const { type, path: listPath } = useContext(SessionTypeContext);
-	const { setAnonymousConversationFinished } = useContext(
-		AnonymousConversationFinishedContext
-	);
 
 	const { activeSession, reloadActiveSession } =
 		useContext(ActiveSessionContext);
@@ -163,23 +153,7 @@ export const SessionMenu = (props: SessionMenuProps) => {
 		setOverlayActive(true);
 	};
 
-	const handleFinishAnonymousChat = () => {
-		if (hasUserAuthority(AUTHORITIES.ANONYMOUS_DEFAULT, userData)) {
-			finishAnonymousChatSecurityOverlayItem.copy = translate(
-				'anonymous.overlay.finishChat.asker.copy'
-			);
-		}
-		setOverlayItem(finishAnonymousChatSecurityOverlayItem);
-		setOverlayActive(true);
-	};
-
 	const handleArchiveSession = () => {
-		// location type
-		if (type === SESSION_LIST_TYPES.TEAMSESSION) {
-			archiveSessionSuccessOverlayItem.copy = translate(
-				'archive.overlay.teamsession.success.copy'
-			);
-		}
 		setOverlayItem(archiveSessionSuccessOverlayItem);
 		setOverlayActive(true);
 	};
@@ -252,33 +226,6 @@ export const SessionMenu = (props: SessionMenuProps) => {
 			setRedirectToSessionsList(true);
 		} else if (buttonFunction === OVERLAY_FUNCTIONS.LOGOUT) {
 			logout();
-		} else if (
-			buttonFunction === OVERLAY_FUNCTIONS.FINISH_ANONYMOUS_CONVERSATION
-		) {
-			apiFinishAnonymousConversation(activeSession.item.id)
-				.then(() => {
-					setIsRequestInProgress(false);
-
-					if (
-						hasUserAuthority(
-							AUTHORITIES.ANONYMOUS_DEFAULT,
-							userData
-						)
-					) {
-						setAnonymousConversationFinished('DONE');
-					} else {
-						setOverlayActive(false);
-						setOverlayItem(null);
-					}
-				})
-				.catch((error) => {
-					console.error(error);
-					setIsRequestInProgress(false);
-					setOverlayActive(false);
-					setOverlayItem(null);
-				});
-		} else if (buttonFunction === OVERLAY_FUNCTIONS.REDIRECT_TO_URL) {
-			window.location.href = settings.urls.finishedAnonymousChatRedirect;
 		} else if (buttonFunction === OVERLAY_FUNCTIONS.ARCHIVE) {
 			apiPutArchive(activeSession.item.id)
 				.then(() => {
@@ -305,7 +252,7 @@ export const SessionMenu = (props: SessionMenuProps) => {
 
 	//TODO:
 	//enquiries: only RS profil
-	//sessions/peer/team: feedback (if u25), rs, docu
+	//sessions: rs, docu
 	//imprint/dataschutz all users all devices
 
 	//dynamicly menut items in flyout:
@@ -356,22 +303,9 @@ export const SessionMenu = (props: SessionMenuProps) => {
 		)
 	};
 
-	const buttonFeedback: ButtonItem = {
-		type: BUTTON_TYPES.SMALL_ICON,
-		smallIconBackgroundColor: 'yellow',
-		icon: (
-			<FeedbackIcon
-				title={translate('chatFlyout.feedback')}
-				aria-label={translate('videoCall.button.feedback')}
-			/>
-		),
-		label: translate('chatFlyout.feedback')
-	};
-
 	const hasVideoCallFeatures = () =>
 		hasUserAuthority(AUTHORITIES.CONSULTANT_DEFAULT, userData) &&
 		activeSession.isSession &&
-		!activeSession.isLive &&
 		type !== SESSION_LIST_TYPES.ENQUIRY &&
 		consultingType.isVideoCallAllowed;
 
@@ -410,20 +344,6 @@ export const SessionMenu = (props: SessionMenuProps) => {
 
 	return (
 		<div className="sessionMenu__wrapper">
-			{activeSession.isLive &&
-				activeSession.item.status !== STATUS_FINISHED &&
-				type !== SESSION_LIST_TYPES.ENQUIRY && (
-					<span
-						onClick={handleFinishAnonymousChat}
-						className="sessionMenu__item--desktop sessionMenu__button"
-					>
-						<span className="sessionMenu__icon">
-							<LeaveChatIcon />
-							{translate('anonymous.session.finishChat')}
-						</span>
-					</span>
-				)}
-
 			{hasVideoCallFeatures() && (
 				<div
 					className="sessionMenu__videoCallButtons"
@@ -440,23 +360,8 @@ export const SessionMenu = (props: SessionMenuProps) => {
 				</div>
 			)}
 
-			{!hasUserAuthority(AUTHORITIES.ASKER_DEFAULT, userData) &&
-				type !== SESSION_LIST_TYPES.ENQUIRY &&
-				activeSession.item.feedbackGroupId && (
-					<Link
-						to={generatePath(baseUrl, {
-							...(activeSession.item as TReducedSessionItemInterface),
-							groupId: activeSession.item.feedbackGroupId
-						})}
-						className="sessionInfo__feedbackButton"
-					>
-						<Button item={buttonFeedback} isLink={true} />
-					</Link>
-				)}
-
 			{!activeSession.isEnquiry &&
 				appointmentFeatureEnabled &&
-				!activeSession.isLive &&
 				!activeSession.isGroup && (
 					<div
 						className="sessionMenu__icon sessionMenu__icon--booking"
@@ -497,16 +402,6 @@ export const SessionMenu = (props: SessionMenuProps) => {
 					flyoutOpen && 'sessionMenu__content--open'
 				}`}
 			>
-				{activeSession.isLive &&
-					activeSession.item.status !== STATUS_FINISHED &&
-					type !== SESSION_LIST_TYPES.ENQUIRY && (
-						<div
-							className="sessionMenu__item sessionMenu__item--mobile"
-							onClick={handleFinishAnonymousChat}
-						>
-							{translate('anonymous.session.finishChat')}
-						</div>
-					)}
 				{hasVideoCallFeatures() && (
 					<>
 						<div
@@ -524,19 +419,6 @@ export const SessionMenu = (props: SessionMenuProps) => {
 					</>
 				)}
 
-				{!hasUserAuthority(AUTHORITIES.ASKER_DEFAULT, userData) &&
-					activeSession.item.feedbackGroupId && (
-						<Link
-							className="sessionMenu__item sessionMenu__item--mobile"
-							to={generatePath(baseUrl, {
-								...(activeSession.item as TReducedSessionItemInterface),
-								groupId: activeSession.item.feedbackGroupId
-							})}
-						>
-							{translate('chatFlyout.feedback')}
-						</Link>
-					)}
-
 				{props.isAskerInfoAvailable && (
 					<Link className="sessionMenu__item" to={userProfileLink}>
 						{translate('chatFlyout.askerProfil')}
@@ -545,8 +427,7 @@ export const SessionMenu = (props: SessionMenuProps) => {
 
 				{!hasUserAuthority(AUTHORITIES.ASKER_DEFAULT, userData) &&
 					type !== SESSION_LIST_TYPES.ENQUIRY &&
-					activeSession.isSession &&
-					!activeSession.isLive && (
+					activeSession.isSession && (
 						<>
 							{sessionListTab !== SESSION_LIST_TAB_ARCHIVE ? (
 								<div
@@ -568,8 +449,7 @@ export const SessionMenu = (props: SessionMenuProps) => {
 
 				{hasUserAuthority(AUTHORITIES.CONSULTANT_DEFAULT, userData) &&
 					type !== SESSION_LIST_TYPES.ENQUIRY &&
-					activeSession.isSession &&
-					!activeSession.isLive && (
+					activeSession.isSession && (
 						<DeleteSession
 							chatId={activeSession.item.id}
 							onSuccess={onSuccessDeleteSession}

@@ -4,7 +4,6 @@ export interface AppConfigUrlsInterface {
 	error401: string;
 	error404: string;
 	error500: string;
-	finishedAnonymousChatRedirect: string;
 	home: string;
 	landingpage: string;
 	releases: string;

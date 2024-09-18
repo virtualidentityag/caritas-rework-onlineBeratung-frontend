@@ -1,7 +1,6 @@
 import {
 	GroupChatItemInterface,
 	ListItemInterface,
-	REGISTRATION_TYPE_ANONYMOUS,
 	SessionItemInterface,
 	STATUS_ARCHIVED,
 	STATUS_EMPTY,
@@ -18,8 +17,7 @@ import { decodeUsername } from '../../utils/encryptionHelpers';
 
 export enum SESSION_LIST_TYPES {
 	ENQUIRY = 'ENQUIRY',
-	MY_SESSION = 'MY_SESSION',
-	TEAMSESSION = 'TEAMSESSION'
+	MY_SESSION = 'MY_SESSION'
 }
 
 export const CHAT_TYPE_GROUP_CHAT = 'chat';
@@ -30,49 +28,33 @@ export type ChatTypes =
 	| typeof CHAT_TYPE_SINGLE_CHAT;
 
 export const SESSION_TYPE_ENQUIRY = 'enquiry';
-export const SESSION_TYPE_LIVECHAT = 'livechat';
 export const SESSION_TYPE_ARCHIVED = 'archived';
-export const SESSION_TYPE_FEEDBACK = 'feedback';
 export const SESSION_TYPE_GROUP = 'group';
 export const SESSION_TYPE_SESSION = 'session';
-export const SESSION_TYPE_TEAMSESSION = 'teamsession';
 export const SESSION_TYPE_UNKNOWN = 'unknown';
 
 export type SESSION_TYPES =
-	| typeof SESSION_TYPE_LIVECHAT
 	| typeof SESSION_TYPE_ENQUIRY
 	| typeof SESSION_TYPE_ARCHIVED
-	| typeof SESSION_TYPE_FEEDBACK
 	| typeof SESSION_TYPE_GROUP
 	| typeof SESSION_TYPE_SESSION
-	| typeof SESSION_TYPE_TEAMSESSION
 	| typeof SESSION_TYPE_UNKNOWN;
 
 export const getSessionType = (
 	session: ListItemInterface,
-	rid: string,
 	uid: string
 ): SESSION_TYPES => {
 	const chatItem = getChatItemForSession(session);
 	switch (!isGroupChat(chatItem) && chatItem.status) {
 		case STATUS_ENQUIRY:
 		case STATUS_EMPTY:
-			if (isLiveChat(chatItem)) {
-				return SESSION_TYPE_LIVECHAT;
-			}
 			return SESSION_TYPE_ENQUIRY;
 		case STATUS_ARCHIVED:
 			return SESSION_TYPE_ARCHIVED;
 	}
 
-	if (!isGroupChat(chatItem) && chatItem?.feedbackGroupId === rid) {
-		return SESSION_TYPE_FEEDBACK;
-	} else if (isGroupChat(chatItem)) {
+	if (isGroupChat(chatItem)) {
 		return SESSION_TYPE_GROUP;
-	}
-
-	if (isTeamSession(chatItem) && session?.consultant?.id !== uid) {
-		return SESSION_TYPE_TEAMSESSION;
 	}
 
 	return SESSION_TYPE_SESSION;
@@ -86,30 +68,13 @@ export const getChatTypeForListItem = (
 export const isSessionChat = (
 	chatItem: SessionItemInterface | GroupChatItemInterface
 ): chatItem is SessionItemInterface => {
-	return chatItem && 'feedbackGroupId' in chatItem;
-};
-
-export const isLiveChat = (
-	chatItem: SessionItemInterface | GroupChatItemInterface
-): chatItem is SessionItemInterface => {
-	return (
-		isSessionChat(chatItem) &&
-		chatItem.registrationType === REGISTRATION_TYPE_ANONYMOUS
-	);
+	return chatItem && 'askerRcId' in chatItem;
 };
 
 export const isGroupChat = (
 	chatItem: SessionItemInterface | GroupChatItemInterface
 ): chatItem is GroupChatItemInterface => {
-	return (
-		(chatItem as GroupChatItemInterface) && !('feedbackGroupId' in chatItem)
-	);
-};
-
-export const isTeamSession = (
-	sessionItem: SessionItemInterface
-): sessionItem is SessionItemInterface => {
-	return sessionItem && sessionItem.isTeamSession;
+	return (chatItem as GroupChatItemInterface) && 'moderators' in chatItem;
 };
 
 export const getChatItemForSession = (
@@ -125,20 +90,15 @@ export const getChatItemForSession = (
 	return sessionItem[chatType] as SessionItemInterface;
 };
 
-export const SESSION_LIST_TAB_ANONYMOUS = 'anonymous';
 export const SESSION_LIST_TAB_ARCHIVE = 'archive';
 
-export type SESSION_LIST_TAB =
-	| typeof SESSION_LIST_TAB_ANONYMOUS
-	| typeof SESSION_LIST_TAB_ARCHIVE;
+export type SESSION_LIST_TAB = typeof SESSION_LIST_TAB_ARCHIVE;
 
 export const getViewPathForType = (type: SESSION_LIST_TYPES) => {
 	if (type === SESSION_LIST_TYPES.ENQUIRY) {
 		return 'sessionPreview';
 	} else if (type === SESSION_LIST_TYPES.MY_SESSION) {
 		return 'sessionView';
-	} else if (type === SESSION_LIST_TYPES.TEAMSESSION) {
-		return 'teamSessionView';
 	}
 };
 

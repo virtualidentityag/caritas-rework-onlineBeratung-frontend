@@ -23,12 +23,10 @@
 		}
 	},
 	"isSubsequentRegistrationAllowed": false,
-	"isAnonymousConversationAllowed": false,
 	"isSetEmailAllowed": false,
 	"slug": "u25",
 	"languageFormal": false,
 	"lockedAgencies": false,
-	"excludeNonMainConsultantsFromTeamSessions": false,
 	"whiteSpot": {
 		"whiteSpotAgencyAssigned": false
 	},
@@ -50,18 +48,10 @@
 		"relation": false,
 		"state": true
 	},
-	"initializeFeedbackChat": true,
 	"roles": {
 		"consultant": {
 			"main": ["consultant", "u25-consultant", "u25-main-consultant"],
 			"peer": ["consultant", "u25-consultant"]
-		}
-	},
-	"notifications": {
-		"teamSessions": {
-			"newMessage": {
-				"allTeamConsultants": false
-			}
 		}
 	},
 	"showAskerProfile": true,
