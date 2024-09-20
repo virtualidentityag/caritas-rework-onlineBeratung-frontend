@@ -273,9 +273,7 @@ declare namespace UserService {
 			 */
 			token?: string;
 		}
-		export interface MonitoringDTO {
-			additionalProperties?: Properties;
-		}
+
 		export interface NewMessageNotificationDTO {
 			/**
 			 * example:
@@ -862,22 +860,7 @@ declare namespace Paths {
 			export interface $500 {}
 		}
 	}
-	namespace GetMonitoring {
-		namespace Parameters {
-			export type SessionId = number; // int64
-		}
-		export interface PathParameters {
-			sessionId: Parameters.SessionId /* int64 */;
-		}
-		namespace Responses {
-			export type $200 = UserService.Schemas.MonitoringDTO;
-			export interface $204 {}
-			export interface $400 {}
-			export interface $401 {}
-			export interface $403 {}
-			export interface $500 {}
-		}
-	}
+
 	namespace GetSessionsForAuthenticatedConsultant {
 		export interface HeaderParameters {
 			RCToken: Parameters.RCToken;
@@ -1165,22 +1148,7 @@ declare namespace Paths {
 			export interface $500 {}
 		}
 	}
-	namespace UpdateMonitoring {
-		namespace Parameters {
-			export type SessionId = number; // int64
-		}
-		export interface PathParameters {
-			sessionId: Parameters.SessionId /* int64 */;
-		}
-		export type RequestBody = UserService.Schemas.MonitoringDTO;
-		namespace Responses {
-			export interface $200 {}
-			export interface $400 {}
-			export interface $401 {}
-			export interface $403 {}
-			export interface $500 {}
-		}
-	}
+
 	namespace UpdatePassword {
 		export type RequestBody = UserService.Schemas.PasswordDTO;
 		namespace Responses {

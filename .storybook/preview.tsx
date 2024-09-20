@@ -4,7 +4,7 @@ import i18n from 'i18next';
 import { ThemeProvider } from '@mui/material';
 import { Preview } from '@storybook/react';
 import * as React from 'react';
-import theme from '../src/extensions/theme';
+import theme from '../src/resources/scripts/theme';
 import { config } from '../src/resources/scripts/config';
 import { LegalLinksProvider } from '../src/globalState/provider/LegalLinksProvider';
 import { init, FALLBACK_LNG } from '../src/i18n';

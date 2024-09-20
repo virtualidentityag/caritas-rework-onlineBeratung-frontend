@@ -1,8 +1,20 @@
-import * as React from 'react';
-import { useCallback, useRef, useState, MouseEvent } from 'react';
 import clsx from 'clsx';
-import { Spinner } from '../spinner/Spinner';
-import { useTenant } from '../../globalState';
+import * as React from 'react';
+import { useTranslation, Trans } from 'react-i18next';
+import {
+	useState,
+	useEffect,
+	useRef,
+	useCallback,
+	MouseEvent,
+	useContext
+} from 'react';
+import { Text } from '../text/Text';
+import { LegalLinksContext } from '../../globalState/provider/LegalLinksProvider';
+import './stage.styles';
+import { Banner } from '../banner/Banner';
+import { Headline } from '../headline/Headline';
+import LegalLinks from '../legalLinks/LegalLinks';
 import { ReactComponent as SkfLogo } from '../../resources/img/logos/01_skf.svg';
 import { ReactComponent as CaritasLogo } from '../../resources/img/logos/02_caritas.svg';
 import { ReactComponent as SkmLogo } from '../../resources/img/logos/03_skm.svg';
@@ -10,9 +22,7 @@ import { ReactComponent as InViaLogo } from '../../resources/img/logos/04_via.sv
 import { ReactComponent as KreuzbundLogo } from '../../resources/img/logos/05_kreuzbund.svg';
 import { ReactComponent as RaphaelswerkLogo } from '../../resources/img/logos/06_raphael.svg';
 import { ReactComponent as MalteserLogo } from '../../resources/img/logos/07_malteser.svg';
-import './stage.styles';
-import { Trans, useTranslation } from 'react-i18next';
-import { Banner } from '../banner/Banner';
+import { Spinner } from '../spinner/Spinner';
 
 export interface StageProps {
 	className?: string;
@@ -26,16 +36,29 @@ export const Stage = ({
 	isReady = true
 }: StageProps) => {
 	const { t: translate } = useTranslation();
-	const tenant = useTenant();
-	const rootNodeRef = useRef();
-	const [isAnimationDone, setIsAnimationDone] = useState(false);
 
-	function onAnimationEnd(event) {
-		// Ignore animations of children
-		if (event.target === rootNodeRef.current) {
-			setIsAnimationDone(true);
+	const legalLinks = useContext(LegalLinksContext);
+
+	const rootNodeRef = useRef(null);
+
+	const [isOpen, setIsOpen] = useState(!hasAnimation);
+	const [hasAnimationFinished, setHasAnimationFinished] = useState(false);
+
+	useEffect(() => {
+		if (hasAnimation && isReady) {
+			setIsOpen(true);
 		}
-	}
+
+		const onTransitionEnd = () => {
+			setHasAnimationFinished(true);
+		};
+
+		const rootNode = rootNodeRef.current;
+		rootNode.addEventListener('transitionend', onTransitionEnd);
+		return () => {
+			rootNode.removeEventListener('transitionend', onTransitionEnd);
+		};
+	}, [hasAnimation, isReady]);
 
 	const [ieBanner, setIeBanner] = useState(true);
 	const closeIeBanner = useCallback((e: MouseEvent<HTMLButtonElement>) => {
@@ -46,19 +69,18 @@ export const Stage = ({
 	return (
 		<div
 			ref={rootNodeRef}
-			onAnimationEnd={onAnimationEnd}
-			id="loginLogoWrapper"
 			className={clsx(className, 'stage', {
-				'stage--animated': hasAnimation,
-				'stage--animation-done': isAnimationDone,
-				'stage--ready': isReady
+				'stage--no-animation': !hasAnimation,
+				'stage--open': isOpen || !hasAnimation,
+				'stage--ready': hasAnimationFinished
 			})}
+			data-cy="stage"
 		>
 			{ieBanner && (
 				<Banner
 					className="ieBanner"
-					onClose={closeIeBanner}
 					style={{ display: 'none' }}
+					onClose={closeIeBanner}
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -72,20 +94,57 @@ export const Stage = ({
 				</Banner>
 			)}
 
-			<div className="stage__headline">
-				<h1>{tenant?.name || translate('app.stage.title')}</h1>
-				<h4>{tenant?.content?.claim || translate('app.claim')}</h4>
-			</div>
-
-			{hasAnimation ? <Spinner className="stage__spinner" /> : null}
-			<div className="stage__logos">
-				<SkfLogo />
-				<CaritasLogo />
-				<SkmLogo />
-				<MalteserLogo />
-				<KreuzbundLogo />
-				<RaphaelswerkLogo />
-				<InViaLogo />
+			<div className="stage__content">
+				<div className="stage__headline">
+					<Headline
+						className="stage__title"
+						semanticLevel="1"
+						text={translate('app.stage.title')}
+					/>
+					<Headline
+						className="stage__claim"
+						semanticLevel="4"
+						text={translate('app.claim')}
+					/>
+				</div>
+				{hasAnimation ? <Spinner className="stage__spinner" /> : null}
+				<div className="stage__logos">
+					<SkfLogo />
+					<CaritasLogo />
+					<SkmLogo />
+					<MalteserLogo />
+					<KreuzbundLogo />
+					<RaphaelswerkLogo />
+					<InViaLogo />
+				</div>
+				<div className={`stage__legalLinks`}>
+					<LegalLinks
+						legalLinks={legalLinks}
+						params={{ aid: null }}
+						delimiter={
+							<Text
+								type="infoSmall"
+								className="stage__legalLinksSeparator"
+								text=" | "
+							/>
+						}
+					>
+						{(label, url) => (
+							<button
+								type="button"
+								className="button-as-link"
+								data-cy-link={url}
+								onClick={() => window.open(url, '_blank')}
+							>
+								<Text
+									className="stage__legalLinksItem"
+									type="infoSmall"
+									text={translate(label)}
+								/>
+							</button>
+						)}
+					</LegalLinks>
+				</div>
 			</div>
 		</div>
 	);

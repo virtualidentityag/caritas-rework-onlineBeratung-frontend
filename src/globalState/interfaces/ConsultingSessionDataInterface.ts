@@ -13,7 +13,6 @@ export interface ConsultingSessionDataInterface {
 	gender: string;
 	groupId: string;
 	id: number;
-	isMonitoring: boolean;
 	mainTopic: TopicsDataInterface;
 	postcode: string;
 	topics: TopicsDataInterface[];

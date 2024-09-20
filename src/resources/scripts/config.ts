@@ -1,5 +1,10 @@
 import deAgency from '../i18n/de/agency.json';
 import deConsultingTypes from '../i18n/de/consultingTypes.json';
+import deLanguages from '../i18n/de/languages.json';
+import en from '../i18n/en/common.json';
+import enAgency from '../i18n/en/agency.json';
+import enConsultingTypes from '../i18n/en/consultingTypes.json';
+import enLanguages from '../i18n/en/languages.json';
 import { AppConfigInterface } from '../../globalState/interfaces';
 import {
 	OVERLAY_RELEASE_NOTE,
@@ -9,6 +14,14 @@ import {
 export const uiUrl = window.location.origin;
 
 export const APP_PATH = 'app';
+
+export const routePathNames = {
+	root: '/',
+	login: '/login',
+	termsAndConditions: '/nutzungsbedingungen',
+	imprint: '/impressum',
+	privacy: '/datenschutz'
+};
 
 export const config: AppConfigInterface = {
 	budibaseUrl: '',
@@ -32,7 +45,7 @@ export const config: AppConfigInterface = {
 		}
 	},
 	urls: {
-		chatScheduleUrl: 'https://www.caritas.de/onlineberatung',
+		chatScheduleUrl: uiUrl + '/registration',
 		consultantVideoConference:
 			'/consultant/videoberatung/:type/:appointmentId',
 		error401: uiUrl + '/error.401.html',
@@ -43,9 +56,9 @@ export const config: AppConfigInterface = {
 		releases: uiUrl + '/releases',
 		redirectToApp: uiUrl + '/' + APP_PATH,
 		registration: uiUrl + '/registration',
-		toEntry: uiUrl + '/',
+		toEntry: uiUrl + '/registration',
 		toLogin: uiUrl + '/login',
-		toRegistration: 'https://www.caritas.de/onlineberatung',
+		toRegistration: uiUrl + '/registration',
 		videoCall: '/videoanruf/:domain/:jwt/:video?/:username?/:e2e?',
 		videoConference: '/videoberatung/:type/:appointmentId'
 	},
@@ -55,7 +68,7 @@ export const config: AppConfigInterface = {
 			showCreationDate: false
 		}
 	},
-	postcodeFallbackUrl: '{url}',
+	postcodeFallbackUrl: '{url}{postcode}/',
 	jitsi: {
 		/**
 		 * Enable WebRTC Encoded Transform as an alternative to insertable streams.
@@ -73,14 +86,19 @@ export const config: AppConfigInterface = {
 	},
 	legalLinks: [
 		{
-			url: 'https://www.caritas.de/impressum',
+			url: uiUrl + routePathNames.imprint,
 			label: 'login.legal.infoText.impressum'
 		},
 		{
-			url: 'https://www.caritas.de/hilfeundberatung/onlineberatung/datenschutz',
+			url: uiUrl + routePathNames.privacy,
 			label: 'login.legal.infoText.dataprotection',
 			registration: true
 		}
+		// {
+		// 	url: routePathNames.termsAndConditions,
+		// 	label: 'login.legal.infoText.termsAndConditions',
+		// 	registration: true
+		// }
 	],
 	welcomeScreen: {
 		consultingType: {
@@ -89,7 +107,7 @@ export const config: AppConfigInterface = {
 	},
 	registration: {
 		consultingTypeDefaults: {
-			autoSelectPostcode: true,
+			autoSelectPostcode: false,
 			autoSelectAgency: false
 		}
 	},
@@ -307,15 +325,33 @@ export const config: AppConfigInterface = {
 		'zu'
 	],
 	i18n: {
-		supportedLngs: ['de', 'de@informal'],
-		preload: ['de', 'de@informal'],
+		supportedLngs: ['en', 'de'],
+		fallbackLng: {
+			en: ['de'],
+			en_informal: ['en', 'de_informal', 'de']
+		},
 		resources: {
 			de: {
+				languages: {
+					...deLanguages
+				},
 				consultingTypes: {
 					...deConsultingTypes
 				},
 				agencies: {
 					...deAgency
+				}
+			},
+			en: {
+				common: [en],
+				consultingTypes: {
+					...enConsultingTypes
+				},
+				agencies: {
+					...enAgency
+				},
+				languages: {
+					...enLanguages
 				}
 			}
 		}
