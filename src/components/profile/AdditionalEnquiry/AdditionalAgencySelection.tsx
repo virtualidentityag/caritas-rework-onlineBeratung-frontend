@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { AgencyDataInterface } from '../../../globalState/interfaces';
-import { FETCH_ERRORS } from '../../../api';
+import { apiGetAgenciesByTenant, FETCH_ERRORS } from '../../../api';
 import { InputField, InputFieldItem } from '../../inputField/InputField';
 import '../../agencySelection/agencySelection.styles';
 import '../profile.styles';
@@ -10,7 +10,6 @@ import { Headline } from '../../headline/Headline';
 import { useTranslation } from 'react-i18next';
 import { AgencyRadioSelect } from '../../agencyRadioSelect/AgencyRadioSelect';
 import { VALID_POSTCODE_LENGTH } from '../../agencySelection/agencySelectionHelpers';
-import { apiGetAgenciesByTenant } from '../../../api/apiGetAgenciesByTenant';
 
 export interface AdditionalAgencySelectionProps {
 	onAgencyChange: Function;

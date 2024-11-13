@@ -11,13 +11,11 @@ interface registrationResponse {
 	rcGroupId: string;
 }
 
-//TODO cleanup deprecated functionality
 export const apiPostAdditionalEnquiry = async (
 	consultingType: number,
 	agencyId: number,
 	postcode: string,
 	mainTopicId: number
-	// topicIds?: number[] ??? todo? tomasz
 ): Promise<registrationResponse> => {
 	const url = endpoints.additionalEnquiry;
 	const data = JSON.stringify({
@@ -25,7 +23,6 @@ export const apiPostAdditionalEnquiry = async (
 		agencyId,
 		consultingType,
 		mainTopicId
-		// ...(topicIds ? { topicIds: topicIds } : {})
 	});
 
 	return fetchData({

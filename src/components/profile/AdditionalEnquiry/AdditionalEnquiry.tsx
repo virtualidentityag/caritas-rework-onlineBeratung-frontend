@@ -16,12 +16,12 @@ import { Headline } from '../../headline/Headline';
 import { useTranslation } from 'react-i18next';
 import { ReactComponent as CheckIcon } from '../../../resources/img/illustrations/check.svg';
 import { ReactComponent as XIcon } from '../../../resources/img/illustrations/x.svg';
+import { AdditionalAgencySelection } from './AdditionalAgencySelection';
 import {
 	apiGetTenantAgenciesTopics,
+	apiPostAdditionalEnquiry,
 	TenantAgenciesTopicsInterface
-} from '../../../api/apiGetTenantAgenciesTopics';
-import { AdditionalAgencySelection } from './AdditionalAgencySelection';
-import { apiPostAdditionalEnquiry } from '../../../api/apiPostAdditionalEnquiry';
+} from '../../../api';
 
 export const AdditionalEnquiry: React.FC = () => {
 	const { t: translate } = useTranslation(['common', 'consultingTypes']);
@@ -155,8 +155,10 @@ export const AdditionalEnquiry: React.FC = () => {
 					setSuccessOverlayActive(true);
 					setIsRequestInProgress(false);
 				})
-				//TODO CATCH CONFLICT -> same topic & agency
 				.catch((error) => {
+					//TODO error handling? -> same topic & agency
+					//CONFLICT_WITH_RESPONSE
+					console.log('error ', error);
 					setSuccessOverlayItem(overlayItemNewRegistrationError);
 					setSuccessOverlayActive(true);
 					setIsRequestInProgress(false);
@@ -189,7 +191,7 @@ export const AdditionalEnquiry: React.FC = () => {
 	};
 
 	return (
-		<div className="profile__data__itemWrapper askerRegistration">
+		<div className="profile__data__itemWrapper additionalEnquiry">
 			<div className="profile__content__title">
 				<Headline
 					text={translate('profile.data.register.headline')}
@@ -197,7 +199,7 @@ export const AdditionalEnquiry: React.FC = () => {
 				/>
 			</div>
 			{
-				<div className="askerRegistration__consultingTypeWrapper">
+				<div className="additionalEnquiry__consultingTypeWrapper">
 					<SelectDropdown {...topicsDropdown} />
 				</div>
 			}
