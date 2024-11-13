@@ -1,3 +1,4 @@
+import { apiGetTenantAgenciesTopics } from '../../api/apiGetTenantAgenciesTopics';
 import { getConsultingType } from '../../globalState';
 import {
 	UserDataInterface,
@@ -49,10 +50,34 @@ export const getConsultingTypesForRegistrationStatus = (
 		});
 };
 
+//TODO can be removed or move again here?
 export const consultingTypeSelectOptionsSet = (
 	userData: UserDataInterface,
 	consultingTypes: Array<ConsultingTypeBasicInterface>
 ) => {
+	// let topics;
+	// apiGetTenantAgenciesTopics()
+	// 	.then((response) => {
+	// 		// const consultants = prepareConsultantDataForSelect(response);
+	// 		topics = response;
+	// 		console.log('response', response);
+	// 	})
+	// 	.catch((error) => {
+	// 		console.log(error);
+	// 	});
+
+	// let topics;
+	// apiGeTenantAgenciesTopics()
+	// 	.then((response) => {
+	// 		// const consultants = prepareConsultantDataForSelect(response);
+	// 		topics = response;
+	// 	})
+	// 	.catch((error) => {
+	// 		console.log(error);
+	// 	});
+
+	// // const topics = apiGeTenantAgenciesTopics().then((resp: any) => resp);
+	// console.log('HEY topics: ', topics);
 	const unregisteredConsultingTypesData =
 		getConsultingTypesForRegistrationStatus(
 			userData,

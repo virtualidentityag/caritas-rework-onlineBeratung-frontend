@@ -21,6 +21,8 @@ import {
 import { EmailNotification } from './EmailNotifications';
 import { BrowserNotification } from './BrowserNotifications';
 import { browserNotificationsSettings } from '../../utils/notificationHelpers';
+import { AdditionalEnquiry } from './AdditionalEnquiry/AdditionalEnquiry';
+import { consultingTypeSelectOptionsSet } from './profileHelpers';
 
 const shouldShowOverview = (useOverviewPage: boolean, userData) =>
 	useOverviewPage &&
@@ -113,6 +115,21 @@ const profileRoutes = (
 							component: AskerConsultingTypeData,
 							boxed: false,
 							order: 2,
+							column: COLUMN_RIGHT
+						},
+						{
+							condition: (userData, consultingTypes) =>
+								!hasUserAuthority(
+									AUTHORITIES.CONSULTANT_DEFAULT,
+									userData
+								) &&
+								consultingTypeSelectOptionsSet(
+									userData,
+									consultingTypes
+								).length >
+									0 /* TODO check condition inside component */,
+							component: AdditionalEnquiry,
+							order: 3,
 							column: COLUMN_RIGHT
 						}
 					]
