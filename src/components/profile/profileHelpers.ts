@@ -1,4 +1,3 @@
-import { apiGetTenantAgenciesTopics } from '../../api/apiGetTenantAgenciesTopics';
 import { getConsultingType } from '../../globalState';
 import {
 	UserDataInterface,
