@@ -13,6 +13,9 @@ if (apiUrlEnv) {
 export const endpoints = {
 	agencyConsultants: apiUrl + '/service/users/consultants',
 	agencyServiceBase: apiUrl + '/service/agencies',
+	agencyTopics: apiUrl + '/service/agencies/topics',
+	agenciesByTenant: apiUrl + '/service/agencies/by-tenant',
+	additionalEnquiry: apiUrl + '/service/users/askers/session/new',
 	appointmentBase: apiUrl + '/service/appointments/sessions',
 	appointmentBaseNew: (sessionId: number) =>
 		apiUrl + `/service/appointments/sessions/${sessionId}/enquiry/new`,
@@ -100,6 +103,7 @@ export const endpoints = {
 	},
 	registerAsker: apiUrl + '/service/users/askers/new',
 	baseUserService: apiUrl + '/service/users',
+	//todo delete?
 	registerAskerNewConsultingType:
 		apiUrl + '/service/users/askers/consultingType/new',
 	rejectVideoCall: apiUrl + '/service/videocalls/reject',

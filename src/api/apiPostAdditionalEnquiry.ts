@@ -8,23 +8,24 @@ import {
 
 interface registrationResponse {
 	sessionId: number;
+	rcGroupId: string;
 }
 
 //TODO cleanup deprecated functionality
-export const apiRegistrationNewConsultingTypes = async (
+export const apiPostAdditionalEnquiry = async (
 	consultingType: number,
 	agencyId: number,
 	postcode: string,
-	consultantId?: string,
-	topicIds?: number[]
+	mainTopicId: number
+	// topicIds?: number[] ??? todo? tomasz
 ): Promise<registrationResponse> => {
-	const url = endpoints.registerAskerNewConsultingType;
+	const url = endpoints.additionalEnquiry;
 	const data = JSON.stringify({
 		postcode,
 		agencyId,
 		consultingType,
-		consultantId,
-		...(topicIds ? { topicIds: topicIds } : {})
+		mainTopicId
+		// ...(topicIds ? { topicIds: topicIds } : {})
 	});
 
 	return fetchData({
