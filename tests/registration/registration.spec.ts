@@ -3,8 +3,8 @@ import { caritasRework } from '../config';
 import { ensureLanguage, generateRandomAlphanumeric } from '../utils';
 
 test('Check registration page elements', async ({ page }) => {
-	ensureLanguage(page);
 	await page.goto(`${caritasRework.dev}registration`);
+	ensureLanguage(page);
 	await expect(page.locator('h1.headline--1')).toHaveText(
 		/Beratung & Hilfe|Consulting & Help/
 	);
@@ -16,8 +16,8 @@ test('Check registration page elements', async ({ page }) => {
 // registration test is skipped until a delete user account feature is implemented
 test.skip('Complete registration process', async ({ page }) => {
 	const password = process.env.TEST_PASSWORD;
-	ensureLanguage(page);
 	await page.goto(`${caritasRework.dev}registration`);
+	ensureLanguage(page);
 	await page.click('a[data-cy="button-register"]');
 
 	// registration steps
