@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { caritasRework } from '../config';
 import { ensureLanguage, generateRandomAlphanumeric } from '../utils';
 
+// checks if the page is correct
 test('Check registration page elements', async ({ page }) => {
 	await page.goto(`${caritasRework.dev}registration`);
 	ensureLanguage(page);
