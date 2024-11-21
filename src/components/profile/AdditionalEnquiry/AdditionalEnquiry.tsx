@@ -20,7 +20,9 @@ import { AdditionalAgencySelection } from './AdditionalAgencySelection';
 import {
 	apiGetTenantAgenciesTopics,
 	apiPostAdditionalEnquiry,
-	TenantAgenciesTopicsInterface
+	FETCH_ERRORS,
+	TenantAgenciesTopicsInterface,
+	X_REASON
 } from '../../../api';
 
 export const AdditionalEnquiry: React.FC = () => {
@@ -155,11 +157,23 @@ export const AdditionalEnquiry: React.FC = () => {
 					setSuccessOverlayActive(true);
 					setIsRequestInProgress(false);
 				})
-				.catch((error) => {
-					//TODO error handling? -> same topic & agency
-					//CONFLICT_WITH_RESPONSE
-					console.log('error ', error);
-					setSuccessOverlayItem(overlayItemNewRegistrationError);
+				.catch((error: Response) => {
+					const reason = error.headers?.get(FETCH_ERRORS.X_REASON);
+					if (
+						reason ===
+						X_REASON.USER_ALREADY_REGISTERED_WITH_AGENCY_AND_TOPIC
+					) {
+						let xReasonErrorOverlay =
+							overlayItemNewRegistrationError;
+						xReasonErrorOverlay.headline = translate(
+							'profile.data.registerError.overlay.xReasonAlreadyRegistered'
+						);
+						setSuccessOverlayItem(xReasonErrorOverlay);
+					} else {
+						setSuccessOverlayItem(overlayItemNewRegistrationError);
+					}
+
+					setIsButtonDisabled(true);
 					setSuccessOverlayActive(true);
 					setIsRequestInProgress(false);
 				});
