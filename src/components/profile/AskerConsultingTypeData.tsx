@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { useContext } from 'react';
-import { UserDataContext, useTopics } from '../../globalState';
-import { handleNumericTranslation } from '../../utils/translate';
-import { getUserDataTranslateBase } from './profileHelpers';
+import { useContext, useEffect } from 'react';
+import { SessionsDataContext, SET_SESSIONS } from '../../globalState';
 import { Headline } from '../headline/Headline';
 import { Box } from '../box/Box';
 import { useTranslation } from 'react-i18next';
+import { apiGetAskerSessionList } from '../../api';
+import { ListItemInterface } from '../../globalState/interfaces';
 
 export const AskerConsultingTypeData = () => {
 	const { t: translate } = useTranslation([
@@ -13,106 +13,44 @@ export const AskerConsultingTypeData = () => {
 		'consultingTypes',
 		'agencies'
 	]);
-	const { userData } = useContext(UserDataContext);
-	const topics = useTopics();
+
+	const { sessions, dispatch } = useContext(SessionsDataContext);
+
+	useEffect(() => {
+		apiGetAskerSessionList().then((sessionsData) => {
+			dispatch({
+				type: SET_SESSIONS,
+				ready: true,
+				sessions: sessionsData.sessions
+			});
+		});
+	}, []);
 
 	return (
 		<>
-			{Object.values(userData.consultingTypes).map(
-				(resort: any, index) =>
-					resort.isRegistered &&
-					resort.agency && (
-						<Box key={index}>
-							<div
-								className="profile__data__itemWrapper"
-								key={index}
-							>
-								<div className="profile__content__title">
-									<Headline
-										className="pr--3"
-										text={
-											topics.find(
-												(topic) =>
-													topic.id === resort.topic
-											)?.name || ''
-										}
-										semanticLevel="5"
-									/>
-								</div>
-								{resort.sessionData &&
-									Object.keys(resort.sessionData).map(
-										(item, itemIndex) =>
-											item === 'age' &&
-											resort.sessionData[item] ===
-												'null' ? null : (
-												<div
-													className="profile__data__item"
-													key={itemIndex}
-												>
-													<p className="profile__data__label">
-														{translate(
-															'userProfile.data.' +
-																item
-														)}
-													</p>
-													<p
-														className={
-															resort.sessionData[
-																item
-															]
-																? `profile__data__content`
-																: `profile__data__content profile__data__content--empty`
-														}
-													>
-														{resort.sessionData[
-															item
-														]
-															? translate(
-																	handleNumericTranslation(
-																		getUserDataTranslateBase(
-																			parseInt(
-																				resort
-																					.agency
-																					.consultingType
-																			)
-																		),
-																		item,
-																		resort
-																			.sessionData[
-																			item
-																		]
-																	)
-																)
-															: translate(
-																	'profile.noContent'
-																)}
-													</p>
-												</div>
-											)
-									)}
-								<div className="profile__data__item">
-									<p className="profile__data__label">
-										{translate('profile.data.agency.label')}
-									</p>
-									<p className="profile__data__content">
-										{translate(
-											[
-												`agency.${resort.agency.id}.name`,
-												resort.agency.name
-											],
-											{ ns: 'agencies' }
-										)}{' '}
-										<br />
-										{resort.agency.postcode}
-										{resort.agency.city
-											? ' ' + resort.agency.city
-											: ''}
-									</p>
-								</div>
-							</div>
-						</Box>
-					)
-			)}
+			{Object.values(sessions).map((item: ListItemInterface, index) => (
+				<Box key={index}>
+					<div className="profile__data__itemWrapper" key={index}>
+						<div className="profile__content__title">
+							<Headline
+								className="pr--3"
+								text={item.session.topic.name}
+								semanticLevel="5"
+							/>
+						</div>
+						<div className="profile__data__item">
+							<p className="profile__data__label">
+								{translate('profile.data.agency.label')}
+							</p>
+							<p className="profile__data__content">
+								{item.agency.name}
+								<br />
+								{item.agency.postcode} {item.agency.city}
+							</p>
+						</div>
+					</div>
+				</Box>
+			))}
 		</>
 	);
 };
