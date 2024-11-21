@@ -37,7 +37,7 @@ test.skip('Complete registration process', async ({ page }) => {
 		.click();
 	await page.click('button[data-cy="button-next"]');
 
-	// usermame & password
+	// username & password
 	const randomUsername = `testuser_${generateRandomAlphanumeric(3)}`;
 	await page.getByLabel(/(user\s?name|benutzername)/i).fill(randomUsername);
 	await page
