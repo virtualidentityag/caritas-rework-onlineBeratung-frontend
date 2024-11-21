@@ -24,7 +24,7 @@ export const AskerConsultingTypeData = () => {
 				sessions: sessionsData.sessions
 			});
 		});
-	}, []);
+	}, [dispatch]);
 
 	return (
 		<>
