@@ -1350,7 +1350,8 @@
 					"button": {
 						"label": "Schließen"
 					},
-					"headline": "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
+					"headline": "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
+					"xReasonAlreadyRegistered": "Sie sind bereits mit diesem Thema in der Beratungsstelle registriert."
 				}
 			},
 			"registerSuccess": {

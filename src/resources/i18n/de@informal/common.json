@@ -429,7 +429,8 @@
 			},
 			"registerError": {
 				"overlay": {
-					"headline": "Es ist ein Fehler aufgetreten. Bitte versuche es erneut."
+					"headline": "Es ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+					"xReasonAlreadyRegistered": "Du bist bereits mit diesem Thema in der Beratungsstelle registriert."
 				}
 			},
 			"registerSuccess": {
