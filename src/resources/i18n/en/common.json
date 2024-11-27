@@ -1327,7 +1327,8 @@
 					"button": {
 						"label": "Close"
 					},
-					"headline": "An error has occurred. Please try again."
+					"headline": "An error has occurred. Please try again.",
+					"xReasonAlreadyRegistered": "You are already registered with this topic at the counseling center."
 				}
 			},
 			"registerSuccess": {
