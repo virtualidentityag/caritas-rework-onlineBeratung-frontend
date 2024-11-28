@@ -217,7 +217,7 @@ export const AdditionalEnquiry: React.FC = () => {
 					<SelectDropdown {...topicsDropdown} />
 				</div>
 			}
-			{selectedTopicId && (
+			{selectedTopicId !== null && (
 				<AdditionalAgencySelection
 					selectedTopicId={selectedTopicId}
 					onAgencyChange={(agency) => setSelectedAgency(agency)}
