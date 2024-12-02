@@ -344,6 +344,7 @@ export const NavigationBar = ({
 						tabIndex={-1}
 						ref={(el) => (ref_logout.current = el)}
 						onKeyDown={(e) => handleKeyDownMenu(e, null)}
+						id="logout"
 					>
 						<LogoutIconOutline
 							className="navigation__icon__outline"
