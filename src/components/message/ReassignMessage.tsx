@@ -7,7 +7,6 @@ import { ConsultantListContext } from '../../globalState';
 export const ReassignRequestMessage: React.FC<{
 	fromConsultantName: string;
 	toConsultantName: string;
-	isTeamSession: boolean;
 	onClick: (accepted: boolean) => void;
 }> = (props) => {
 	const { t: translate } = useTranslation();
@@ -27,9 +26,7 @@ export const ReassignRequestMessage: React.FC<{
 
 				<span className="description">
 					{translate(
-						`session.reassign.system.message.reassign.description.${
-							props.isTeamSession ? 'team' : 'noTeam'
-						}`,
+						'session.reassign.system.message.reassign.description.noTeam',
 						{
 							oldConsultant: props.fromConsultantName,
 							newConsultant: props.toConsultantName
@@ -70,7 +67,6 @@ export const ReassignRequestSentMessage: React.FC<{
 	toAskerName: string;
 	fromConsultantId: string;
 	toConsultantId: string;
-	isTeamSession: boolean;
 	isMySession: boolean;
 }> = (props) => {
 	const { t: translate } = useTranslation();
@@ -91,12 +87,6 @@ export const ReassignRequestSentMessage: React.FC<{
 
 	let descriptionToTranslate =
 		'session.reassign.system.message.reassign.sent.description.noTeam';
-	if (props.isTeamSession && props.isMySession)
-		descriptionToTranslate =
-			'session.reassign.system.message.reassign.sent.description.team.self';
-	if (props.isTeamSession && !props.isMySession)
-		descriptionToTranslate =
-			'session.reassign.system.message.reassign.sent.description.team.other';
 
 	return (
 		<div className="reassignRequestMessage">

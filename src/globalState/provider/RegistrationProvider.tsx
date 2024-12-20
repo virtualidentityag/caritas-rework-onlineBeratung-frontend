@@ -15,11 +15,11 @@ import { UrlParamsContext } from './UrlParamsProvider';
 import { getUrlParameter } from '../../utils/getUrlParameter';
 import { apiGetTopicById } from '../../api/apiGetTopicId';
 import { apiGetAgencyById } from '../../api';
-import { TopicSelection } from '../../extensions/components/registration/topicSelection/TopicSelection';
-import { ZipcodeInput } from '../../extensions/components/registration/zipcodeInput/ZipcodeInput';
-import { AgencySelection } from '../../extensions/components/registration/agencySelection/AgencySelection';
-import { AccountData } from '../../extensions/components/registration/accountData/AccountData';
 import { RouteProps, useRouteMatch } from 'react-router-dom';
+import { TopicSelection } from '../../components/registration/topicSelection/TopicSelection';
+import { ZipcodeInput } from '../../components/registration/zipcodeInput/ZipcodeInput';
+import { AgencySelection } from '../../components/registration/agencySelection/AgencySelection';
+import { AccountData } from '../../components/registration/accountData/AccountData';
 
 export const RegistrationContext = createContext<RegistrationContextInterface>(
 	{}

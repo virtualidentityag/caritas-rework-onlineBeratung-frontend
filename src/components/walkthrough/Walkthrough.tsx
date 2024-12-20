@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 
 import 'intro.js/introjs.css';
 import './walkthrough.styles.scss';
-import { ConsultingTypesContext, UserDataContext } from '../../globalState';
+import { UserDataContext } from '../../globalState';
 import { apiPatchConsultantData } from '../../api';
 import steps from './steps';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +14,6 @@ import { useAppConfig } from '../../hooks/useAppConfig';
 export const Walkthrough = () => {
 	const { t: translate } = useTranslation();
 
-	const { consultingTypes } = useContext(ConsultingTypesContext);
 	const ref = useRef<any>();
 	const settings = useAppConfig();
 	const { userData, reloadUserData } = useContext(UserDataContext);
@@ -32,14 +31,7 @@ export const Walkthrough = () => {
 		});
 	}, [ref]);
 
-	const hasTeamAgency = userData.agencies?.some(
-		(agency) => agency.teamAgency
-	);
-	const stepsData = steps({
-		hasTeamAgency,
-		anonymousConversationAllowed:
-			consultingTypes?.[0]?.isAnonymousConversationAllowed
-	});
+	const stepsData = steps();
 	// Sometimes when not even showing the modal the steps are triggering the on exist callback so it was causing
 	// to enable the WalkThrough and this way prevents from render
 	if (!userData.isWalkThroughEnabled || !settings.enableWalkthrough) {

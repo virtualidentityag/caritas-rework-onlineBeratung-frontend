@@ -80,7 +80,6 @@ $message-name-self: $text-low-emphasis;
 $message-name-system: var(--skin-color-default, $primary);
 $message-name-consultant: var(--skin-color-default, $primary);
 $message-name-user: #167a6f;
-$message-name-forwarded: $text-low-emphasis;
 $message-system: #8c878c;
 
 // FONT SIZES
@@ -289,5 +288,4 @@ $text-divider-letter-spacing: 0;
 $text-divider-font-weight: $font-weight-regular;
 $text-divider-text-transform: none;
 $upload-progress: #80dd92;
-$waiting-room-illustration-display-after: block;
 $welcome-screen-icon-background: $primary;

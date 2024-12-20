@@ -12,37 +12,26 @@ import { apiGetSessionRoomsByGroupIds } from '../../api/apiGetSessionRooms';
 import {
 	getChatItemForSession,
 	getSessionType,
-	isGroupChat,
 	SESSION_TYPE_ARCHIVED,
 	SESSION_TYPE_ENQUIRY,
-	SESSION_TYPE_FEEDBACK,
 	SESSION_TYPE_GROUP,
-	SESSION_TYPE_LIVECHAT,
-	SESSION_TYPE_SESSION,
-	SESSION_TYPE_TEAMSESSION
+	SESSION_TYPE_SESSION
 } from '../../components/session/sessionHelpers';
 import { UserDataContext } from '../context/UserDataContext';
-import { AnonymousConversationFinishedContext } from './AnonymousConversationFinishedProvider';
 import { useBrowserNotification } from '../../hooks/useBrowserNotification';
 
 type UnreadStatusContextProps = {
 	sessions: string[];
-	teamsessions: string[];
-	feedback: string[];
 	enquiry: string[];
-	livechat: string[];
 	group: string[];
 	archiv: string[];
 	unknown: string[];
 };
 
 const initialData = {
-	livechat: [],
 	enquiry: [],
 	archiv: [],
-	feedback: [],
 	sessions: [],
-	teamsessions: [],
 	group: [],
 	unknown: []
 };
@@ -61,9 +50,6 @@ export function RocketChatUnreadProvider({
 }: RocketChatUnreadProviderProps) {
 	const { maybeSendNewEnquiryNotification } = useBrowserNotification();
 	const { subscriptions } = useContext(RocketChatSubscriptionsContext);
-	const { anonymousConversationFinished } = useContext(
-		AnonymousConversationFinishedContext
-	);
 	const { userData } = useContext(UserDataContext);
 	const [unreadStatus, setUnreadStatus] =
 		useState<UnreadStatusContextProps>(initialData);
@@ -96,11 +82,7 @@ export function RocketChatUnreadProvider({
 					const session = sessions.find((s) => {
 						const chatItem = getChatItemForSession(s);
 
-						return (
-							chatItem.groupId === subscription.rid ||
-							(!isGroupChat(chatItem) &&
-								chatItem?.feedbackGroupId === subscription.rid)
-						);
+						return chatItem.groupId === subscription.rid;
 					});
 
 					if (!session) {
@@ -110,7 +92,6 @@ export function RocketChatUnreadProvider({
 
 					const sessionType = getSessionType(
 						session,
-						subscription.rid,
 						userData.userId
 					);
 
@@ -122,26 +103,17 @@ export function RocketChatUnreadProvider({
 
 					// Add it to relevant unread group
 					switch (sessionType) {
-						case SESSION_TYPE_LIVECHAT:
-							newUnreadStatus.livechat.push(subscription.rid);
-							break;
 						case SESSION_TYPE_ENQUIRY:
 							newUnreadStatus.enquiry.push(subscription.rid);
 							break;
 						case SESSION_TYPE_ARCHIVED:
 							newUnreadStatus.archiv.push(subscription.rid);
 							break;
-						case SESSION_TYPE_FEEDBACK:
-							newUnreadStatus.feedback.push(subscription.rid);
-							break;
 						case SESSION_TYPE_GROUP:
 							newUnreadStatus.group.push(subscription.rid);
 							break;
 						case SESSION_TYPE_SESSION:
 							newUnreadStatus.sessions.push(subscription.rid);
-							break;
-						case SESSION_TYPE_TEAMSESSION:
-							newUnreadStatus.teamsessions.push(subscription.rid);
 							break;
 						default:
 							newUnreadStatus.unknown.push(subscription.rid);
@@ -161,7 +133,7 @@ export function RocketChatUnreadProvider({
 
 	// Initialize all subscriptions with unread status
 	useEffect(() => {
-		if (!subscriptions?.length || anonymousConversationFinished) {
+		if (!subscriptions?.length) {
 			return;
 		}
 
@@ -203,7 +175,6 @@ export function RocketChatUnreadProvider({
 		subscriptions,
 		handleSessions,
 		unreadStatus,
-		anonymousConversationFinished,
 		maybeSendNewEnquiryNotification
 	]);
 

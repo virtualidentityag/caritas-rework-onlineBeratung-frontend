@@ -42,11 +42,6 @@ declare namespace UserService {
 			 * example:
 			 * false
 			 */
-			teamAgency?: boolean;
-			/**
-			 * example:
-			 * false
-			 */
 			offline?: boolean;
 			/**
 			 * example:
@@ -55,7 +50,6 @@ declare namespace UserService {
 			consultingType?: number;
 		}
 		export interface AliasMessageDTO {
-			forwardMessageDTO?: ForwardMessageDTO;
 			videoCallMessageDTO?: VideoCallMessageDTO;
 			messageType?: MessageType;
 		}
@@ -163,12 +157,6 @@ declare namespace UserService {
 			 */
 			groupId?: string;
 			/**
-			 * Rocket.Chat feedback room ID
-			 * example:
-			 * 8ertjlasdKJA
-			 */
-			feedbackGroupId?: string;
-			/**
 			 * keycloak id of assigned consultant
 			 * example:
 			 * 926b9777-4eef-443d-925a-4aa534797bd7
@@ -198,11 +186,6 @@ declare namespace UserService {
 			 * asker123
 			 */
 			askerUserName?: string;
-			/**
-			 * example:
-			 * false
-			 */
-			isTeamSession?: boolean;
 			/**
 			 * example:
 			 * true
@@ -256,29 +239,7 @@ declare namespace UserService {
 			 */
 			message: string;
 		}
-		export interface ForwardMessageDTO {
-			/**
-			 * example:
-			 * Lorem ipsum dolor sit amet, consetetur...
-			 */
-			message: string;
-			/**
-			 * Full qualified timestamp
-			 * example:
-			 * 2018-11-15T09:33:00.057Z
-			 */
-			timestamp: string;
-			/**
-			 * example:
-			 * asker23
-			 */
-			username: string;
-			/**
-			 * example:
-			 * ag89h3tjkerg94t
-			 */
-			rcUserId: string;
-		}
+
 		export interface HttpStatus {}
 		export interface MandatorySessionDataDTO {
 			/**
@@ -304,7 +265,6 @@ declare namespace UserService {
 		export type MessageType =
 			| 'FURTHER_STEPS'
 			| 'UPDATE_SESSION_DATA'
-			| 'FORWARD'
 			| 'VIDEOCALL';
 		export interface MobileTokenDTO {
 			/**
@@ -313,9 +273,7 @@ declare namespace UserService {
 			 */
 			token?: string;
 		}
-		export interface MonitoringDTO {
-			additionalProperties?: Properties;
-		}
+
 		export interface NewMessageNotificationDTO {
 			/**
 			 * example:
@@ -444,12 +402,6 @@ declare namespace UserService {
 			 */
 			groupId?: string;
 			/**
-			 * Rocket.Chat feedback room ID
-			 * example:
-			 * 8ertjlasdKJA
-			 */
-			feedbackGroupId?: string;
-			/**
 			 * asker Rocket.Chat ID
 			 * example:
 			 * 8ertjlasdKJA
@@ -470,16 +422,6 @@ declare namespace UserService {
 			 * false
 			 */
 			messagesRead?: boolean;
-			/**
-			 * example:
-			 * true
-			 */
-			feedbackRead?: boolean;
-			/**
-			 * example:
-			 * false
-			 */
-			isTeamSession?: boolean;
 			/**
 			 * example:
 			 * true
@@ -741,21 +683,10 @@ declare namespace UserService {
 			 * Bin mal weg...
 			 */
 			absenceMessage?: string;
-			/**
-			 * example:
-			 * true
-			 */
-			isInTeamAgency?: boolean;
 			agencies?: AgencyDTO[];
 			userRoles?: string[];
 			grantedAuthorities?: string[];
 			consultingTypes?: ConsultingTypeMap;
-			/**
-			 * Is true if consultant has at least one consulting type containing anonymous conversations active
-			 * example:
-			 * true
-			 */
-			hasAnonymousConversations?: boolean;
 		}
 		export interface UserSessionListResponseDTO {
 			sessions?: UserSessionResponseDTO[];
@@ -929,22 +860,7 @@ declare namespace Paths {
 			export interface $500 {}
 		}
 	}
-	namespace GetMonitoring {
-		namespace Parameters {
-			export type SessionId = number; // int64
-		}
-		export interface PathParameters {
-			sessionId: Parameters.SessionId /* int64 */;
-		}
-		namespace Responses {
-			export type $200 = UserService.Schemas.MonitoringDTO;
-			export interface $204 {}
-			export interface $400 {}
-			export interface $401 {}
-			export interface $403 {}
-			export interface $500 {}
-		}
-	}
+
 	namespace GetSessionsForAuthenticatedConsultant {
 		export interface HeaderParameters {
 			RCToken: Parameters.RCToken;
@@ -1121,16 +1037,7 @@ declare namespace Paths {
 			export interface $500 {}
 		}
 	}
-	namespace SendNewFeedbackMessageNotification {
-		export type RequestBody = UserService.Schemas.NewMessageNotificationDTO;
-		namespace Responses {
-			export interface $200 {}
-			export interface $400 {}
-			export interface $401 {}
-			export interface $409 {}
-			export interface $500 {}
-		}
-	}
+
 	namespace SendNewMessageNotification {
 		export type RequestBody = UserService.Schemas.NewMessageNotificationDTO;
 		namespace Responses {
@@ -1241,22 +1148,7 @@ declare namespace Paths {
 			export interface $500 {}
 		}
 	}
-	namespace UpdateMonitoring {
-		namespace Parameters {
-			export type SessionId = number; // int64
-		}
-		export interface PathParameters {
-			sessionId: Parameters.SessionId /* int64 */;
-		}
-		export type RequestBody = UserService.Schemas.MonitoringDTO;
-		namespace Responses {
-			export interface $200 {}
-			export interface $400 {}
-			export interface $401 {}
-			export interface $403 {}
-			export interface $500 {}
-		}
-	}
+
 	namespace UpdatePassword {
 		export type RequestBody = UserService.Schemas.PasswordDTO;
 		namespace Responses {

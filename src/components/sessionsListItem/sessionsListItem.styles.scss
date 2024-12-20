@@ -24,6 +24,7 @@ $icon-size-small: 16px;
 			opacity: 0;
 			transform: scale(0.98);
 		}
+
 		100% {
 			opacity: 1;
 			transform: scale(1);
@@ -32,6 +33,7 @@ $icon-size-small: 16px;
 
 	&--active {
 		transition: all 0.3s ease;
+
 		&:after {
 			content: '';
 			width: 40px;
@@ -49,6 +51,7 @@ $icon-size-small: 16px;
 				left: calc(100% - 80px);
 				opacity: 0;
 			}
+
 			100% {
 				left: calc(100% - 40px);
 				opacity: 1;
@@ -60,6 +63,7 @@ $icon-size-small: 16px;
 				background-color: $session-list-item-background-active;
 				transition: all 0.3s ease;
 			}
+
 			&:focus-visible {
 				outline: $focus-outline;
 				border-radius: 4px;
@@ -107,16 +111,19 @@ $icon-size-small: 16px;
 		display: flex;
 		gap: 12px;
 		color: var(--skin-color-default, $secondary);
+
 		&:first-child {
 			justify-content: space-between;
 			color: $tertiary;
 			font-size: $font-size-secondary;
 			line-height: 16px;
 		}
+
 		&:last-child {
 			justify-content: space-between;
 			min-height: 19px;
 		}
+
 		&:not(:last-child) {
 			margin-bottom: $grid-base;
 		}
@@ -154,24 +161,6 @@ $icon-size-small: 16px;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
-	}
-
-	&__feedbackLabel {
-		padding: 0 8px;
-		height: 18px;
-		line-height: 18px;
-		border-radius: 9px;
-		background-color: $yellow-3;
-		display: inline-block;
-		word-break: keep-all;
-		cursor: pointer;
-		color: var(--skin-color-secondary, $secondary);
-		transition: background-color 0.5s ease-out;
-
-		&:hover {
-			color: var(--skin-color-secondary, $secondary);
-			background-color: $yellow-4;
-		}
 	}
 
 	&__icon {
@@ -268,6 +257,7 @@ $icon-size-small: 16px;
 .skeleton {
 	&:hover {
 		cursor: auto !important;
+
 		.sessionsListItem__content {
 			background-color: $white;
 		}
@@ -290,6 +280,7 @@ $icon-size-small: 16px;
 			0% {
 				background-position: 0;
 			}
+
 			100% {
 				background-position: -135% 0%;
 			}

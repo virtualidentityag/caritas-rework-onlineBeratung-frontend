@@ -57,8 +57,7 @@ $iconSize: 24px;
 		}
 	}
 
-	&__backButton,
-	&__feedbackBackButton {
+	&__backButton {
 		svg {
 			width: $iconSize;
 			height: $iconSize;
@@ -78,14 +77,6 @@ $iconSize: 24px;
 		}
 	}
 
-	&__feedbackBackButton {
-		padding-right: 10px;
-
-		@include breakpoint($fromLarge) {
-			display: block;
-		}
-	}
-
 	&__username {
 		cursor: pointer;
 		overflow: hidden;
@@ -98,6 +89,7 @@ $iconSize: 24px;
 		&--deactivate {
 			cursor: unset;
 		}
+
 		a {
 			text-decoration: none;
 		}
@@ -124,32 +116,6 @@ $iconSize: 24px;
 		margin-right: 20px;
 	}
 
-	&__feedbackButton {
-		display: none;
-
-		@include breakpoint($fromLarge) {
-			display: inline-block;
-		}
-
-		&--active .button__item {
-			transform: scale(1.2);
-			animation: yellowThemeHighlight 1.5s forwards;
-
-			@keyframes yellowThemeHighlight {
-				0% {
-					background-color: $yellow-3;
-				}
-				20% {
-					background-color: $yellow-4;
-				}
-				100% {
-					background-color: $yellow-3;
-				}
-			}
-		}
-	}
-
-	&__feedbackMetaInfo,
 	&__metaInfo {
 		width: 100%;
 		max-width: $xlarge;
@@ -289,11 +255,6 @@ $iconSize: 24px;
 					left: 50%;
 				}
 			}
-		}
-	}
-	&__feedbackMetaInfo {
-		@include breakpoint($fromLarge) {
-			padding-left: 36px;
 		}
 	}
 }

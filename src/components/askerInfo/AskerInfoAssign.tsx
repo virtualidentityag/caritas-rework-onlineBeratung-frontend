@@ -20,7 +20,6 @@ export const AskerInfoAssign = ({
 	const { userData } = useContext(UserDataContext);
 
 	return (
-		!activeSession.isLive &&
 		hasUserAuthority(AUTHORITIES.CONSULTANT_DEFAULT, userData) && (
 			<>
 				<Text text={title && translate(title)} type="divider" />

@@ -43,6 +43,7 @@ $two-factor-auth-overlay-buttons-margin-right: auto !default;
 			margin-left: auto;
 			margin-right: $two-factor-auth-overlay-buttons-margin-right;
 		}
+
 		.button__wrapper + .button__wrapper {
 			@include breakpoint($fromSmall) {
 				margin-left: $grid-base-two;
@@ -193,9 +194,12 @@ $two-factor-auth-overlay-buttons-margin-right: auto !default;
 
 	&__appConfirmation,
 	&__emailConfirmation {
+		text-align: center;
+
 		svg {
 			max-width: 240px;
 		}
+
 		.headline {
 			text-align: center;
 		}
@@ -208,6 +212,7 @@ $two-factor-auth-overlay-buttons-margin-right: auto !default;
 
 	.button__link {
 		color: $tertiary;
+
 		svg {
 			margin: 0;
 		}

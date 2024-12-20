@@ -73,8 +73,6 @@ export const RequestSessionAssign = (props: { value?: string }) => {
 		const selectedConsultant = consultantList.filter(
 			(consultant) => consultant.value === activeSession?.consultant?.id
 		)[0];
-		const isTeamSession = activeSession?.item?.isTeamSession;
-		const isMyOwnSession = selected?.value === profileData.userId;
 
 		const client = activeSession.user.username;
 		const newConsultant = selected.label;
@@ -94,26 +92,6 @@ export const RequestSessionAssign = (props: { value?: string }) => {
 				newConsultant
 			}
 		);
-
-		if (isTeamSession && isMyOwnSession) {
-			overlayText = translate(
-				'session.assignOther.overlay.subtitle.team.self',
-				{
-					newConsultant,
-					toAskerName
-				}
-			);
-		}
-
-		if (isTeamSession && !isMyOwnSession) {
-			overlayText = translate(
-				'session.assignOther.overlay.subtitle.team.other',
-				{
-					newConsultant,
-					toAskerName
-				}
-			);
-		}
 
 		const reassignSession: OverlayItem = {
 			headline: translate('session.assignOther.overlay.headline.1', {

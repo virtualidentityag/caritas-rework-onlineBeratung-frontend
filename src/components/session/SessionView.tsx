@@ -23,7 +23,6 @@ import useUpdatingRef from '../../hooks/useUpdatingRef';
 import { useSearchParam } from '../../hooks/useSearchParams';
 import { useSession } from '../../hooks/useSession';
 import { SessionStream } from './SessionStream';
-import { AcceptLiveChatView } from './AcceptLiveChatView';
 import { RocketChatUsersOfRoomProvider } from '../../globalState/provider/RocketChatUsersOfRoomProvider';
 import { useSetAtom } from 'jotai';
 import { agencyLogoAtom } from '../../store/agencyLogoAtom';
@@ -187,23 +186,6 @@ export const SessionView = () => {
 						forceBannedOverlay={forceBannedOverlay}
 						bannedUsers={bannedUsers}
 					/>
-				</RocketChatUsersOfRoomProvider>
-			</ActiveSessionProvider>
-		);
-	}
-
-	if (
-		activeSession?.isEnquiry &&
-		!activeSession?.isEmptyEnquiry &&
-		activeSession.isLive
-	) {
-		return (
-			<ActiveSessionProvider
-				activeSession={activeSession}
-				reloadActiveSession={reloadActiveSession}
-			>
-				<RocketChatUsersOfRoomProvider watch>
-					<AcceptLiveChatView bannedUsers={bannedUsers} />
 				</RocketChatUsersOfRoomProvider>
 			</ActiveSessionProvider>
 		);

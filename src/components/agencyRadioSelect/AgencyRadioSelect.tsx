@@ -56,7 +56,6 @@ export const AgencyRadioSelect = ({
 						prefix: 'agency'
 					}}
 					info={agency}
-					showTeamAgencyInfo={agency.teamAgency}
 					isProfileView={showTooltipAbove}
 				/>
 			</div>

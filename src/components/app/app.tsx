@@ -46,11 +46,7 @@ const Registration = lazy(() =>
 		default: m.Registration
 	}))
 );
-const WaitingRoomLoader = lazy(() =>
-	import('../waitingRoom/WaitingRoomLoader').then((m) => ({
-		default: m.WaitingRoomLoader
-	}))
-);
+
 const VideoConference = lazy(
 	() => import('../videoConference/VideoConference')
 );
@@ -169,14 +165,6 @@ const RouterWrapper = ({ extraRoutes }: RouterWrapperProps) => {
 									<UrlParamsProvider>
 										<Registration />
 									</UrlParamsProvider>
-								</Route>
-
-								<Route path="/:consultingTypeSlug/warteraum">
-									<WaitingRoomLoader
-										onAnonymousRegistration={() =>
-											setStartWebsocket(true)
-										}
-									/>
 								</Route>
 
 								<Route path="/login" exact>

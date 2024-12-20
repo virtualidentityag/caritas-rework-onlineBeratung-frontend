@@ -11,19 +11,17 @@ import { useHistory } from 'react-router-dom';
 
 import { SendMessageButton } from './SendMessageButton';
 import { SESSION_LIST_TYPES } from '../session/sessionHelpers';
-import { Checkbox } from '../checkbox/Checkbox';
 import {
 	AUTHORITIES,
 	getContact,
 	hasUserAuthority,
-	AnonymousConversationFinishedContext,
 	E2EEContext,
 	SessionTypeContext,
 	useTenant,
 	UserDataContext,
 	ActiveSessionContext
 } from '../../globalState';
-import { STATUS_ARCHIVED, STATUS_FINISHED } from '../../globalState/interfaces';
+import { STATUS_ARCHIVED } from '../../globalState/interfaces';
 import {
 	apiPutDearchive,
 	apiSendEnquiry,
@@ -69,7 +67,6 @@ import { ReactComponent as RemoveIcon } from '../../resources/img/icons/x.svg';
 import { ReactComponent as CalendarMonthIcon } from '../../resources/img/icons/calendar-month-navigation.svg';
 import './emojiPicker.styles';
 import './messageSubmitInterface.styles';
-import './messageSubmitInterface.yellowTheme.styles';
 import clsx from 'clsx';
 import { mobileListView } from '../app/navigationHandler';
 import { Button, ButtonItem, BUTTON_TYPES } from '../button/Button';
@@ -97,7 +94,6 @@ import {
 	OVERLAY_REQUEST
 } from '../../globalState/interfaces/AppConfig/OverlaysConfigInterface';
 import { getIconForAttachmentType } from '../message/messageHelpers';
-import classNames from 'classnames';
 
 //Linkify Plugin
 const omitKey = (key, { [key]: _, ...obj }) => obj;
@@ -127,8 +123,7 @@ const INFO_TYPES = {
 	ATTACHMENT_SIZE_ERROR: 'ATTACHMENT_SIZE_ERROR',
 	ATTACHMENT_FORMAT_ERROR: 'ATTACHMENT_FORMAT_ERROR',
 	ATTACHMENT_QUOTA_REACHED_ERROR: 'ATTACHMENT_QUOTA_REACHED_ERROR',
-	ATTACHMENT_OTHER_ERROR: 'ATTACHMENT_OTHER_ERROR',
-	FINISHED_CONVERSATION: 'FINISHED_CONVERSATION'
+	ATTACHMENT_OTHER_ERROR: 'ATTACHMENT_OTHER_ERROR'
 };
 
 export interface MessageSubmitInterfaceComponentProps {
@@ -165,9 +160,6 @@ export const MessageSubmitInterfaceComponent = ({
 	const { activeSession, reloadActiveSession } =
 		useContext(ActiveSessionContext);
 	const { type, path: listPath } = useContext(SessionTypeContext);
-	const { anonymousConversationFinished } = useContext(
-		AnonymousConversationFinishedContext
-	);
 	const { isE2eeEnabled } = useContext(E2EEContext);
 
 	const [activeInfo, setActiveInfo] = useState(null);
@@ -187,14 +179,7 @@ export const MessageSubmitInterfaceComponent = ({
 	const [isSessionArchived, setIsSessionArchived] = useState(
 		activeSession.item.status === STATUS_ARCHIVED
 	);
-	const [isTypingActive, setIsTypingActive] = useState(
-		activeSession.isGroup || activeSession.isLive
-	);
-	const [isLiveChatFinished, setIsLiveChatFinished] = useState(
-		activeSession.isLive && activeSession.item.status === STATUS_FINISHED
-	);
-	const [requestFeedbackCheckboxChecked, setRequestFeedbackCheckboxChecked] =
-		useState(false);
+	const [isTypingActive, setIsTypingActive] = useState(activeSession.isGroup);
 	const [showAppointmentButton, setShowAppointmentButton] = useState(false);
 
 	//Emoji Picker Plugin
@@ -218,7 +203,6 @@ export const MessageSubmitInterfaceComponent = ({
 	// This loads the keys for current activeSession.rid which is already set:
 	// to groupChat.groupId on group chats
 	// to session.groupId on session chats
-	// to session.feebackGroupId on feedback chats
 	const {
 		keyID,
 		key,
@@ -228,15 +212,6 @@ export const MessageSubmitInterfaceComponent = ({
 		encryptRoom,
 		ready: e2EEReady
 	} = useE2EE(activeSession.rid || null);
-
-	// This loads keys for feedback chat to have the ability to encrypt
-	// the feedback chat when checkbox "Request feedback" is checked
-	const {
-		keyID: feedbackChatKeyId,
-		key: feedbackChatKey,
-		encryptRoom: feedbackEncryptRoom,
-		ready: feedbackE2EEReady
-	} = useE2EE(activeSession.item.feedbackGroupId);
 
 	const {
 		visible: e2eeOverlayVisible,
@@ -261,18 +236,11 @@ export const MessageSubmitInterfaceComponent = ({
 				activeSession.consultant?.absent
 		);
 		setIsSessionArchived(activeSession.item.status === STATUS_ARCHIVED);
-		setIsTypingActive(activeSession.isGroup || activeSession.isLive);
-		setIsLiveChatFinished(
-			activeSession.isLive &&
-				activeSession.item.status === STATUS_FINISHED
-		);
+		setIsTypingActive(activeSession.isGroup);
 	}, [activeSession, activeSession.item.status, userData]);
 
 	const { onChange: onDraftMessageChange, loaded: draftLoaded } =
-		useDraftMessage(
-			!anonymousConversationFinished && !isRequestInProgress,
-			setEditorState
-		);
+		useDraftMessage(!isRequestInProgress, setEditorState);
 
 	useEffect(() => {
 		if (
@@ -282,18 +250,10 @@ export const MessageSubmitInterfaceComponent = ({
 			setActiveInfo(INFO_TYPES.ARCHIVED);
 		} else if (isConsultantAbsent) {
 			setActiveInfo(INFO_TYPES.ABSENT);
-		} else if (isLiveChatFinished) {
-			setActiveInfo(INFO_TYPES.FINISHED_CONVERSATION);
 		} else {
 			setActiveInfo(null);
 		}
-	}, [isConsultantAbsent, isLiveChatFinished, isSessionArchived, userData]);
-
-	useEffect(() => {
-		if (isLiveChatFinished) {
-			setActiveInfo(INFO_TYPES.FINISHED_CONVERSATION);
-		}
-	}, [isLiveChatFinished]);
+	}, [isConsultantAbsent, isSessionArchived, userData]);
 
 	const getTypedMarkdownMessage = useCallback(
 		(currentEditorState?: EditorState) => {
@@ -511,37 +471,16 @@ export const MessageSubmitInterfaceComponent = ({
 
 	const handleMessageSendSuccess = useCallback(() => {
 		onMessageSendSuccess?.();
-		if (requestFeedbackCheckboxChecked) {
-			const feedbackButton = document.querySelector(
-				'.sessionInfo__feedbackButton'
-			);
-			feedbackButton?.classList.add(
-				'sessionInfo__feedbackButton--active'
-			);
-			setTimeout(() => {
-				feedbackButton?.classList.remove(
-					'sessionInfo__feedbackButton--active'
-				);
-			}, 700);
-		}
 		setEditorState(EditorState.createEmpty());
 		setActiveInfo('');
 		resizeTextarea();
 		setTimeout(() => setIsRequestInProgress(false), 1200);
-	}, [onMessageSendSuccess, requestFeedbackCheckboxChecked, resizeTextarea]);
+	}, [onMessageSendSuccess, resizeTextarea]);
 
 	const sendMessage = useCallback(
-		async (
-			sendToFeedbackEndpoint,
-			message,
-			attachment: File,
-			isEncrypted
-		) => {
-			const sendToRoomWithId = sendToFeedbackEndpoint
-				? activeSession.item.feedbackGroupId
-				: activeSession.rid || activeSession.item.id;
-			const getSendMailNotificationStatus = () =>
-				!activeSession.isGroup && !activeSession.isLive;
+		async (message, attachment: File, isEncrypted) => {
+			const sendToRoomWithId = activeSession.rid || activeSession.item.id;
+			const getSendMailNotificationStatus = () => !activeSession.isGroup;
 
 			if (attachment) {
 				let res: any;
@@ -577,7 +516,6 @@ export const MessageSubmitInterfaceComponent = ({
 				res = await apiUploadAttachment(
 					attachmentFile,
 					sendToRoomWithId,
-					sendToFeedbackEndpoint,
 					getSendMailNotificationStatus(),
 					setUploadProgress,
 					setAttachmentUpload,
@@ -617,7 +555,6 @@ export const MessageSubmitInterfaceComponent = ({
 				await apiSendMessage(
 					message,
 					sendToRoomWithId,
-					sendToFeedbackEndpoint,
 					getSendMailNotificationStatus() && !attachment,
 					isEncrypted
 				)
@@ -640,8 +577,6 @@ export const MessageSubmitInterfaceComponent = ({
 		},
 		[
 			activeSession.isGroup,
-			activeSession.isLive,
-			activeSession.item.feedbackGroupId,
 			activeSession.item.id,
 			activeSession.rid,
 			cleanupAttachment,
@@ -673,21 +608,11 @@ export const MessageSubmitInterfaceComponent = ({
 			return null;
 		}
 
-		const sendToFeedbackEndpoint =
-			requestFeedbackCheckboxChecked || activeSession.isFeedback;
-
-		const messageKeyId = requestFeedbackCheckboxChecked
-			? feedbackChatKeyId
-			: keyID;
-		const messageKey = requestFeedbackCheckboxChecked
-			? feedbackChatKey
-			: key;
-
 		let message = getTypedMarkdownMessage().trim();
 		let isEncrypted = isE2eeEnabled;
 		if (message.length > 0 && isE2eeEnabled) {
 			try {
-				message = await encryptText(message, messageKeyId, messageKey);
+				message = await encryptText(message, keyID, key);
 			} catch (e: any) {
 				apiPostError({
 					name: e.name,
@@ -708,31 +633,16 @@ export const MessageSubmitInterfaceComponent = ({
 			return;
 		}
 
-		await sendMessage(
-			sendToFeedbackEndpoint,
-			message,
-			attachment,
-			isEncrypted
-		);
-
-		if (requestFeedbackCheckboxChecked) {
-			await feedbackEncryptRoom(setE2EEState);
-		}
+		await sendMessage(message, attachment, isEncrypted);
 	}, [
-		activeSession.isFeedback,
 		encrypted,
-		feedbackChatKey,
-		feedbackChatKeyId,
-		feedbackEncryptRoom,
 		getTypedMarkdownMessage,
 		isE2eeEnabled,
 		key,
 		keyID,
 		preselectedFile,
-		requestFeedbackCheckboxChecked,
 		sendEnquiry,
 		sendMessage,
-		setE2EEState,
 		type,
 		userData
 	]);
@@ -781,12 +691,6 @@ export const MessageSubmitInterfaceComponent = ({
 		uploadProgress,
 		userData
 	]);
-
-	const handleRequestFeedbackCheckbox = useCallback(() => {
-		setRequestFeedbackCheckboxChecked(
-			(requestFeedbackCheckboxChecked) => !requestFeedbackCheckboxChecked
-		);
-	}, []);
 
 	const handleAttachmentSelect = useCallback(() => {
 		const attachmentInput: any = attachmentInputRef.current;
@@ -873,13 +777,6 @@ export const MessageSubmitInterfaceComponent = ({
 				infoHeadline: translate('attachments.error.other.headline'),
 				infoMessage: translate('attachments.error.other.message')
 			};
-		} else if (activeInfo === INFO_TYPES.FINISHED_CONVERSATION) {
-			infoData = {
-				isInfo: true,
-				infoHeadline: translate(
-					'anonymous.session.infoMessage.chatFinished'
-				)
-			};
 		} else if (activeInfo === INFO_TYPES.ARCHIVED) {
 			infoData = {
 				isInfo: true,
@@ -901,12 +798,6 @@ export const MessageSubmitInterfaceComponent = ({
 				!hasUserAuthority(AUTHORITIES.ASKER_DEFAULT, userData))) &&
 		!tenant?.settings?.featureAttachmentUploadDisabled;
 
-	const hasRequestFeedbackCheckbox =
-		hasUserAuthority(AUTHORITIES.USE_FEEDBACK, userData) &&
-		!hasUserAuthority(AUTHORITIES.VIEW_ALL_PEER_SESSIONS, userData) &&
-		activeSession.item.feedbackGroupId &&
-		(activeSession.isGroup || !activeSession.isFeedback);
-
 	const bookingButton: ButtonItem = useMemo(
 		() => ({
 			label: translate('message.submit.booking.buttonLabel'),
@@ -923,7 +814,7 @@ export const MessageSubmitInterfaceComponent = ({
 		return null;
 	}, []);
 
-	if (!e2EEReady || !feedbackE2EEReady) {
+	if (!e2EEReady) {
 		return null;
 	}
 
@@ -951,202 +842,166 @@ export const MessageSubmitInterfaceComponent = ({
 				/>
 			)}
 			{activeInfo && <MessageSubmitInfo {...getMessageSubmitInfo()} />}
-			{!isLiveChatFinished && (
-				<form
-					className={classNames('textarea', {
-						'textarea--yellowTheme': requestFeedbackCheckboxChecked,
-						'textarea--large': hasRequestFeedbackCheckbox
-					})}
-				>
-					{hasRequestFeedbackCheckbox && (
-						<Checkbox
-							inputId={'requestFeedback'}
-							name={'requestFeedback'}
-							labelId={'requestFeedbackLabel'}
-							labelClass={'requestFeedbackLabel'}
-							label={translate(
-								'message.write.peer.checkbox.label'
-							)}
-							checked={requestFeedbackCheckboxChecked}
-							checkboxHandle={handleRequestFeedbackCheckbox}
-						/>
-					)}
-					<div className={'textarea__wrapper'}>
-						<div className="textarea__wrapper-send-message">
-							<span className="textarea__featureWrapper">
-								<span className="textarea__richtextToggle">
-									<RichtextToggleIcon
-										width="20"
-										height="20"
-										onClick={() =>
-											setIsRichtextActive(
-												!isRichtextActive
-											)
-										}
-										title={translate(
-											'enquiry.write.input.format'
-										)}
-										aria-label={translate(
-											'enquiry.write.input.format'
-										)}
-									/>
-								</span>
-								<EmojiSelect />
+
+			<form className="textarea">
+				<div className={'textarea__wrapper'}>
+					<div className="textarea__wrapper-send-message">
+						<span className="textarea__featureWrapper">
+							<span className="textarea__richtextToggle">
+								<RichtextToggleIcon
+									width="20"
+									height="20"
+									onClick={() =>
+										setIsRichtextActive(!isRichtextActive)
+									}
+									title={translate(
+										'enquiry.write.input.format'
+									)}
+									aria-label={translate(
+										'enquiry.write.input.format'
+									)}
+								/>
 							</span>
-							<span
-								className="textarea__inputWrapper"
-								ref={inputWrapperRef}
+							<EmojiSelect />
+						</span>
+						<span
+							className="textarea__inputWrapper"
+							ref={inputWrapperRef}
+						>
+							<div
+								className="textarea__input"
+								ref={textareaInputRef}
+								onKeyUp={() => resizeTextarea()}
+								onFocus={toggleAbsentMessage}
+								onBlur={toggleAbsentMessage}
 							>
-								<div
-									className="textarea__input"
-									ref={textareaInputRef}
-									onKeyUp={() => resizeTextarea()}
-									onFocus={toggleAbsentMessage}
-									onBlur={toggleAbsentMessage}
-								>
-									<Toolbar>
-										{(externalProps) => (
-											<div className="textarea__toolbar__buttonWrapper">
-												<BoldButton
-													{...externalProps}
-												/>
-												<ItalicButton
-													{...externalProps}
-												/>
-												<UnorderedListButton
-													{...externalProps}
-												/>
-											</div>
-										)}
-									</Toolbar>
-									<PluginsEditor
-										editorState={editorState}
-										onChange={handleEditorChange}
-										readOnly={!draftLoaded}
-										handleKeyCommand={
-											handleEditorKeyCommand
-										}
-										placeholder={
-											hasRequestFeedbackCheckbox &&
-											requestFeedbackCheckboxChecked
-												? translate(
-														'enquiry.write.input.placeholder.feedback.peer'
-													)
-												: placeholder
-										}
-										stripPastedStyles={true}
-										spellCheck={true}
-										handleBeforeInput={() =>
-											handleEditorBeforeInput(editorState)
-										}
-										handlePastedText={(
-											text: string,
-											html?: string
-										): DraftHandleValue => {
-											const newEditorState =
-												handleEditorPastedText(
-													editorState,
-													text,
-													html
-												);
-											if (newEditorState) {
-												setEditorState(newEditorState);
-											}
-											return 'handled';
-										}}
-										plugins={[
-											linkifyPlugin,
-											staticToolbarPlugin,
-											emojiPlugin
-										]}
-										tabIndex={0}
-									/>
-								</div>
-								{hasUploadFunctionality &&
-									(!attachmentSelected ? (
-										<span className="textarea__attachmentSelect">
-											<ClipIcon
-												aria-label={translate(
-													'enquiry.write.input.attachement'
-												)}
-												title={translate(
-													'enquiry.write.input.attachement'
-												)}
-												onClick={handleAttachmentSelect}
+								<Toolbar>
+									{(externalProps) => (
+										<div className="textarea__toolbar__buttonWrapper">
+											<BoldButton {...externalProps} />
+											<ItalicButton {...externalProps} />
+											<UnorderedListButton
+												{...externalProps}
 											/>
-										</span>
-									) : (
-										<div className="textarea__attachmentWrapper">
-											<span className="textarea__attachmentSelected">
-												<span className="textarea__attachmentSelected__progress"></span>
-												<span className="textarea__attachmentSelected__labelWrapper">
-													{getAttachmentIcon(
-														attachmentSelected.type
-													)}
-													<p className="textarea__attachmentSelected__label">
-														{
-															attachmentSelected.name
+										</div>
+									)}
+								</Toolbar>
+								<PluginsEditor
+									editorState={editorState}
+									onChange={handleEditorChange}
+									readOnly={!draftLoaded}
+									handleKeyCommand={handleEditorKeyCommand}
+									placeholder={placeholder}
+									stripPastedStyles={true}
+									spellCheck={true}
+									handleBeforeInput={() =>
+										handleEditorBeforeInput(editorState)
+									}
+									handlePastedText={(
+										text: string,
+										html?: string
+									): DraftHandleValue => {
+										const newEditorState =
+											handleEditorPastedText(
+												editorState,
+												text,
+												html
+											);
+										if (newEditorState) {
+											setEditorState(newEditorState);
+										}
+										return 'handled';
+									}}
+									plugins={[
+										linkifyPlugin,
+										staticToolbarPlugin,
+										emojiPlugin
+									]}
+									tabIndex={0}
+								/>
+							</div>
+							{hasUploadFunctionality &&
+								(!attachmentSelected ? (
+									<span className="textarea__attachmentSelect">
+										<ClipIcon
+											aria-label={translate(
+												'enquiry.write.input.attachement'
+											)}
+											title={translate(
+												'enquiry.write.input.attachement'
+											)}
+											onClick={handleAttachmentSelect}
+										/>
+									</span>
+								) : (
+									<div className="textarea__attachmentWrapper">
+										<span className="textarea__attachmentSelected">
+											<span className="textarea__attachmentSelected__progress"></span>
+											<span className="textarea__attachmentSelected__labelWrapper">
+												{getAttachmentIcon(
+													attachmentSelected.type
+												)}
+												<p className="textarea__attachmentSelected__label">
+													{attachmentSelected.name}
+												</p>
+												<span className="textarea__attachmentSelected__remove">
+													<RemoveIcon
+														onClick={
+															handleAttachmentRemoval
 														}
-													</p>
-													<span className="textarea__attachmentSelected__remove">
-														<RemoveIcon
-															onClick={
-																handleAttachmentRemoval
-															}
-															title={translate(
-																'app.remove'
-															)}
-															aria-label={translate(
-																'app.remove'
-															)}
-														/>
-													</span>
+														title={translate(
+															'app.remove'
+														)}
+														aria-label={translate(
+															'app.remove'
+														)}
+													/>
 												</span>
 											</span>
-										</div>
-									))}
-							</span>
-							<div className="textarea__buttons">
-								<SendMessageButton
-									handleSendButton={handleButtonClick}
-									clicked={isRequestInProgress}
-									deactivated={
-										uploadProgress || isRequestInProgress
-									}
-								/>
-							</div>
+										</span>
+									</div>
+								))}
+						</span>
+						<div className="textarea__buttons">
+							<SendMessageButton
+								handleSendButton={handleButtonClick}
+								clicked={isRequestInProgress}
+								deactivated={
+									uploadProgress || isRequestInProgress
+								}
+							/>
 						</div>
-						{showAppointmentButton && (
-							<div className="textarea__wrapper-booking">
-								<Headline
-									semanticLevel="5"
-									text={translate(
-										'message.submit.booking.headline'
-									)}
-									className="textarea__wrapper-booking-headline"
-								/>
-								<Button
-									item={bookingButton}
-									isLink={true}
-									buttonHandle={handleBookingButton}
-									customIcon={<CalendarMonthIcon />}
-								/>
-							</div>
-						)}
 					</div>
-					{hasUploadFunctionality && (
-						<input
-							ref={attachmentInputRef}
-							onChange={handleAttachmentChange}
-							className="textarea__attachmentInput"
-							type="file"
-							id="dataUpload"
-							name="dataUpload"
-							accept="image/jpeg, image/png, .pdf, .docx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-						/>
+					{showAppointmentButton && (
+						<div className="textarea__wrapper-booking">
+							<Headline
+								semanticLevel="5"
+								text={translate(
+									'message.submit.booking.headline'
+								)}
+								className="textarea__wrapper-booking-headline"
+							/>
+							<Button
+								item={bookingButton}
+								isLink={true}
+								buttonHandle={handleBookingButton}
+								customIcon={<CalendarMonthIcon />}
+							/>
+						</div>
 					)}
-				</form>
-			)}
+				</div>
+				{hasUploadFunctionality && (
+					<input
+						ref={attachmentInputRef}
+						onChange={handleAttachmentChange}
+						className="textarea__attachmentInput"
+						type="file"
+						id="dataUpload"
+						name="dataUpload"
+						accept="image/jpeg, image/png, .pdf, .docx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+					/>
+				)}
+			</form>
 
 			{requestOverlayVisible && (
 				<Overlay item={requestOverlay} name={OVERLAY_REQUEST} />

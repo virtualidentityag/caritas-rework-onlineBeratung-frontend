@@ -7,18 +7,12 @@ import {
 	hasUserAuthority,
 	AUTHORITIES,
 	E2EEContext,
-	SessionTypeContext,
 	RocketChatGlobalSettingsContext,
 	ActiveSessionContext
 } from '../../globalState';
-import {
-	ConsultingTypeInterface,
-	STATUS_ARCHIVED
-} from '../../globalState/interfaces';
-import { isUserModerator, SESSION_LIST_TYPES } from '../session/sessionHelpers';
-import { ForwardMessage } from './ForwardMessage';
+import { STATUS_ARCHIVED } from '../../globalState/interfaces';
+import { isUserModerator } from '../session/sessionHelpers';
 import { MessageMetaData } from './MessageMetaData';
-import { CopyMessage } from './CopyMessage';
 import { MessageDisplayName } from './MessageDisplayName';
 import { markdownToDraft } from 'markdown-draft-js';
 import { stateToHTML } from 'draft-js-export-html';
@@ -70,14 +64,6 @@ import { BanUser, BanUserOverlay } from '../banUser/BanUser';
 import { getValueFromCookie } from '../sessionCookie/accessSessionCookie';
 import { VideoChatDetails, VideoChatDetailsAlias } from './VideoChatDetails';
 
-export interface ForwardMessageDTO {
-	message: string;
-	rcUserId: string;
-	timestamp: any;
-	username: string;
-	displayName: string;
-}
-
 export interface VideoCallMessageDTO {
 	eventType: 'IGNORED_CALL';
 	initiatorRcUserId: string;
@@ -99,7 +85,6 @@ export interface MessageItem {
 	groupId?: string;
 	isNotRead: boolean;
 	alias?: {
-		forwardMessageDTO?: ForwardMessageDTO;
 		videoCallMessageDTO?: VideoCallMessageDTO;
 		content?: string;
 		messageType: ALIAS_MESSAGE_TYPES;
@@ -115,7 +100,6 @@ interface MessageItemComponentProps extends MessageItem {
 	isOnlyEnquiry?: boolean;
 	isMyMessage: boolean;
 	clientName: string;
-	resortData: ConsultingTypeInterface;
 	isUserBanned: boolean;
 	handleDecryptionErrors: (
 		id: string,
@@ -133,7 +117,6 @@ export const MessageItemComponent = ({
 	message,
 	messageDate,
 	messageTime,
-	resortData,
 	isMyMessage,
 	displayName,
 	username,
@@ -153,7 +136,6 @@ export const MessageItemComponent = ({
 	const { activeSession, reloadActiveSession } =
 		useContext(ActiveSessionContext);
 	const { userData } = useContext(UserDataContext);
-	const { type } = useContext(SessionTypeContext);
 
 	const [renderedMessage, setRenderedMessage] = useState<string | null>(null);
 	const [decryptedMessage, setDecryptedMessage] = useState<
@@ -242,9 +224,6 @@ export const MessageItemComponent = ({
 		if (isMyMessage) {
 			return 'self';
 		}
-		if (alias?.forwardMessageDTO) {
-			return 'forwarded';
-		}
 		if (displayName === 'system') {
 			return 'system';
 		}
@@ -293,8 +272,6 @@ export const MessageItemComponent = ({
 		alias?.messageType === ALIAS_MESSAGE_TYPES.UPDATE_SESSION_DATA;
 	const isVideoCallMessage =
 		alias?.messageType === ALIAS_MESSAGE_TYPES.VIDEOCALL;
-	const isFinishedConversationMessage =
-		alias?.messageType === ALIAS_MESSAGE_TYPES.FINISHED_CONVERSATION;
 	const isUserMutedMessage =
 		alias?.messageType === ALIAS_MESSAGE_TYPES.USER_MUTED;
 	const isE2EEActivatedMessage =
@@ -317,7 +294,6 @@ export const MessageItemComponent = ({
 		return null;
 	}
 
-	const isTeamSession = activeSession?.item?.isTeamSession;
 	const isMySession = activeSession?.consultant?.id === userData?.userId;
 	const isAppointmentSet =
 		alias?.messageType === ALIAS_MESSAGE_TYPES.APPOINTMENT_SET ||
@@ -355,7 +331,6 @@ export const MessageItemComponent = ({
 							return isAsker ? (
 								<ReassignRequestMessage
 									{...reassignmentParams}
-									isTeamSession={isTeamSession}
 									onClick={(accepted) =>
 										clickReassignRequestMessage(
 											accepted,
@@ -366,7 +341,6 @@ export const MessageItemComponent = ({
 							) : (
 								<ReassignRequestSentMessage
 									{...reassignmentParams}
-									isTeamSession={isTeamSession}
 									isMySession={isMySession}
 								/>
 							);
@@ -399,14 +373,6 @@ export const MessageItemComponent = ({
 						data={alias.content}
 						messageType={alias.messageType}
 					/>
-				);
-			case isFinishedConversationMessage:
-				return (
-					<span className="messageItem__message--system">
-						{translate(
-							'anonymous.session.systemMessage.chatFinished'
-						)}
-					</span>
 				);
 			case isVideoCallMessage && !videoCallMessage?.eventType:
 				const parsedMessage = JSON.parse(
@@ -456,7 +422,6 @@ export const MessageItemComponent = ({
 					<>
 						<div className="flex flex--jc-sb">
 							<MessageDisplayName
-								alias={alias?.forwardMessageDTO}
 								isMyMessage={isMyMessage}
 								isUser={isUserMessage()}
 								type={getUsernameType()}
@@ -479,11 +444,9 @@ export const MessageItemComponent = ({
 
 						<div
 							className={
-								isMyMessage && !alias
+								isMyMessage
 									? `messageItem__message messageItem__message--myMessage`
-									: alias
-										? `messageItem__message messageItem__message--forwarded`
-										: `messageItem__message`
+									: `messageItem__message`
 							}
 						>
 							<span
@@ -502,34 +465,6 @@ export const MessageItemComponent = ({
 										hasRenderedMessage={hasRenderedMessage}
 									/>
 								))}
-							{activeSession.isFeedback && (
-								<CopyMessage
-									right={isMyMessage}
-									message={renderedMessage}
-								/>
-							)}
-							{hasRenderedMessage &&
-								hasUserAuthority(
-									AUTHORITIES.USE_FEEDBACK,
-									userData
-								) &&
-								type !== SESSION_LIST_TYPES.ENQUIRY &&
-								activeSession.isSession &&
-								activeSession.item.feedbackGroupId &&
-								!activeSession.isFeedback &&
-								activeSession.item.status !==
-									STATUS_ARCHIVED && (
-									<ForwardMessage
-										right={isMyMessage}
-										message={decryptedMessage}
-										messageTime={messageTime}
-										askerRcId={askerRcId}
-										groupId={
-											activeSession.item.feedbackGroupId
-										}
-										displayName={displayName}
-									/>
-								)}
 						</div>
 					</>
 				);
@@ -578,9 +513,7 @@ export const MessageItemComponent = ({
 					messageTime={messageTime}
 					t={t}
 					type={getUsernameType()}
-					isReadStatusDisabled={
-						isVideoCallMessage || isFinishedConversationMessage
-					}
+					isReadStatusDisabled={isVideoCallMessage}
 				/>
 			</div>
 		</div>

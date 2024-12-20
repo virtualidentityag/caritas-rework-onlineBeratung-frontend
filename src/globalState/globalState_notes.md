@@ -5,7 +5,6 @@
 ```json
 {
 	"absent": true,
-	"inTeamAgency": true,
 	"userId": "ajsd89-sdf9-sadk-as8j-asdf8jo",
 	"userName": "max.muster",
 	"firstName": "Max",
@@ -17,8 +16,7 @@
 			"id": 153918,
 			"name": "Alkohol-Beratung",
 			"postcode": 53113,
-			"description": "Our agency provides help for the following topics: Lorem ipsum..",
-			"teamAgency": false
+			"description": "Our agency provides help for the following topics: Lorem ipsum.."
 		}
 	],
 	"grantedAuthorities": ["string"]
@@ -46,7 +44,6 @@ Example json object for userRole consultant
 		{
 			"session": {
 				"id": 153918,
-				"teamSession": true,
 				"agencyId": 100,
 				"consultingType": 0,
 				"status": 1,
@@ -66,9 +63,6 @@ Example json object for userRole consultant
 		}
 	],
 	"mySessions": [
-		// ...
-	],
-	"teamSessions": [
 		// ...
 	]
 }
@@ -90,15 +84,13 @@ Example json object for userRole user
 				"groupId": "upncZaeACtWErNACh",
 				"askerRcId": "qQ6EvvxoXS2ERMz77",
 				"messageDate": 1558593730,
-				"messagesRead": true,
-				"teamSession": true
+				"messagesRead": true
 			},
 			"agency": {
 				"id": 101,
 				"name": "U25 Beratungsstelle",
 				"postcode": "25252",
-				"description": "U25 DEV Test-Beratungsstelle",
-				"teamAgency": true
+				"description": "U25 DEV Test-Beratungsstelle"
 			},
 			"consultant": {
 				"username": "u25main",
@@ -106,8 +98,7 @@ Example json object for userRole user
 				"absent": false
 			}
 		}
-	],
-	"teamSessions": null
+	]
 }
 ```
 

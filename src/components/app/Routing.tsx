@@ -1,14 +1,7 @@
 import * as React from 'react';
 import { useContext, useMemo, Suspense } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import {
-	RouterConfigUser,
-	RouterConfigConsultant,
-	RouterConfigTeamConsultant,
-	RouterConfigMainConsultant,
-	RouterConfigPeerConsultant,
-	RouterConfigAnonymousAsker
-} from './RouterConfig';
+import { RouterConfigUser, RouterConfigConsultant } from './RouterConfig';
 import { AbsenceHandler } from './AbsenceHandler';
 import {
 	UserDataContext,
@@ -20,7 +13,6 @@ import {
 } from '../../globalState';
 import { NavigationBar } from './NavigationBar';
 import { Header } from '../header/Header';
-import { FinishedAnonymousConversationHandler } from './FinishedAnonymousConversationHandler';
 import { ReleaseNote } from '../releaseNote/ReleaseNote';
 import { NonPlainRoutesWrapper } from './NonPlainRoutesWrapper';
 import { Walkthrough } from '../walkthrough/Walkthrough';
@@ -41,23 +33,8 @@ export const Routing = (props: RoutingProps) => {
 	const hasAssignedConsultant = useAskerHasAssignedConsultant();
 
 	const routerConfig = useMemo(() => {
-		if (hasUserAuthority(AUTHORITIES.VIEW_ALL_PEER_SESSIONS, userData)) {
-			return RouterConfigMainConsultant(settings);
-		}
-		if (hasUserAuthority(AUTHORITIES.USE_FEEDBACK, userData)) {
-			return RouterConfigPeerConsultant(settings);
-		}
-		if (
-			hasUserAuthority(AUTHORITIES.CONSULTANT_DEFAULT, userData) &&
-			userData.inTeamAgency
-		) {
-			return RouterConfigTeamConsultant(settings);
-		}
 		if (hasUserAuthority(AUTHORITIES.CONSULTANT_DEFAULT, userData)) {
 			return RouterConfigConsultant(settings);
-		}
-		if (hasUserAuthority(AUTHORITIES.ANONYMOUS_DEFAULT, userData)) {
-			return RouterConfigAnonymousAsker();
 		}
 		return RouterConfigUser(settings, hasAssignedConsultant);
 	}, [userData, settings, hasAssignedConsultant]);
@@ -365,10 +342,6 @@ export const Routing = (props: RoutingProps) => {
 								AUTHORITIES.CONSULTANT_DEFAULT,
 								userData
 							) && <AbsenceHandler />}
-							{hasUserAuthority(
-								AUTHORITIES.ANONYMOUS_DEFAULT,
-								userData
-							) && <FinishedAnonymousConversationHandler />}
 							{hasUserAuthority(
 								AUTHORITIES.CONSULTANT_DEFAULT,
 								userData

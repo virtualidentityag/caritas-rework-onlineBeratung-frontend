@@ -2,10 +2,8 @@ import { UserDataInterface } from '../interfaces/UserDataInterface';
 import {
 	GroupChatItemInterface,
 	ListItemInterface,
-	REGISTRATION_TYPE_ANONYMOUS,
 	SESSION_DATA_KEY_ENQUIRIES,
 	SESSION_DATA_KEY_MY_SESSIONS,
-	SESSION_DATA_KEY_TEAM_SESSIONS,
 	SessionItemInterface,
 	STATUS_ARCHIVED,
 	STATUS_EMPTY,
@@ -17,7 +15,6 @@ import {
 	CHAT_TYPE_SINGLE_CHAT,
 	getChatItemForSession,
 	getChatTypeForListItem,
-	isSessionChat,
 	SESSION_LIST_TYPES
 } from '../../components/session/sessionHelpers';
 
@@ -33,8 +30,6 @@ export type ExtendedSessionInterface = Omit<
 	type: typeof CHAT_TYPE_GROUP_CHAT | typeof CHAT_TYPE_SINGLE_CHAT;
 	isGroup?: boolean;
 	isSession?: boolean;
-	isLive?: boolean;
-	isFeedback?: boolean;
 	isEnquiry?: boolean;
 	isEmptyEnquiry?: boolean;
 	isNonEmptyEnquiry?: boolean;
@@ -50,23 +45,13 @@ export const buildExtendedSession = (
 
 	if (groupChat) {
 		rid = groupChat.groupId;
-	} else if (
-		sessionGroupId &&
-		sessionChat?.feedbackGroupId === sessionGroupId
-	) {
-		rid = sessionChat.feedbackGroupId;
 	}
 	return {
 		...sessionProps,
 		item: groupChat ?? sessionChat,
 		type: groupChat ? CHAT_TYPE_GROUP_CHAT : CHAT_TYPE_SINGLE_CHAT,
 		isGroup: !!groupChat,
-		isSession:
-			sessionChat &&
-			sessionChat?.registrationType !== REGISTRATION_TYPE_ANONYMOUS,
-		isFeedback:
-			sessionGroupId && sessionChat?.feedbackGroupId === sessionGroupId,
-		isLive: sessionChat?.registrationType === REGISTRATION_TYPE_ANONYMOUS,
+		isSession: !!sessionChat,
 		isEnquiry:
 			sessionChat &&
 			[STATUS_EMPTY, STATUS_ENQUIRY].includes(sessionChat.status),
@@ -89,8 +74,6 @@ export const getExtendedSession = (
 		const chatItem = getChatItemForSession(sessionItem);
 		return (
 			(chatItem.groupId && chatItem.groupId === sessionGroupId) ||
-			(isSessionChat(chatItem) &&
-				chatItem?.feedbackGroupId === sessionGroupId) ||
 			chatItem?.id?.toString() === sessionGroupId
 		);
 	});
@@ -121,8 +104,6 @@ export const getSessionsDataKeyForSessionType = (sessionType) => {
 			return SESSION_DATA_KEY_ENQUIRIES;
 		case SESSION_LIST_TYPES.MY_SESSION:
 			return SESSION_DATA_KEY_MY_SESSIONS;
-		case SESSION_LIST_TYPES.TEAMSESSION:
-			return SESSION_DATA_KEY_TEAM_SESSIONS;
 		default:
 			return SESSION_DATA_KEY_MY_SESSIONS;
 	}
@@ -148,22 +129,10 @@ export const hasUserAuthority = (
 ): boolean => userData?.grantedAuthorities?.includes(authority);
 
 export const AUTHORITIES = {
-	ANONYMOUS_DEFAULT: 'AUTHORIZATION_ANONYMOUS_DEFAULT',
 	ASSIGN_CONSULTANT_TO_ENQUIRY: 'AUTHORIZATION_ASSIGN_CONSULTANT_TO_ENQUIRY',
-	ASSIGN_CONSULTANT_TO_PEER_SESSION:
-		'AUTHORIZATION_ASSIGN_CONSULTANT_TO_PEER_SESSION',
 	ASSIGN_CONSULTANT_TO_SESSION: 'AUTHORIZATION_ASSIGN_CONSULTANT_TO_SESSION',
 	CONSULTANT_DEFAULT: 'AUTHORIZATION_CONSULTANT_DEFAULT',
 	CREATE_NEW_CHAT: 'AUTHORIZATION_CREATE_NEW_CHAT',
-	USE_FEEDBACK: 'AUTHORIZATION_USE_FEEDBACK',
 	ASKER_DEFAULT: 'AUTHORIZATION_USER_DEFAULT',
-	VIEW_AGENCY_CONSULTANTS: 'AUTHORIZATION_VIEW_AGENCY_CONSULTANTS',
-	VIEW_ALL_FEEDBACK_SESSIONS: 'AUTHORIZATION_VIEW_ALL_FEEDBACK_SESSIONS',
-	VIEW_ALL_PEER_SESSIONS: 'AUTHORIZATION_VIEW_ALL_PEER_SESSIONS'
-};
-
-export const isAnonymousSession = (
-	session: SessionItemInterface | undefined
-): boolean => {
-	return session?.registrationType === REGISTRATION_TYPE_ANONYMOUS;
+	VIEW_AGENCY_CONSULTANTS: 'AUTHORIZATION_VIEW_AGENCY_CONSULTANTS'
 };

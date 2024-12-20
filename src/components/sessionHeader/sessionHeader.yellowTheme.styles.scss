@@ -1,9 +1,0 @@
-.session--yellowTheme {
-	.sessionInfo {
-		background-color: $yellow-1;
-
-		@include breakpoint($fromLarge) {
-			background-color: var(--skin-color-secondary-light, $yellow-2);
-		}
-	}
-}

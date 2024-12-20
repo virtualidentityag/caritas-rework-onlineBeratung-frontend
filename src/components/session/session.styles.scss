@@ -38,6 +38,7 @@ $session-scroll-to-bottom-radius: $button-border-radius !default;
 
 	.messageSubmit__wrapper {
 		z-index: 2;
+
 		&--withTyping {
 			position: relative;
 		}
@@ -48,6 +49,7 @@ $session-scroll-to-bottom-radius: $button-border-radius !default;
 			&__divider {
 				padding-top: 5px;
 			}
+
 			&__message {
 				white-space: pre-wrap;
 			}
@@ -76,16 +78,6 @@ $session-scroll-to-bottom-radius: $button-border-radius !default;
 
 		@include breakpoint($fromMedium) {
 			padding: $grid-base-three $grid-base-three $grid-base-two;
-		}
-
-		&--anonymousEnquiry {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-
-			.headline {
-				text-align: center;
-			}
 		}
 	}
 

@@ -9,16 +9,6 @@ import { appConfig } from './appConfig';
 export const currentUserWasVideoCallInitiator = (initiatorRcUserId: string) =>
 	initiatorRcUserId === getValueFromCookie('rc_uid');
 
-const currentUserIsAsker = (askerRcUserId: string) =>
-	askerRcUserId === getValueFromCookie('rc_uid');
-
-export const currentUserIsTeamConsultant = (
-	initiatorRcUserId: string,
-	askerRcUserId: string
-) =>
-	!currentUserWasVideoCallInitiator(initiatorRcUserId) &&
-	!currentUserIsAsker(askerRcUserId);
-
 /**
  * Checks if the browser supports WebRTC Encoded Transform, an alternative
  * to insertable streams.

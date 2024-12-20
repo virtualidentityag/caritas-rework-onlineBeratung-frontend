@@ -18,7 +18,6 @@ import {
 } from '../message/MessageItemComponent';
 import { SessionHeaderComponent } from '../sessionHeader/SessionHeaderComponent';
 import { Button, BUTTON_TYPES, ButtonItem } from '../button/Button';
-import { apiGetConsultingType } from '../../api';
 import {
 	AUTHORITIES,
 	getContact,
@@ -28,9 +27,7 @@ import {
 	useTenant,
 	ActiveSessionContext
 } from '../../globalState';
-import { ConsultingTypeInterface } from '../../globalState/interfaces';
 import './session.styles';
-import './session.yellowTheme.styles';
 import { useDebouncedCallback } from 'use-debounce';
 import { ReactComponent as ArrowDoubleDownIcon } from '../../resources/img/icons/arrow-double-down.svg';
 import smoothScroll from './smoothScrollHelper';
@@ -83,10 +80,7 @@ export const SessionItemComponent = (props: SessionItemProps) => {
 	);
 
 	useEffect(() => {
-		setCanWriteMessage(
-			type !== SESSION_LIST_TYPES.ENQUIRY ||
-				hasUserAuthority(AUTHORITIES.VIEW_ALL_PEER_SESSIONS, userData)
-		);
+		setCanWriteMessage(type !== SESSION_LIST_TYPES.ENQUIRY);
 	}, [type, userData]);
 
 	const resetUnreadCount = () => {
@@ -171,37 +165,11 @@ export const SessionItemComponent = (props: SessionItemProps) => {
 		}
 	}, [isScrolledToBottom]); // eslint-disable-line
 
-	const [resortData, setResortData] = useState<ConsultingTypeInterface>();
-	useEffect(() => {
-		if (activeSession.item.consultingType) {
-			let isCanceled = false;
-			apiGetConsultingType({
-				consultingTypeId: activeSession.item.consultingType
-			}).then((response) => {
-				if (isCanceled) return;
-				setResortData(response);
-			});
-			return () => {
-				isCanceled = true;
-			};
-		}
-	}, [activeSession.item.consultingType]);
-
 	const getPlaceholder = () => {
 		if (activeSession.isGroup) {
 			return translate('enquiry.write.input.placeholder.groupChat');
 		} else if (hasUserAuthority(AUTHORITIES.ASKER_DEFAULT, userData)) {
 			return translate('enquiry.write.input.placeholder.asker');
-		} else if (
-			hasUserAuthority(AUTHORITIES.VIEW_ALL_PEER_SESSIONS, userData) &&
-			activeSession.isFeedback
-		) {
-			return translate('enquiry.write.input.placeholder.feedback.main');
-		} else if (
-			hasUserAuthority(AUTHORITIES.CONSULTANT_DEFAULT, userData) &&
-			activeSession.isFeedback
-		) {
-			return translate('enquiry.write.input.placeholder.feedback.peer');
 		} else if (hasUserAuthority(AUTHORITIES.CONSULTANT_DEFAULT, userData)) {
 			return translate('enquiry.write.input.placeholder.consultant');
 		}
@@ -355,13 +323,7 @@ export const SessionItemComponent = (props: SessionItemProps) => {
 	);
 
 	return (
-		<div
-			className={
-				activeSession.isFeedback
-					? `session session--yellowTheme`
-					: `session`
-			}
-		>
+		<div className="session">
 			<div ref={headerRef}>
 				<SessionHeaderComponent
 					consultantAbsent={
@@ -402,7 +364,6 @@ export const SessionItemComponent = (props: SessionItemProps) => {
 									askerRcId={activeSession.item.askerRcId}
 									isOnlyEnquiry={isOnlyEnquiry}
 									isMyMessage={isMyMessage(message.userId)}
-									resortData={resortData}
 									isUserBanned={props.bannedUsers.includes(
 										message.username
 									)}
@@ -448,17 +409,7 @@ export const SessionItemComponent = (props: SessionItemProps) => {
 			</div>
 
 			{type === SESSION_LIST_TYPES.ENQUIRY && (
-				<AcceptAssign
-					assignable={
-						!activeSession.isLive &&
-						hasUserAuthority(
-							AUTHORITIES.VIEW_ALL_PEER_SESSIONS,
-							userData
-						)
-					}
-					isAnonymous={false}
-					btnLabel={'enquiry.acceptButton.known'}
-				/>
+				<AcceptAssign btnLabel={'enquiry.acceptButton.known'} />
 			)}
 
 			{canWriteMessage && (

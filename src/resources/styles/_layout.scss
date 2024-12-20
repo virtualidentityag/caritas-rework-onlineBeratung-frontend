@@ -56,9 +56,6 @@ hr {
 
 	&:hover {
 		color: var(--skin-color-primary-contrast-safe, $hover-primary);
-		.formAccordionItem__index {
-			border: 1px solid $hover-primary;
-		}
 	}
 }
 
@@ -76,6 +73,7 @@ hr {
 		content: ' ';
 		display: table;
 	}
+
 	&:after {
 		clear: both;
 	}

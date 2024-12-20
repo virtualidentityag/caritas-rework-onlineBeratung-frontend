@@ -13,8 +13,9 @@ if (apiUrlEnv) {
 export const endpoints = {
 	agencyConsultants: apiUrl + '/service/users/consultants',
 	agencyServiceBase: apiUrl + '/service/agencies',
-	anonymousAskerBase: apiUrl + '/service/conversations/askers/anonymous/',
-	anonymousBase: apiUrl + '/service/conversations/anonymous/',
+	agencyTopics: apiUrl + '/service/agencies/topics',
+	agenciesByTenant: apiUrl + '/service/agencies/by-tenant',
+	additionalEnquiry: apiUrl + '/service/users/askers/session/new',
 	appointmentBase: apiUrl + '/service/appointments/sessions',
 	appointmentBaseNew: (sessionId: number) =>
 		apiUrl + `/service/appointments/sessions/${sessionId}/enquiry/new`,
@@ -36,7 +37,6 @@ export const endpoints = {
 		`/service/appointservice/consultants/${userId}/bookings?status=${status}`,
 	askerSessions: apiUrl + '/service/users/sessions/askers',
 	attachmentUpload: apiUrl + '/service/uploads/new/',
-	attachmentUploadFeedbackRoom: apiUrl + '/service/uploads/feedback/new/',
 	banUser: (rcUserId, chatId) =>
 		apiUrl + `/service/users/${rcUserId}/chat/${chatId}/ban`,
 	budibaseTools: (userId: string) =>
@@ -47,14 +47,12 @@ export const endpoints = {
 	consultantSessions:
 		apiUrl + '/service/users/sessions/consultants?status=2&',
 	consultantStatistics: apiUrl + '/service/statistics/consultant',
-	consultantTeamSessions: apiUrl + '/service/users/sessions/teams?',
 	consultantsLanguages: apiUrl + '/service/users/consultants/languages',
 	consultingTypeServiceBase: apiUrl + '/service/consultingtypes',
 	deleteAskerAccount: apiUrl + '/service/users/account',
 	draftMessages: apiUrl + '/service/messages/draft',
 	email: apiUrl + '/service/users/email',
 	error: apiUrl + '/service/logstash',
-	forwardMessage: apiUrl + '/service/messages/forward',
 	groupChatBase: apiUrl + '/service/users/chat/',
 	keycloakAccessToken:
 		apiUrl + '/auth/realms/online-beratung/protocol/openid-connect/token',
@@ -103,10 +101,9 @@ export const endpoints = {
 			resetE2EKey: apiUrl + '/api/v1/users.resetE2EKey'
 		}
 	},
-	registerAnonymousAsker:
-		apiUrl + '/service/conversations/askers/anonymous/new',
 	registerAsker: apiUrl + '/service/users/askers/new',
 	baseUserService: apiUrl + '/service/users',
+	//todo delete?
 	registerAskerNewConsultingType:
 		apiUrl + '/service/users/askers/consultingType/new',
 	rejectVideoCall: apiUrl + '/service/videocalls/reject',
@@ -114,13 +111,10 @@ export const endpoints = {
 	rocketchatLogout: apiUrl + '/api/v1/logout',
 	sendAliasMessage: apiUrl + '/service/messages/aliasonly/new',
 	sendMessage: apiUrl + '/service/messages/new',
-	sendMessageToFeedback: apiUrl + '/service/messages/feedback/new',
 	sessionBase: apiUrl + '/service/users/sessions',
 	sessionRooms: apiUrl + '/service/users/sessions/room',
 	setAbsence: apiUrl + '/service/users/consultants/absences',
 	startVideoCall: apiUrl + '/service/videocalls/new',
-	teamSessionsBase:
-		apiUrl + '/service/conversations/consultants/teamsessions/',
 	tenantServiceBase: apiUrl + '/service/tenant',
 	topicGroups: apiUrl + '/service/topic-groups/',
 	topicsData: apiUrl + '/service/topic/public/',

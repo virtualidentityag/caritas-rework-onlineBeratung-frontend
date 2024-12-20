@@ -29,7 +29,6 @@ import {
 } from '../profile/profileHelpers';
 import { ReactComponent as BackIcon } from '../../resources/img/icons/arrow-left.svg';
 import './sessionHeader.styles';
-import './sessionHeader.yellowTheme.styles';
 import { useSearchParam } from '../../hooks/useSearchParams';
 import { useTranslation } from 'react-i18next';
 import { GroupChatHeader } from './GroupChatHeader';
@@ -62,8 +61,7 @@ export const SessionHeaderComponent = (props: SessionHeaderProps) => {
 
 	const preparedUserSessionData =
 		hasUserAuthority(AUTHORITIES.CONSULTANT_DEFAULT, userData) &&
-		userSessionData &&
-		!activeSession.isLive
+		userSessionData
 			? convertUserDataObjectToArray(userSessionData)
 			: null;
 	const translateBase = getUserDataTranslateBase(
@@ -115,7 +113,6 @@ export const SessionHeaderComponent = (props: SessionHeaderProps) => {
 		!hasUserAuthority(AUTHORITIES.ASKER_DEFAULT, userData) &&
 		consultingType?.showAskerProfile &&
 		activeSession.isSession &&
-		!activeSession.isLive &&
 		((type === SESSION_LIST_TYPES.ENQUIRY && enquiryUserProfileCondition) ||
 			SESSION_LIST_TYPES.ENQUIRY !== type);
 
@@ -128,35 +125,6 @@ export const SessionHeaderComponent = (props: SessionHeaderProps) => {
 				isJoinGroupChatView={props.isJoinGroupChatView}
 				bannedUsers={props.bannedUsers}
 			/>
-		);
-	}
-
-	if (activeSession.isFeedback) {
-		return (
-			<div className="sessionInfo">
-				<div className="sessionInfo__feedbackHeaderWrapper">
-					<Link
-						to={{
-							pathname: `${listPath}/${activeSession.item.groupId}
-							/${activeSession.item.id}`,
-							search: getSessionListTab()
-						}}
-						className="sessionInfo__feedbackBackButton"
-					>
-						<BackIcon />
-					</Link>
-					<div className="sessionInfo__username">
-						<h3>{translate('session.feedback.label')}</h3>
-					</div>
-				</div>
-				<div className="sessionInfo__feedbackMetaInfo">
-					{activeSession.user.username ? (
-						<div className="sessionInfo__metaInfo__content">
-							{activeSession.user.username}
-						</div>
-					) : null}
-				</div>
-			</div>
 		);
 	}
 
@@ -176,11 +144,7 @@ export const SessionHeaderComponent = (props: SessionHeaderProps) => {
 							!isAskerInfoAvailable()
 					})}
 				>
-					{(hasUserAuthority(AUTHORITIES.ASKER_DEFAULT, userData) ||
-						hasUserAuthority(
-							AUTHORITIES.ANONYMOUS_DEFAULT,
-							userData
-						)) && (
+					{hasUserAuthority(AUTHORITIES.ASKER_DEFAULT, userData) && (
 						<h3>
 							{contact?.displayName ||
 								contact?.username ||

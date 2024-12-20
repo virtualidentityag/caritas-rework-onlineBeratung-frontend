@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Stomp } from '@stomp/stompjs';
 import * as SockJS from 'sockjs-client';
@@ -10,24 +10,14 @@ import {
 	VideoCallRequestProps
 } from '../incomingVideoCall/IncomingVideoCall';
 import {
-	AnonymousConversationFinishedContext,
-	AnonymousConversationStartedContext,
-	AnonymousEnquiryAcceptedContext,
-	AUTHORITIES,
-	ConsultingTypesContext,
-	hasUserAuthority,
 	NotificationsContext,
-	UserDataContext,
 	WebsocketConnectionDeactivatedContext
 } from '../../globalState';
-import { SESSION_LIST_TAB_ANONYMOUS } from '../session/sessionHelpers';
 import {
 	isBrowserNotificationTypeEnabled,
 	sendNotification
 } from '../../utils/notificationHelpers';
 import { useTranslation } from 'react-i18next';
-import { RocketChatUserStatusContext } from '../../globalState/provider/RocketChatUserStatusProvider';
-import { STATUS_ONLINE } from './RocketChat';
 import { useAppConfig } from '../../hooks/useAppConfig';
 
 interface WebsocketHandlerProps {
@@ -38,44 +28,13 @@ export const WebsocketHandler = ({ disconnect }: WebsocketHandlerProps) => {
 	const { t: translate } = useTranslation();
 	const history = useHistory();
 	const { releaseToggles } = useAppConfig();
-	const { userData } = useContext(UserDataContext);
-	const { consultingTypes } = useContext(ConsultingTypesContext);
-	const { status } = useContext(RocketChatUserStatusContext);
-
 	const [newStompDirectMessage, setNewStompDirectMessage] =
-		useState<boolean>(false);
-	const [newStompAnonymousEnquiry, setNewStompAnonymousEnquiry] =
 		useState<boolean>(false);
 	const [newStompVideoCallRequest, setNewStompVideoCallRequest] =
 		useState<VideoCallRequestProps>();
 	const { addNotification } = useContext(NotificationsContext);
-	const { setAnonymousEnquiryAccepted } = useContext(
-		AnonymousEnquiryAcceptedContext
-	);
-	const { setAnonymousConversationFinished } = useContext(
-		AnonymousConversationFinishedContext
-	);
 	const { setWebsocketConnectionDeactivated } = useContext(
 		WebsocketConnectionDeactivatedContext
-	);
-	const { setAnonymousConversationStarted } = useContext(
-		AnonymousConversationStartedContext
-	);
-
-	const hasLiveChatAndEnabled = useMemo(
-		() =>
-			consultingTypes &&
-			hasUserAuthority(AUTHORITIES.CONSULTANT_DEFAULT, userData) &&
-			userData.hasAnonymousConversations &&
-			userData.agencies.some(
-				(agency) =>
-					(consultingTypes ?? []).find(
-						(consultingType) =>
-							consultingType.id === agency.consultingType
-					)?.isAnonymousConversationAllowed
-			) &&
-			status === STATUS_ONLINE,
-		[consultingTypes, userData, status]
 	);
 
 	const stompClient = Stomp.over(function () {
@@ -139,31 +98,6 @@ export const WebsocketHandler = ({ disconnect }: WebsocketHandlerProps) => {
 	}, [newStompDirectMessage]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	useEffect(() => {
-		if (newStompAnonymousEnquiry) {
-			setNewStompAnonymousEnquiry(false);
-
-			if (!hasLiveChatAndEnabled) {
-				return;
-			}
-
-			setAnonymousConversationStarted(true);
-			if (
-				!releaseToggles.enableNewNotifications ||
-				isBrowserNotificationTypeEnabled('initialEnquiry')
-			) {
-				sendNotification(translate('notifications.enquiry.new'), {
-					showAlways: true,
-					onclick: () => {
-						history.push(
-							`/sessions/consultant/sessionPreview?sessionListTab=${SESSION_LIST_TAB_ANONYMOUS}`
-						);
-					}
-				});
-			}
-		}
-	}, [newStompAnonymousEnquiry, hasLiveChatAndEnabled]); // eslint-disable-line react-hooks/exhaustive-deps
-
-	useEffect(() => {
 		if (newStompVideoCallRequest) {
 			addNotification({
 				id: newStompVideoCallRequest.rcGroupId,
@@ -187,14 +121,6 @@ export const WebsocketHandler = ({ disconnect }: WebsocketHandlerProps) => {
 					const stompEventContent: VideoCallRequestProps =
 						stompMessageBody['eventContent'];
 					setNewStompVideoCallRequest(stompEventContent);
-				} else if (stompEventType === 'newAnonymousEnquiry') {
-					setNewStompAnonymousEnquiry(true);
-				} else if (stompEventType === 'anonymousEnquiryAccepted') {
-					setAnonymousEnquiryAccepted(true);
-				} else if (stompEventType === 'anonymousConversationFinished') {
-					const finishConversationPhase =
-						stompMessageBody.eventContent?.finishConversationPhase;
-					setAnonymousConversationFinished(finishConversationPhase);
 				}
 				message.ack({ 'message-id': message.headers.id });
 			});

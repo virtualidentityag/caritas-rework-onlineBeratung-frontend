@@ -2,7 +2,6 @@ import { v4 as uuid } from 'uuid';
 import { SESSION_LIST_TYPES } from '../../src/components/session/sessionHelpers';
 import {
 	ListItemInterface,
-	SessionItemInterface,
 	SessionUserDataInterface
 } from '../../src/globalState/interfaces';
 
@@ -43,15 +42,10 @@ export const generateConsultantSession = ({
 			status,
 			postcode: 12345,
 			groupId: rcGroupId,
-			feedbackGroupId: null,
 			askerRcId: 'askerRcId',
 			lastMessage: 'lastMessage',
 			messageDate: 1606900238,
 			messagesRead: messagesRead === undefined ? true : messagesRead,
-			feedbackRead: true,
-			isTeamSession: true,
-			isFeedbackSession: false,
-			isPeerChat: false,
 			attachment: null,
 			registrationType: 'REGISTERED',
 			e2eLastMessage: {
@@ -90,11 +84,9 @@ export const generateMultipleConsultantSessions = (amount: number): void => {
 };
 
 export const generateAskerSession = ({
-	messagesRead,
-	isTeamSession
+	messagesRead
 }: {
 	messagesRead?: boolean;
-	isTeamSession?: boolean;
 } = {}): ListItemInterface => {
 	const sessionId = Math.random();
 	const rcGroupId = uuid();
@@ -112,15 +104,10 @@ export const generateAskerSession = ({
 			status: 2,
 			postcode: 12345,
 			groupId: rcGroupId,
-			feedbackGroupId: 'feedbackGroupId1',
 			askerRcId: 'askerRcId1',
 			lastMessage: null,
 			messageDate: null,
 			messagesRead: messagesRead === undefined ? true : messagesRead,
-			feedbackRead: null,
-			isTeamSession: isTeamSession === undefined ? true : isTeamSession,
-			isFeedbackSession: false,
-			isPeerChat: false,
 			attachment: null,
 			registrationType: 'REGISTERED',
 			e2eLastMessage: {
@@ -141,7 +128,6 @@ export const generateAskerSession = ({
 			postcode: '12345',
 			city: 'city',
 			description: null,
-			teamAgency: true,
 			offline: false,
 			consultingType: 1
 		},

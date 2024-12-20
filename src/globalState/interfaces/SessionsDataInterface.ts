@@ -3,16 +3,13 @@ import { AgencyDataInterface } from './UserDataInterface';
 
 export const SESSION_DATA_KEY_ENQUIRIES = 'enquiries';
 export const SESSION_DATA_KEY_MY_SESSIONS = 'mySessions';
-export const SESSION_DATA_KEY_TEAM_SESSIONS = 'teamSessions';
 
 export type SessionDataKeyEnquiries = typeof SESSION_DATA_KEY_ENQUIRIES;
 export type SessionDataKeyMySessions = typeof SESSION_DATA_KEY_MY_SESSIONS;
-export type SessionDataKeyTeamSessions = typeof SESSION_DATA_KEY_TEAM_SESSIONS;
 
 export type SessionDataKeys =
 	| SessionDataKeyEnquiries
-	| SessionDataKeyMySessions
-	| SessionDataKeyTeamSessions;
+	| SessionDataKeyMySessions;
 
 export type SessionsDataInterface = {
 	[key in SessionDataKeys]?: ListItemInterface[];
@@ -54,9 +51,6 @@ type statusFinished = typeof STATUS_FINISHED;
 export const STATUS_ARCHIVED = 4;
 type statusArchived = typeof STATUS_ARCHIVED;
 
-export const REGISTRATION_TYPE_ANONYMOUS = 'ANONYMOUS';
-type registrationTypeAnonymous = typeof REGISTRATION_TYPE_ANONYMOUS;
-
 export const REGISTRATION_TYPE_REGISTERED = 'REGISTERED';
 type registrationTypeRegistered = typeof REGISTRATION_TYPE_REGISTERED;
 
@@ -71,8 +65,6 @@ export interface SessionItemInterface {
 	askerRcId: string;
 	attachment: UserService.Schemas.SessionAttachmentDTO;
 	consultingType: number;
-	feedbackGroupId?: string;
-	feedbackRead?: boolean;
 	groupId: string;
 	id: number;
 	e2eLastMessage: {
@@ -86,18 +78,15 @@ export interface SessionItemInterface {
 	messagesRead: boolean;
 	messageTime?: number;
 	postcode: number;
-	registrationType: registrationTypeAnonymous | registrationTypeRegistered;
+	registrationType: registrationTypeRegistered;
 	status:
 		| statusEmpty
 		| statusEnquiry
 		| statusActive
 		| statusFinished
 		| statusArchived;
-	isPeerChat: boolean;
-	isTeamSession: boolean;
 	videoCallMessageDTO: VideoCallMessageDTO;
 	language?: string;
-	isFeedbackSession: boolean;
 	topic: TopicSessionInterface;
 }
 

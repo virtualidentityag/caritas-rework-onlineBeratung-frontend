@@ -93,18 +93,6 @@ $breakpointFlyoutPosition: 1140px;
 		}
 	}
 
-	&__teamAgency {
-		display: flex;
-		margin-bottom: $grid-base;
-
-		svg {
-			margin-right: $grid-base;
-			&* {
-				fill: $tertiary;
-			}
-		}
-	}
-
 	&__name {
 		font-weight: $font-weight-bold;
 	}

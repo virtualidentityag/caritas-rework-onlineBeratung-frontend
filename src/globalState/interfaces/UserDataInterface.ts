@@ -15,9 +15,7 @@ export interface UserDataInterface {
 	firstName?: string;
 	formalLanguage: boolean;
 	grantedAuthorities: [string];
-	hasAnonymousConversations: boolean;
 	hasArchive: boolean;
-	inTeamAgency: boolean;
 	isDisplayNameEditable: boolean;
 	isWalkThroughEnabled?: boolean;
 	languages?: string[];
@@ -46,7 +44,6 @@ export interface AgencyDataInterface {
 	name: string;
 	offline: boolean;
 	postcode: string;
-	teamAgency: boolean;
 	url?: string;
 	external?: boolean;
 	tenantId?: number;

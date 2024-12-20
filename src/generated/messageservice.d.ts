@@ -1,7 +1,6 @@
 declare namespace MessageService {
 	namespace Schemas {
 		export interface AliasMessageDTO {
-			forwardMessageDTO?: ForwardMessageDTO;
 			videoCallMessageDTO?: VideoCallMessageDTO;
 			messageType?: MessageType;
 		}
@@ -72,29 +71,7 @@ declare namespace MessageService {
 			 */
 			type: string;
 		}
-		export interface ForwardMessageDTO {
-			/**
-			 * example:
-			 * Lorem ipsum dolor sit amet, consetetur...
-			 */
-			message: string;
-			/**
-			 * Full qualified timestamp
-			 * example:
-			 * 2018-11-15T09:33:00.057Z
-			 */
-			timestamp: string;
-			/**
-			 * example:
-			 * asker23
-			 */
-			username: string;
-			/**
-			 * example:
-			 * ag89h3tjkerg94t
-			 */
-			rcUserId: string;
-		}
+
 		export interface MasterKeyDTO {
 			/**
 			 * example:
@@ -123,8 +100,6 @@ declare namespace MessageService {
 			cleaned: null;
 		}
 		export type MessageType =
-			| 'FINISHED_CONVERSATION'
-			| 'FORWARD'
 			| 'FURTHER_STEPS'
 			| 'UPDATE_SESSION_DATA'
 			| 'VIDEOCALL';
@@ -197,26 +172,6 @@ declare namespace MessageService {
 	}
 }
 declare namespace Paths {
-	namespace CreateFeedbackMessage {
-		export interface HeaderParameters {
-			rcToken: Parameters.RcToken;
-			rcUserId: Parameters.RcUserId;
-			rcFeedbackGroupId: Parameters.RcFeedbackGroupId;
-		}
-		namespace Parameters {
-			export type RcFeedbackGroupId = string;
-			export type RcToken = string;
-			export type RcUserId = string;
-		}
-		export type RequestBody = MessageService.Schemas.MessageDTO;
-		namespace Responses {
-			export interface $201 {}
-			export interface $400 {}
-			export interface $401 {}
-			export interface $403 {}
-			export interface $500 {}
-		}
-	}
 	namespace CreateMessage {
 		export interface HeaderParameters {
 			rcToken: Parameters.RcToken;
@@ -269,26 +224,7 @@ declare namespace Paths {
 			export interface $500 {}
 		}
 	}
-	namespace ForwardMessage {
-		export interface HeaderParameters {
-			rcToken: Parameters.RcToken;
-			rcUserId: Parameters.RcUserId;
-			rcGroupId: Parameters.RcGroupId;
-		}
-		namespace Parameters {
-			export type RcGroupId = string;
-			export type RcToken = string;
-			export type RcUserId = string;
-		}
-		export type RequestBody = MessageService.Schemas.ForwardMessageDTO;
-		namespace Responses {
-			export interface $201 {}
-			export interface $400 {}
-			export interface $401 {}
-			export interface $403 {}
-			export interface $500 {}
-		}
-	}
+
 	namespace GetMessageStream {
 		export interface HeaderParameters {
 			rcToken: Parameters.RcToken;

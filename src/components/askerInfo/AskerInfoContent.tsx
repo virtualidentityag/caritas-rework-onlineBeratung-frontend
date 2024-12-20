@@ -24,30 +24,23 @@ export const AskerInfoContent = () => {
 	const { type } = useContext(SessionTypeContext);
 
 	const isSessionAssignAvailable = useMemo(() => {
-		const isPeerChat = activeSession.item.isPeerChat;
-		const isLiveChat = activeSession.isLive;
 		const isGroupChat = activeSession.isGroup;
 		const isEnquiryListView = type === SESSION_LIST_TYPES.ENQUIRY;
 		const isAsker = hasUserAuthority(AUTHORITIES.ASKER_DEFAULT, userData);
 
-		if (isAsker || isLiveChat || isGroupChat) {
+		if (isAsker || isGroupChat) {
 			return false;
 		}
 
 		if (isEnquiryListView) {
-			return (
-				isPeerChat &&
-				hasUserAuthority(
-					AUTHORITIES.ASSIGN_CONSULTANT_TO_ENQUIRY,
-					userData
-				)
+			return hasUserAuthority(
+				AUTHORITIES.ASSIGN_CONSULTANT_TO_ENQUIRY,
+				userData
 			);
 		}
 
 		return hasUserAuthority(
-			isPeerChat
-				? AUTHORITIES.ASSIGN_CONSULTANT_TO_PEER_SESSION
-				: AUTHORITIES.ASSIGN_CONSULTANT_TO_SESSION,
+			AUTHORITIES.ASSIGN_CONSULTANT_TO_SESSION,
 			userData
 		);
 	}, [activeSession, type, userData]);

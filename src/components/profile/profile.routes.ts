@@ -14,7 +14,6 @@ import { OverviewBookings } from './OverviewMobile/Bookings';
 import { OverviewSessions } from './OverviewMobile/Sessions';
 import { profileRoutesSettings } from './profileSettings.routes';
 import { profileRoutesHelp } from './profileHelp.routes';
-import { ConsultantLiveChatAvailability } from './ConsultantLiveChatAvailability';
 import {
 	TenantDataInterface,
 	AppConfigInterface
@@ -22,6 +21,7 @@ import {
 import { EmailNotification } from './EmailNotifications';
 import { BrowserNotification } from './BrowserNotifications';
 import { browserNotificationsSettings } from '../../utils/notificationHelpers';
+import { AdditionalEnquiry } from './AdditionalEnquiry/AdditionalEnquiry';
 
 const shouldShowOverview = (useOverviewPage: boolean, userData) =>
 	useOverviewPage &&
@@ -115,6 +115,16 @@ const profileRoutes = (
 							boxed: false,
 							order: 2,
 							column: COLUMN_RIGHT
+						},
+						{
+							condition: (userData) =>
+								!hasUserAuthority(
+									AUTHORITIES.CONSULTANT_DEFAULT,
+									userData
+								),
+							component: AdditionalEnquiry,
+							order: 3,
+							column: COLUMN_RIGHT
 						}
 					]
 				},
@@ -163,30 +173,6 @@ const profileRoutes = (
 								tenant === null ||
 								!!tenant?.settings?.featureStatisticsEnabled,
 							column: COLUMN_LEFT
-						}
-					]
-				},
-				{
-					title: 'profile.routes.activities.availability',
-					url: '/verfuegbarkeit',
-					elements: [
-						{
-							component: ConsultantLiveChatAvailability,
-							column: COLUMN_RIGHT,
-							condition: (userData, consultingTypes) =>
-								hasUserAuthority(
-									AUTHORITIES.CONSULTANT_DEFAULT,
-									userData
-								) &&
-								userData.hasAnonymousConversations &&
-								userData.agencies.some(
-									(agency) =>
-										(consultingTypes ?? []).find(
-											(consultingType) =>
-												consultingType.id ===
-												agency.consultingType
-										)?.isAnonymousConversationAllowed
-								)
 						}
 					]
 				},

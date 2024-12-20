@@ -18,7 +18,6 @@ import { apiEnquiryAcceptance, FETCH_ERRORS } from '../../api';
 import { Button, BUTTON_TYPES, ButtonItem } from '../button/Button';
 import { useWatcher } from '../../hooks/useWatcher';
 import { apiGetSessionRoomBySessionId } from '../../api/apiGetSessionRooms';
-import { SessionAssign } from '../sessionAssign/SessionAssign';
 import { ReactComponent as CheckIcon } from '../../resources/img/illustrations/check.svg';
 import { ReactComponent as XIcon } from '../../resources/img/illustrations/x.svg';
 import { useTranslation } from 'react-i18next';
@@ -30,18 +29,11 @@ import {
 } from '../../globalState/interfaces/AppConfig/OverlaysConfigInterface';
 
 interface AcceptAssignProps {
-	assignable: boolean;
 	assigned?: boolean;
-	isAnonymous: boolean;
 	btnLabel: string;
 }
 
-export const AcceptAssign = ({
-	assignable,
-	assigned,
-	btnLabel,
-	isAnonymous
-}: AcceptAssignProps) => {
+export const AcceptAssign = ({ assigned, btnLabel }: AcceptAssignProps) => {
 	const { t: translate } = useTranslation();
 	const { rcGroupId: groupIdFromParam } = useParams<{ rcGroupId: string }>();
 	const history = useHistory();
@@ -159,7 +151,7 @@ export const AcceptAssign = ({
 		}
 		setIsRequestInProgress(true);
 
-		apiEnquiryAcceptance(sessionId, isAnonymous)
+		apiEnquiryAcceptance(sessionId)
 			.then(() => encryptRoom(setE2EEState))
 			.then(() => setIsRequestInProgress(false))
 			.then(() => setOverlayItem(enquirySuccessfullyAcceptedOverlayItem))
@@ -205,16 +197,12 @@ export const AcceptAssign = ({
 	return (
 		<>
 			<div className="session__acceptance messageItem">
-				{assignable ? (
-					<SessionAssign />
-				) : (
-					<Button
-						item={buttonItem}
-						buttonHandle={() =>
-							handleButtonClick(activeSession.item.id)
-						}
-					/>
-				)}
+				<Button
+					item={buttonItem}
+					buttonHandle={() =>
+						handleButtonClick(activeSession.item.id)
+					}
+				/>
 			</div>
 
 			{requestOverlayVisible && (
