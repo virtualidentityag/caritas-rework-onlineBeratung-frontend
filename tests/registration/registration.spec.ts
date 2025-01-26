@@ -3,9 +3,8 @@ import { caritasRework } from '../config';
 import { ensureLanguage, generateRandomAlphanumeric } from '../utils';
 
 // checks if the page has the home titles
-test('Check registration page elements', async ({ page }) => {
+test('Check registration page title and subtitle', async ({ page }) => {
 	await page.goto(`${caritasRework.dev}registration`);
-	ensureLanguage(page);
 	await expect(page.locator('h1.headline--1')).toBeVisible();
 	await expect(page.locator('h4.headline--4')).toBeVisible();
 });
