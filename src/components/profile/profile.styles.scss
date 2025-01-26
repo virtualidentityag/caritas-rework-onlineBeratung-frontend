@@ -1,4 +1,4 @@
-@import './askerRegistration.styles';
+@import './AdditionalEnquiry/additionalEnquiry.styles';
 @import './statistics.styles';
 @import './spokenlanguages.styles';
 @import './locale.styles';
@@ -115,6 +115,7 @@ $profile-footer-justify-content: center !default;
 
 		&__actions {
 			margin-left: auto;
+
 			& > * {
 				margin-right: 10px;
 
