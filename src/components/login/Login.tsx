@@ -66,8 +66,7 @@ export const Login = () => {
 
 	const loginButton: ButtonItem = {
 		label: translate('login.button.label'),
-		type: BUTTON_TYPES.PRIMARY,
-		id: 'login'
+		type: BUTTON_TYPES.PRIMARY
 	};
 
 	const hasTenant = tenant != null;
