@@ -1,11 +1,12 @@
 import { expect, test } from '@playwright/test';
-import { caritasRework } from '../config';
+import { goToPage } from '../utils';
 
-test('Login as an advice seeker', async ({ page }) => {
+test('User login', async ({ page }) => {
 	const username = process.env.TEST_USERNAME;
 	const password = process.env.TEST_PASSWORD;
 	const loginButton = page.locator('button.button__item.button__primary');
-	await page.goto(`${caritasRework.dev}`);
+
+	await goToPage(page, 'login');
 	await page.fill('input[id="username"]', username!);
 	await page.fill('input[id="passwordInput"]', password!);
 	await loginButton.click();

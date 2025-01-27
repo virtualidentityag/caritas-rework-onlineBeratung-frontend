@@ -1,14 +1,10 @@
 import { expect, Page } from '@playwright/test';
+import { caritasRework } from './config';
 
-export function generateRandomAlphanumeric(length: number): string {
-	const chars =
-		'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-	let result = '';
-	for (let i = 0; i < length; i++) {
-		const randomIndex = Math.floor(Math.random() * chars.length);
-		result += chars[randomIndex];
-	}
-	return result;
+export async function goToPage(page: Page, path: string) {
+	const env = process.env.TEST_ENV || 'dev';
+	const baseURL = caritasRework[env];
+	await page.goto(`${baseURL}${path}`);
 }
 
 export async function ensureLanguage(page: Page) {
@@ -22,4 +18,15 @@ export async function ensureLanguage(page: Page) {
 	}
 
 	expect(['en', 'de']).toContain(pageLang);
+}
+
+export function generateRandomAlphanumeric(length: number): string {
+	const chars =
+		'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	let result = '';
+	for (let i = 0; i < length; i++) {
+		const randomIndex = Math.floor(Math.random() * chars.length);
+		result += chars[randomIndex];
+	}
+	return result;
 }

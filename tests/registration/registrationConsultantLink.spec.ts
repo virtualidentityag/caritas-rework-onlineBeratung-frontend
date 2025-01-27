@@ -1,5 +1,5 @@
 import { test } from '@playwright/test';
 
-test.skip('registration via consultant link', async ({ page }) => {
-	//
+test.fixme('Registration via consultant link', async ({ page }) => {
+	// to implement
 });

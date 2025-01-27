@@ -1,22 +1,14 @@
 import { test, expect } from '@playwright/test';
-import { caritasRework } from '../config';
-import { ensureLanguage, generateRandomAlphanumeric } from '../utils';
+import { goToPage, generateRandomAlphanumeric } from '../utils';
 
-// checks if the page has the home titles
-test('Check registration page title and subtitle', async ({ page }) => {
-	await page.goto(`${caritasRework.dev}registration`);
+// registration is skipped until a delete user function is implemented
+test('User registration', async ({ page }) => {
+	const password = process.env.TEST_PASSWORD;
+	await goToPage(page, 'registration');
 	await expect(page.locator('h1.headline--1')).toBeVisible();
 	await expect(page.locator('h4.headline--4')).toBeVisible();
-});
-
-// registration test is skipped until a delete user account feature is implemented
-test.skip('Complete registration process', async ({ page }) => {
-	const password = process.env.TEST_PASSWORD;
-	await page.goto(`${caritasRework.dev}registration`);
-	ensureLanguage(page);
 	await page.click('a[data-cy="button-register"]');
 
-	// registration form
 	await page.click('div[id="panel-Children, teenagers, adults and family"]');
 	await page.click('label[data-cy="topic-selection-radio-1"]');
 	await page.click('button[data-cy="button-next"]');
@@ -28,8 +20,9 @@ test.skip('Complete registration process', async ({ page }) => {
 		.click();
 	await page.click('button[data-cy="button-next"]');
 
-	// username & password
 	const randomUsername = `testuser_${generateRandomAlphanumeric(3)}`;
+
+	// to-do: replace getByLabel lines with locator by id when delete method is implemented
 	await page.getByLabel(/(user\s?name|benutzername)/i).fill(randomUsername);
 	await page
 		.getByLabel(/pass\s?(word|wort)/i, { exact: true })
