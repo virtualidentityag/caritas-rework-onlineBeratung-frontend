@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { goToPage, generateRandomAlphanumeric } from '../utils';
 
 // registration is skipped until a delete user function is implemented
-test('User registration', async ({ page }) => {
+test.skip('User registration', async ({ page }) => {
 	const password = process.env.TEST_PASSWORD;
 	await goToPage(page, 'registration');
 	await expect(page.locator('h1.headline--1')).toBeVisible();
