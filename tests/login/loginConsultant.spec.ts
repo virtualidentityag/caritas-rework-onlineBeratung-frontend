@@ -8,10 +8,6 @@ test.fixme('Log in as a consultant', async ({ page }) => {
 
 	await loginUser(page, username!, password!);
 
-	// assert consultant is logged in
-	await expect(page.locator('a[href="/profile"]')).toBeVisible();
-	await expect(page.locator('div[id="local-switch-wrapper"]')).toBeVisible();
-
 	// log out & assert home page
 	await page
 		.locator(

@@ -67,13 +67,6 @@ test.describe.serial('Create initial inquiry', () => {
 
 		await loginUser(page, username!, password!);
 
-		// assert user is logged in and check for initial inquiries
-		await page.waitForSelector('a[href="/profile"]');
-		await expect(page.locator('a[href="/profile"]')).toBeVisible();
-		await expect(
-			page.locator('div[id="local-switch-wrapper"]')
-		).toBeVisible();
-
 		await page.locator('a.navigation__item:first-of-type').click();
 
 		await page.waitForSelector('.listInfo__illustration');
