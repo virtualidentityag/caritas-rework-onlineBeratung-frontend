@@ -21,6 +21,8 @@ jobs:
               env:
                   TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
                   TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+                  TEST_CONSULTANT: ${{ secrets.TEST_CONSULTANT }}
+                  OTP_SECRET: ${{ secrets.OTP_SECRET }}
               run: npx playwright test
             - uses: actions/upload-artifact@v4
               if: ${{ !cancelled() }}
