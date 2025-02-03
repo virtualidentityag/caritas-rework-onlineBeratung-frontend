@@ -8,8 +8,8 @@ export async function loginUser(
 	password: string
 ) {
 	await goToPage(page, 'login');
-	await page.fill('input[id="username"]', username);
-	await page.fill('input[id="passwordInput"]', password);
+	await page.fill('input[id="username"]', username!);
+	await page.fill('input[id="passwordInput"]', password!);
 
 	let totp = new OTPAuth.TOTP({
 		issuer: 'ACME',

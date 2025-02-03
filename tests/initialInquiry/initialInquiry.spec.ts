@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { registerUser } from '../helpers/registerUser';
 import { loginUser } from '../helpers/loginUser';
 
-test.describe.serial('Run tests in sequence', () => {
+test.describe.serial('Create initial inquiry', () => {
 	test('Send initial msg request', async ({ page }) => {
 		await registerUser(page);
 
@@ -39,7 +39,7 @@ test.describe.serial('Run tests in sequence', () => {
 		await page.locator('rect').click();
 		await page.locator('button.button__autoClose').click();
 
-		// assert further steps info
+		// assert further steps info & msg
 		await expect(page.locator('div.e2eeActivatedMessage')).toBeVisible();
 		await expect(page.locator('div.furtherSteps')).toBeVisible();
 		await expect(page.locator('ul.furtherSteps__steps')).toBeVisible();
@@ -47,6 +47,13 @@ test.describe.serial('Run tests in sequence', () => {
 			page.locator('p.furtherSteps__infoText').first()
 		).toBeVisible();
 
+		const messageText = await page.locator(
+			'.messageItem__message.messageItem__message--myMessage p'
+		);
+		await expect(messageText).toBeVisible();
+		await expect(messageText).not.toBeEmpty();
+
+		// logout
 		await page
 			.locator(
 				'div.navigation__item__bottom div.navigation__item:last-of-type'
@@ -69,7 +76,12 @@ test.describe.serial('Run tests in sequence', () => {
 
 		await page.locator('a.navigation__item:first-of-type').click();
 
-		const sessionItems = page.locator('div.sessionsListItem');
+		await page.waitForSelector('.listInfo__illustration');
+		await page.waitForSelector('div[data-cy="session-list-item"]');
+
+		const sessionItems = await page.locator(
+			'div[data-cy="session-list-item"]'
+		);
 
 		if ((await sessionItems.count()) > 0) {
 			await sessionItems.last().click();
@@ -80,9 +92,9 @@ test.describe.serial('Run tests in sequence', () => {
 			await expect(acceptRequestButton).toBeVisible();
 			await acceptRequestButton.click();
 			await page.waitForSelector('div.overlay');
-			await page.locator(
-				'div.overlay button.button__item.button__primary'
-			);
+			await page
+				.locator('div.overlay button.button__item.button__primary')
+				.click();
 		} else {
 			throw new Error('No initial messages found for this consultant!');
 		}
