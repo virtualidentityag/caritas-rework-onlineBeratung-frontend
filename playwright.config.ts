@@ -34,8 +34,8 @@ export default defineConfig({
 		// trace: 'on-first-retry'
 		trace: 'on',
 		screenshot: 'only-on-failure',
-		video: 'on',
-		headless: true // Force headless mode in CI
+		video: 'on'
+		// headless: true // Force headless mode in CI
 	},
 
 	/* Configure projects for major browsers */

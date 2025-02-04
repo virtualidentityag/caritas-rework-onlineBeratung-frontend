@@ -23,9 +23,9 @@ jobs:
                   TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
                   TEST_CONSULTANT: ${{ secrets.TEST_CONSULTANT }}
                   OTP_SECRET: ${{ secrets.OTP_SECRET }}
-              run: npx playwright test --debug
-            - name: Debug ENV Variables
-              run: printenv | grep TEST_
+              run: npx playwright test
+            # - name: Debug ENV Variables
+            #   run: printenv | grep TEST_
             - uses: actions/upload-artifact@v4
               if: ${{ !cancelled() }}
               with:
