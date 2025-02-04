@@ -67,10 +67,13 @@ test.describe.serial('Create initial inquiry', () => {
 
 		await loginUser(page, username!, password!);
 
-		await setTimeout(async () => 2000);
+		await page.waitForLoadState('networkidle'); // wait for page to fully load
 
 		// assert user is logged in and check for initial inquiries
-		await page.waitForSelector('a[href="/profile"]', { state: 'visible' });
+		await page.waitForSelector('a[href="/profile"]', {
+			state: 'visible',
+			timeout: 5000
+		});
 		await expect(
 			page.locator('div[id="local-switch-wrapper"]')
 		).toBeVisible();
