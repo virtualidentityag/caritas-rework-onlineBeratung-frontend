@@ -19,9 +19,9 @@ jobs:
               run: npx playwright install --with-deps
             - name: Run Playwright tests
               env:
-                  TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
+                  TEST_USERNAME: testuser2
                   TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
-                  TEST_CONSULTANT: ${{ secrets.TEST_CONSULTANT }}
+                  TEST_CONSULTANT: testconsultant3
                   OTP_SECRET: ${{ secrets.OTP_SECRET }}
               run: npx playwright test
             - uses: actions/upload-artifact@v4
@@ -30,5 +30,3 @@ jobs:
                   name: playwright-report
                   path: playwright-report/
                   retention-days: 30
-
-                  
