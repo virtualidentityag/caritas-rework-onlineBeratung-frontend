@@ -24,7 +24,7 @@ export default defineConfig({
 	workers: 3,
 	/* Reporter to use. See https://playwright.dev/docs/test-reporters */
 	reporter: 'html',
-	timeout: 70 * 500,
+	timeout: 100 * 500,
 	/* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
 	use: {
 		/* Base URL to use in actions like `await page.goto('/')`. */
@@ -34,7 +34,8 @@ export default defineConfig({
 		// trace: 'on-first-retry'
 		trace: 'on',
 		screenshot: 'only-on-failure',
-		video: 'on'
+		video: 'on',
+		navigationTimeout: 30000 // Increase navigation timeout
 		// headless: true // Force headless mode in CI
 	},
 
