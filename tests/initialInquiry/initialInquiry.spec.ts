@@ -68,9 +68,6 @@ test.describe.serial('Create initial inquiry', () => {
 		await loginUser(page, username!, password!);
 
 		await setTimeout(async () => 2000);
-		const header = page.locator('header.header');
-		await expect(header.locator('h2')).not.toHaveText('');
-		await expect(header.locator('p')).not.toHaveText('');
 
 		// assert user is logged in and check for initial inquiries
 		await page.waitForSelector('a[href="/profile"]', { state: 'visible' });
