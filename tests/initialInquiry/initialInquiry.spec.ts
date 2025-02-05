@@ -67,7 +67,6 @@ test.describe.serial('Create initial inquiry', () => {
 
 		await loginUser(page, username!, password!);
 
-		// await page.waitForLoadState('networkidle');
 		await page.waitForSelector('a[href="/profile"]', { state: 'visible' });
 		await expect(
 			page.locator('div[id="local-switch-wrapper"]')
