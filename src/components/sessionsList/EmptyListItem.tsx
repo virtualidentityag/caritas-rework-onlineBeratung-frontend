@@ -7,13 +7,19 @@ import {
 	SESSION_LIST_TAB_ARCHIVE,
 	SESSION_LIST_TYPES
 } from '../session/sessionHelpers';
+import { AUTHORITIES } from '../../globalState';
 
 interface EmptyListItemProps {
 	type: SESSION_LIST_TYPES;
 	sessionListTab: string;
+	userRole: string;
 }
 
-export const EmptyListItem = ({ type, sessionListTab }: EmptyListItemProps) => {
+export const EmptyListItem = ({
+	type,
+	sessionListTab,
+	userRole
+}: EmptyListItemProps) => {
 	const { t } = useTranslation();
 
 	const emptyTitle = useMemo(() => {
@@ -26,9 +32,12 @@ export const EmptyListItem = ({ type, sessionListTab }: EmptyListItemProps) => {
 				return t('sessionList.empty.known');
 			case SESSION_LIST_TYPES.MY_SESSION:
 			default:
+				if (userRole === AUTHORITIES.ASKER_DEFAULT) {
+					return t('sessionList.asker.welcome');
+				}
 				return t('sessionList.empty.mySessions');
 		}
-	}, [sessionListTab, type, t]);
+	}, [sessionListTab, type, t, userRole]);
 	return (
 		<ListInfo headline={emptyTitle} Illustration={NoMessagesIllustration} />
 	);

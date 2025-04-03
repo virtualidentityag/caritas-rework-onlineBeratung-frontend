@@ -821,8 +821,16 @@ export const SessionsList = ({
 					!isReloadButtonVisible &&
 					finalSessionsList.length === 0 && (
 						<EmptyListItem
-							sessionListTab={sessionListTab}
 							type={type}
+							sessionListTab={sessionListTab}
+							userRole={
+								hasUserAuthority(
+									AUTHORITIES.ASKER_DEFAULT,
+									userData
+								)
+									? AUTHORITIES.ASKER_DEFAULT
+									: AUTHORITIES.CONSULTANT_DEFAULT
+							}
 						/>
 					)}
 			</div>
