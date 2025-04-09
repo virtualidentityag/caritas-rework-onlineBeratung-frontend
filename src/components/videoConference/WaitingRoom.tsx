@@ -51,7 +51,7 @@ export const WaitingRoom = ({
 	};
 
 	const confirmButton: ButtonItem = {
-		label: translate('anonymous.waitingroom.dataProtection.button'),
+		label: translate('videoConference.waitingroom.dataProtection.button'),
 		type: BUTTON_TYPES.PRIMARY
 	};
 

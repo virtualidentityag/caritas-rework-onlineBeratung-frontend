@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import CreateIcon from '@mui/icons-material/Create';
 import ChatIcon from '@mui/icons-material/Chat';
 import MailIcon from '@mui/icons-material/Mail';
-import LockIcon from '@mui/icons-material/Lock';
 import { Link as RouterLink } from 'react-router-dom';
 import { useMemo } from 'react';
 import { PreselectionBox } from '../preselectionBox/PreselectionBox';
@@ -50,16 +49,6 @@ export const WelcomeScreen = ({ nextStepUrl }: WelcomeScreenProps) => {
 				),
 				headline: t('registration.welcomeScreen.info3.title'),
 				subline: t('registration.welcomeScreen.info3.text')
-			},
-			{
-				icon: (
-					<LockIcon
-						sx={{ width: '30px', height: '30px' }}
-						color="primary"
-					/>
-				),
-				headline: t('registration.welcomeScreen.info4.title'),
-				subline: t('registration.welcomeScreen.info4.text')
 			}
 		],
 		[t]

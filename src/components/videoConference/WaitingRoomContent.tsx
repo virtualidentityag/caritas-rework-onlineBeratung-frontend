@@ -5,7 +5,6 @@ import './waitingRoom.styles';
 import { useTranslation } from 'react-i18next';
 
 export interface WaitingRoomContentProps {
-	showRegistrationInfo?: boolean;
 	headlineKey?: string;
 	sublineKey?: string;
 	textKey?: string;
@@ -14,7 +13,6 @@ export interface WaitingRoomContentProps {
 }
 
 export const WaitingRoomContent = ({
-	showRegistrationInfo,
 	headlineKey,
 	sublineKey,
 	textKey,
@@ -55,24 +53,6 @@ export const WaitingRoomContent = ({
 						{Illustration}
 					</div>
 				</div>
-				{showRegistrationInfo && (
-					<>
-						<Headline
-							semanticLevel="5"
-							text={translate(
-								'anonymous.waitingroom.redirect.title'
-							)}
-							className="waitingRoom__redirect-title"
-						/>
-						<Text
-							type="standard"
-							text={translate(
-								'anonymous.waitingroom.redirect.subline'
-							)}
-							className="waitingRoom__redirect-text"
-						/>
-					</>
-				)}
 			</div>
 		</>
 	);

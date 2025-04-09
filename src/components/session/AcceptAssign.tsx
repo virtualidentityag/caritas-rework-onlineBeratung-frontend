@@ -81,13 +81,13 @@ export const AcceptAssign = ({ assigned, btnLabel }: AcceptAssignProps) => {
 		() => ({
 			svg: XIcon,
 			headline: translate(
-				'session.anonymous.takenByOtherConsultant.overlay.headline'
+				'session.takenByOtherConsultant.overlay.headline'
 			),
 			illustrationBackground: 'error',
 			buttonSet: [
 				{
 					label: translate(
-						'session.anonymous.takenByOtherConsultant.button.label'
+						'session.takenByOtherConsultant.button.label'
 					),
 					function: OVERLAY_FUNCTIONS.CLOSE,
 					type: BUTTON_TYPES.PRIMARY

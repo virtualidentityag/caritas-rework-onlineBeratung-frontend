@@ -15,12 +15,7 @@ export type RegistrationNotesInterface = {
 	password?: string;
 };
 
-export type RegistrationWelcomeScreenInterface = {
-	anonymous: {
-		title: string;
-		text: string;
-	};
-};
+export type RegistrationWelcomeScreenInterface = {};
 
 export interface ConsultingTypeBasicInterface {
 	id: number;
