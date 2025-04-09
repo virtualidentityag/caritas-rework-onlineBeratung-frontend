@@ -429,7 +429,7 @@ declare namespace UserService {
 			monitoring?: boolean;
 			/**
 			 * example:
-			 * ANONYMOUS
+			 * DEFAULT
 			 */
 			registrationType: string;
 			/**

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { RegistrationWelcomeScreenInterface } from '../../globalState/interfaces';
 import {
 	EnvelopeIcon,
-	LockIcon,
 	PenIcon,
 	SpeechBubbleIcon
 } from '../../resources/img/icons';
@@ -38,27 +37,6 @@ export const ServiceExplanation = ({
 			icon: <SpeechBubbleIcon aria-hidden="true" focusable="false" />,
 			title: translate('registration.welcomeScreen.info3.title'),
 			text: translate('registration.welcomeScreen.info3.text')
-		},
-		{
-			icon: <LockIcon aria-hidden="true" focusable="false" />,
-			title: translate(
-				[
-					`consultingType.${consultingTypeId}.welcomeScreen.anonymous.title`,
-					`consultingType.fallback.welcomeScreen.anonymous.title`,
-					welcomeScreenConfig?.anonymous.title ||
-						'registration.welcomeScreen.info4.title'
-				],
-				{ ns: ['consultingTypes', 'common'] }
-			),
-			text: translate(
-				[
-					`consultingType.${consultingTypeId}.welcomeScreen.anonymous.text`,
-					`consultingType.fallback.welcomeScreen.anonymous.text`,
-					welcomeScreenConfig?.anonymous.text ||
-						'registration.welcomeScreen.info4.text'
-				],
-				{ ns: ['consultingTypes', 'common'] }
-			)
 		}
 	];
 
