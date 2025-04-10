@@ -1947,6 +1947,14 @@
 		},
 		"unreadCount": {
 			"maxValue": "99+"
+		},
+		"takenByOtherConsultant": {
+			"button": {
+				"label": "Close"
+			},
+			"overlay": {
+				"headline": "This initial request has already been accepted by another consultant."
+			}
 		}
 	},
 	"sessionList": {

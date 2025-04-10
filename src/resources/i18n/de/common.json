@@ -473,14 +473,7 @@
 	},
 	"enquiry": {
 		"acceptButton": {
-			"anonymous": "Chat starten",
 			"known": "Anfrage annehmen"
-		},
-		"anonymous": {
-			"infoLabel": {
-				"end": ".",
-				"start": "Starten Sie nun den Chat mit "
-			}
 		},
 		"language": {
 			"selection": {
@@ -1839,10 +1832,6 @@
 				"text": "Innerhalb von 2 Arbeitstagen bekommen Sie eine Antwort",
 				"title": "Persönliche und professionelle Beratung"
 			},
-			"info4": {
-				"text": "Sie bleiben anonym und erhalten kostenfreie Beratung",
-				"title": "Anonym und kostenfrei"
-			},
 			"register": {
 				"buttonLabel": "Registrieren",
 				"helperText": "Neu bei der Online-Beratung?"
@@ -1929,7 +1918,7 @@
 				"label": "Antworten"
 			},
 			"overlay": {
-				"headline": "Sie haben die Erstanfrage erfolgreich angenommen und finden diese nun unter „Meine Beratungen“."
+				"headline": "Sie haben die Erstanfrage erfolgreich angenommen und finden diese nun unter „Meine Beratungen\"."
 			}
 		},
 		"alreadyAssigned": {
@@ -1941,14 +1930,12 @@
 				"headline": "Sie haben diese Beratung bereits zugewiesen."
 			}
 		},
-		"anonymous": {
-			"takenByOtherConsultant": {
-				"button": {
-					"label": "Schließen"
-				},
-				"overlay": {
-					"headline": "Diese Erstanfrage wurde bereits von einem anderen Berater angenommen."
-				}
+		"takenByOtherConsultant": {
+			"button": {
+				"label": "Schließen"
+			},
+			"overlay": {
+				"headline": "Diese Erstanfrage wurde bereits von einem anderen Berater angenommen."
 			}
 		},
 		"assignOther": {
