@@ -29,9 +29,9 @@ export async function goToSessions(page: Page) {
 	await expect(page.locator('div[id="local-switch-wrapper"]')).toBeVisible();
 	await page.locator('a.navigation__item:first-of-type').click();
 
-	await page.waitForSelector('div[data-cy="session-list-item"]');
+	await page.waitForSelector('div[data-cy="session-list-item"]'); // page.locator().waitFor() is preferable
 
-	const sessionItems = await page.locator('div[data-cy="session-list-item"]');
+	const sessionItems = page.locator('div[data-cy="session-list-item"]');
 
 	if ((await sessionItems.count()) > 0) {
 		await sessionItems.first().click();

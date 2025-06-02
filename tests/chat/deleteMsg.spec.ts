@@ -8,7 +8,7 @@ test('delete a msg', async ({ page }) => {
 	const temporaryMsg = 'This is a test message soon to be deleted.';
 
 	await loginUser(page, username!, password!);
-	goToSessions(page);
+	await goToSessions(page);
 
 	await page.getByRole('combobox').fill(temporaryMsg);
 	await page.locator('rect').click();
