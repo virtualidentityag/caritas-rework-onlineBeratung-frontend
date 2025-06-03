@@ -9,7 +9,7 @@ test('Send message using the rich text editor', async ({ page }) => {
 	await loginUser(page, username!, password!);
 
 	// check sessions
-	goToSessions(page);
+	await goToSessions(page);
 
 	// use rich text & send message
 	await page.getByRole('combobox').fill('Hello there, I need help!');
@@ -20,7 +20,9 @@ test('Send message using the rich text editor', async ({ page }) => {
 	await richText.click();
 	await expect(richText).toHaveClass(/textarea__richtextToggle--active/);
 
-	await page.locator('.textarea__toolbar.textarea__toolbar--active');
+	await page
+		.locator('.textarea__toolbar.textarea__toolbar--active')
+		.waitFor();
 
 	const richTextButtons = page.locator('.textarea__toolbar__button');
 
@@ -46,7 +48,7 @@ test('Send emojis', async ({ page }) => {
 
 	await loginUser(page, username!, password!);
 
-	goToSessions(page);
+	await goToSessions(page);
 
 	// select random emoji
 	await page.locator('.emoji__select').click();

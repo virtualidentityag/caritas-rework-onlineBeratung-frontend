@@ -15,6 +15,7 @@ test('attach a file to a msg and send it', async ({ page }) => {
 		page.locator('span.textarea__attachmentSelect').click()
 	]);
 
+	// load a file (img or pdf)
 	const fileName = 'img1mb.png';
 	await fileChooser.setFiles(`tests/files/${fileName}`);
 	await page.locator('rect').click();
@@ -29,6 +30,7 @@ test('attach a file to a msg and send it', async ({ page }) => {
 		);
 	});
 
+	// confirm attachment is sent
 	const lastChat = page
 		.locator('.messageItem__message__attachment__title')
 		.last();

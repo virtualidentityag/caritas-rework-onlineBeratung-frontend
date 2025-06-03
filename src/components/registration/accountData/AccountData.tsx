@@ -99,6 +99,7 @@ export const AccountData: VFC<{
 				{t('registration.account.subline')}
 			</Typography>
 			<Input
+				id="username"
 				startAdornment={
 					<InputAdornment position="start">
 						<PersonIcon color="info" />
@@ -134,6 +135,7 @@ export const AccountData: VFC<{
 				}}
 			/>
 			<Input
+				id="password"
 				inputType={isPasswordVisible ? 'text' : 'password'}
 				startAdornment={
 					<InputAdornment position="start">
@@ -168,6 +170,7 @@ export const AccountData: VFC<{
 				multipleCriteria={passwordCriteria}
 			/>
 			<Input
+				id="repeat-password"
 				inputType={isRepeatPasswordVisible ? 'text' : 'password'}
 				startAdornment={
 					<InputAdornment position="start">

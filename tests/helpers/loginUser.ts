@@ -21,14 +21,14 @@ export async function loginUser(
 	});
 
 	const otpField = page.locator('input[id="otp"]');
-	await otpField;
+	await otpField.waitFor({ timeout: 5000 }).catch();
 
 	// check if OTP input field exists and is visible
 	if (await otpField.isVisible()) {
 		let token = totp.generate();
 
 		if (!token) {
-			throw new Error('2FA code not found in email.');
+			throw new Error('2FA code was not generated.');
 		}
 		// enter the 2FA code in the input field
 		await otpField.fill(token);

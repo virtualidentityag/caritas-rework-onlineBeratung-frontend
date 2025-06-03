@@ -1,6 +1,7 @@
 import { expect, BrowserContext, Page, Browser } from '@playwright/test';
 import { loginUser } from './loginUser';
 import { generateRandomAlphanumeric } from '../utils';
+import { logout } from '../utils';
 
 export async function registerByLink(browser: Browser, linkSelector: string) {
 	const context: BrowserContext = await browser.newContext({
@@ -14,9 +15,7 @@ export async function registerByLink(browser: Browser, linkSelector: string) {
 	await loginUser(page, username!, password!);
 
 	// navigate to profile and click the given registration link
-	await (
-		await page.waitForSelector('a[href="/profile"]', { state: 'visible' })
-	).click();
+	await page.locator('a[href="/profile"]').click({ timeout: 30000 });
 	await page.locator(linkSelector).click();
 	await page.waitForTimeout(500);
 
@@ -32,41 +31,36 @@ export async function registerByLink(browser: Browser, linkSelector: string) {
 
 	expect(copiedLink).not.toBe('');
 
-	// open the copied link in a new page and register
-	const nextPage = await browser.newPage();
-	await nextPage.goto(copiedLink);
+	await logout(page);
 
-	await (
-		await nextPage.waitForSelector('a[data-cy="button-register"]')
-	).click();
-	await nextPage
+	await page.goto(copiedLink);
+
+	await (await page.waitForSelector('a[data-cy="button-register"]')).click();
+	await page
 		.locator("div[data-cy='topic-radio-group'] label")
 		.first()
 		.click();
-	await nextPage.click('label[data-cy="topic-selection-radio-1"]');
-	await nextPage.click('button[data-cy="button-next"]');
-	await nextPage.fill('input[data-cy="input-postal-code"]', '99999');
-	await nextPage.click('button[data-cy="button-next"]');
+	await page.click('label[data-cy="topic-selection-radio-1"]');
+	await page.click('button[data-cy="button-next"]');
+	await page.fill('input[data-cy="input-postal-code"]', '99999');
+	await page.click('button[data-cy="button-next"]');
 
 	const randomUsername = `testuser-${generateRandomAlphanumeric(4)}`;
 
-	await nextPage
-		.getByLabel(/(user\s?name|benutzername)/i)
-		.fill(randomUsername);
-	await nextPage
+	await page.getByLabel(/(user\s?name|benutzername)/i).fill(randomUsername);
+	await page
 		.getByLabel(/pass\s?(word|wort)/i, { exact: true })
 		.first()
 		.fill(password!);
-	await nextPage
+	await page
 		.getByLabel(/(passwort\s?wiederholen|repeat\s?password)/i)
 		.fill(password!);
 
-	await nextPage.locator('input.PrivateSwitchBase-input').click();
-	await nextPage.click('button[data-cy="button-register"]');
-	await nextPage.locator('button.button__autoClose').click();
+	await page.locator('input.PrivateSwitchBase-input').click();
+	await page.click('button[data-cy="button-register"]');
+	await page.locator('button.button__autoClose').click();
 
 	// close context and browser
-	await nextPage.close();
+	await page.close();
 	await context.close();
-	await browser.close();
 }

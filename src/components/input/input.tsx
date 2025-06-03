@@ -6,6 +6,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { useTranslation } from 'react-i18next';
 
 export interface InputProps {
+	id?: string;
 	label: string;
 	value: string;
 	inputMode?:
@@ -34,6 +35,7 @@ export interface InputProps {
 }
 
 export const Input = ({
+	id,
 	value,
 	label,
 	onInputChange,
@@ -145,6 +147,7 @@ export const Input = ({
 				label={label}
 				autoComplete={autoComplete}
 				inputProps={{
+					id,
 					inputMode: inputMode,
 					...inputProps
 				}}
