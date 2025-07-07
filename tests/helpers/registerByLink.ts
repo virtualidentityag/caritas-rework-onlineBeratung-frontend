@@ -47,14 +47,9 @@ export async function registerByLink(browser: Browser, linkSelector: string) {
 
 	const randomUsername = `testuser-${generateRandomAlphanumeric(4)}`;
 
-	await page.getByLabel(/(user\s?name|benutzername)/i).fill(randomUsername);
-	await page
-		.getByLabel(/pass\s?(word|wort)/i, { exact: true })
-		.first()
-		.fill(password!);
-	await page
-		.getByLabel(/(passwort\s?wiederholen|repeat\s?password)/i)
-		.fill(password!);
+	await page.fill('input[id="username"]', randomUsername);
+	await page.fill('input[id="password"]', password!);
+	await page.fill('input[id="repeat-password"]', password!);
 
 	await page.locator('input.PrivateSwitchBase-input').click();
 	await page.click('button[data-cy="button-register"]');
