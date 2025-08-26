@@ -53,6 +53,6 @@ test.skip('dearchive a consultation by messaging', async ({ page }) => {
 	await page
 		.getByRole('combobox')
 		.fill('This msg should unarchive this chat');
-	await page.locator('rect').click();
+	await page.locator('.textarea__buttons rect').click();
 	await assertCurrentHasChats(page);
 });

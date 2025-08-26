@@ -3,16 +3,17 @@ import { loginUser } from '../helpers/loginUser';
 import { goToSessions, generateRandomAlphanumeric } from '../utils';
 
 test('write long message and scroll to bottom', async ({ page }) => {
-	const username = process.env.TEST_USERNAME;
-	const password = process.env.TEST_PASSWORD;
-
-	await loginUser(page, username!, password!);
+	await loginUser(
+		page,
+		process.env.TEST_USERNAME!,
+		process.env.TEST_PASSWORD!
+	);
 	goToSessions(page);
 
 	// generate long text and send
 	const longMessage = await generateRandomAlphanumeric(7500);
 	await page.getByRole('combobox').fill(longMessage);
-	await page.locator('rect').click();
+	await page.locator('.textarea__buttons rect').click();
 
 	const lastChatMessage = page
 		.locator('.messageItem__message.messageItem__message--myMessage')

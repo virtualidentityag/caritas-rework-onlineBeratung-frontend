@@ -3,30 +3,31 @@ import { loginUser } from '../helpers/loginUser';
 import { ensureLanguage } from '../utils';
 
 test('archive a consultation', async ({ page }) => {
-	const username = process.env.TEST_CONSULTANT;
-	const password = process.env.TEST_PASSWORD;
 	ensureLanguage(page);
-
-	await loginUser(page, username!, password!);
+	await loginUser(
+		page,
+		process.env.TEST_CONSULTANT!,
+		process.env.TEST_PASSWORD!
+	);
 	await page.waitForSelector('a[href="/profile"]', { state: 'visible' });
 	await expect(page.locator('div[id="local-switch-wrapper"]')).toBeVisible();
 
 	await page.click('a[href="/sessions/consultant/sessionView"]');
 	await page.waitForSelector('div[data-cy="session-list-item"]');
-	const sessionItems = page.locator('div[data-cy="session-list-item"]');
-	let firstUsername = '';
 
-	if ((await sessionItems.count()) > 0) {
-		const firstSession = sessionItems.first();
-		firstUsername = await firstSession
-			.locator('div.sessionsListItem__username')
-			.innerText();
-		await firstSession.click();
-	} else {
+	const sessionItems = page.locator('div[data-cy="session-list-item"]');
+	if ((await sessionItems.count()) === 0) {
 		throw new Error('No sessions were found');
 	}
 
-	// go to session menu and click archive
+	// pick the first session + capture username
+	const firstSession = sessionItems.first();
+	const firstUsername = (
+		await firstSession.locator('div.sessionsListItem__username').innerText()
+	).trim();
+	await firstSession.click();
+
+	// archive it
 	await page
 		.locator('div.sessionMenu__wrapper span#iconH')
 		.click({ timeout: 5000 });
@@ -41,33 +42,11 @@ test('archive a consultation', async ({ page }) => {
 	await page.click(
 		'a[href="/sessions/consultant/sessionView?sessionListTab=archive"]'
 	);
-	await page.waitForSelector('div[data-cy="session-list-item"]', {
-		timeout: 10000
-	});
 
-	const archivedSessionItems = page.locator(
-		'div[data-cy="session-list-item"]'
-	);
-	const archivedCount = await archivedSessionItems.count();
-
-	let foundMatch = false;
-
-	for (let i = 0; i < archivedCount; i++) {
-		const archivedItem = archivedSessionItems.nth(i);
-		const archivedUsername = await archivedItem
-			.locator('div.sessionsListItem__username')
-			.innerText();
-
-		if (archivedUsername.trim() === firstUsername.trim()) {
-			await archivedItem.click();
-			foundMatch = true;
-			break;
-		}
-	}
-
-	if (!foundMatch) {
-		throw new Error(
-			`Archived session with username "${firstUsername}" not found.`
-		);
-	}
+	// wait for this username to appear in the archive list
+	await expect(
+		page.locator('div.sessionsListItem__username', {
+			hasText: firstUsername
+		})
+	).toBeVisible({ timeout: 10000 });
 });

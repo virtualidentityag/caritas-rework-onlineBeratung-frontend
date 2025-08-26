@@ -3,15 +3,18 @@ import { loginUser } from '../helpers/loginUser';
 import { goToSessions } from '../utils';
 
 test('delete a msg', async ({ page }) => {
-	const username = process.env.TEST_USERNAME;
-	const password = process.env.TEST_PASSWORD;
+	await loginUser(
+		page,
+		process.env.TEST_USERNAME!,
+		process.env.TEST_PASSWORD!
+	);
+
 	const temporaryMsg = 'This is a test message soon to be deleted.';
 
-	await loginUser(page, username!, password!);
 	await goToSessions(page);
 
 	await page.getByRole('combobox').fill(temporaryMsg);
-	await page.locator('rect').click();
+	await page.locator('.textarea__buttons rect').click();
 
 	// wait for the message to appear in chat
 	const lastChat = page
