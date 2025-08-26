@@ -3,10 +3,11 @@ import { loginUser } from '../helpers/loginUser';
 import { goToSessions } from '../utils';
 
 test('Send message using the rich text editor', async ({ page }) => {
-	const username = process.env.TEST_USERNAME;
-	const password = process.env.TEST_PASSWORD;
-
-	await loginUser(page, username!, password!);
+	await loginUser(
+		page,
+		process.env.TEST_USERNAME!,
+		process.env.TEST_PASSWORD!
+	);
 
 	// check sessions
 	await goToSessions(page);
@@ -30,7 +31,7 @@ test('Send message using the rich text editor', async ({ page }) => {
 	await richTextButtons.nth(1).click(); // italic
 	await richTextButtons.nth(2).click(); // create ul
 
-	await page.locator('rect').click();
+	await page.locator('.textarea__buttons rect').click();
 
 	// check the rich text features are present in last msg
 	const lastChatMessage = page
@@ -43,10 +44,11 @@ test('Send message using the rich text editor', async ({ page }) => {
 });
 
 test('Send emojis', async ({ page }) => {
-	const username = process.env.TEST_USERNAME;
-	const password = process.env.TEST_PASSWORD;
-
-	await loginUser(page, username!, password!);
+	await loginUser(
+		page,
+		process.env.TEST_USERNAME!,
+		process.env.TEST_PASSWORD!
+	);
 
 	await goToSessions(page);
 
@@ -68,7 +70,7 @@ test('Send emojis', async ({ page }) => {
 				throw new Error('No emojis found!');
 			})();
 
-	await page.locator('rect').click();
+	await page.locator('.textarea__buttons rect').click();
 
 	const emojiRegex = /[\p{Emoji}]/u;
 

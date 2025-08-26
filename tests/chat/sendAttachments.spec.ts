@@ -3,11 +3,11 @@ import { loginUser } from '../helpers/loginUser';
 import { goToSessions } from '../utils';
 
 test('attach a file to a msg and send it', async ({ page }) => {
-	const username = process.env.TEST_USERNAME;
-	const password = process.env.TEST_PASSWORD;
-
-	await loginUser(page, username!, password!);
-
+	await loginUser(
+		page,
+		process.env.TEST_USERNAME!,
+		process.env.TEST_PASSWORD!
+	);
 	goToSessions(page);
 
 	const [fileChooser] = await Promise.all([
@@ -18,7 +18,7 @@ test('attach a file to a msg and send it', async ({ page }) => {
 	// load a file (img or pdf)
 	const fileName = 'img1mb.png';
 	await fileChooser.setFiles(`tests/files/${fileName}`);
-	await page.locator('rect').click();
+	await page.locator('.textarea__buttons rect').click();
 
 	await page.waitForFunction(() => {
 		const progressBar = document.querySelector(

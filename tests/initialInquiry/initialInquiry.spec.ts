@@ -36,7 +36,7 @@ test.describe.serial('Create initial inquiry', () => {
 
 		// write message
 		await page.getByRole('combobox').fill('Hello there, I need help!');
-		await page.locator('rect').click();
+		await page.locator('.textarea__buttons rect').click();
 		await page.locator('button.button__autoClose').click();
 
 		// assert further steps info & msg
@@ -62,10 +62,11 @@ test.describe.serial('Create initial inquiry', () => {
 	});
 
 	test('Respond initial msg (as a consultant)', async ({ page }) => {
-		const username = process.env.TEST_CONSULTANT;
-		const password = process.env.TEST_PASSWORD;
-
-		await loginUser(page, username!, password!);
+		await loginUser(
+			page,
+			process.env.TEST_CONSULTANT!,
+			process.env.TEST_PASSWORD!
+		);
 
 		await page.waitForSelector('a[href="/profile"]', { state: 'visible' });
 		await expect(
