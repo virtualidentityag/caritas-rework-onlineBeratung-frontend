@@ -1810,11 +1810,11 @@
 			"start": "Registrierung"
 		},
 		"user": {
-			"infoText": "Um Ihre Anonymität zu schützen, raten wir Ihnen, nicht Ihren tatsächlichen Namen oder Initialien zu verwenden.<br>Wählen Sie bitte einen geeigneten Benutzernamen mit min. 5 Zeichen.",
+			"infoText": "Um Ihre Anonymität zu schützen, raten wir Ihnen, nicht Ihren tatsächlichen Namen oder Initialien zu verwenden.<br>Wählen Sie bitte einen geeigneten Benutzernamen mit min. 5 Zeichenn und ohne Leerzeichen.",
 			"label": "Benutzername",
 			"suitable": "Ihr Benutzername ist geeignet.",
 			"unavailable": "Der Benutzername ist bereits vergeben.",
-			"unsuitable": "Ihr Benutzername ist zu kurz."
+			"unsuitable": "Ihr Benutzername ist zu kurz oder enthält Leerzeichen."
 		},
 		"username": {
 			"headline": "Benutzernamen wählen"
@@ -1859,10 +1859,10 @@
 			"subline": "Um Ihre Anonymität zu schützen, raten wir Ihnen, nicht Ihren tatsächlichen Namen oder Initialen zu verwenden.",
 			"username": {
 				"error": {
-					"available": "Ihr Benutzername ist zu kurz.",
+					"available": "Ihr Benutzername ist zu kurz oder enthält Leerzeichen.",
 					"unavailable": "Dieser Benutzername ist bereits vergeben."
 				},
-				"info": "5 oder mehr Zeichen",
+				"info": "5 oder mehr Zeichen, keine Leerzeichen",
 				"label": "Benutzername",
 				"success": "Ihr Benutzername ist geeignet."
 			}
