@@ -30,6 +30,7 @@ import { RegistrationContext, RegistrationData } from '../../../globalState';
 import { apiGetIsUsernameAvailable } from '../../../api/apiGetIsUsernameAvailable';
 import { REGISTRATION_DATA_VALIDATION } from '../registrationDataValidation';
 import LegalLinks from '../../../components/legalLinks/LegalLinks';
+import { isStringValidUsername } from '../registrationHelpers';
 
 export const passwordCriteria = [
 	{
@@ -118,7 +119,7 @@ export const AccountData: VFC<{
 				}
 				successMesssage={t('registration.account.username.success')}
 				isValueValid={async (val: string) => {
-					if (val.length < 5) {
+					if (!isStringValidUsername(val)) {
 						setIsUsernameAvailable(true);
 						return false;
 					} else {
